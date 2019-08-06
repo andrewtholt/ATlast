@@ -46,6 +46,15 @@
 
 #ifdef LINUX
 #include <unistd.h>
+#ifdef ATH
+// 
+// Socket includes
+//
+#include <sys/socket.h>
+#include <sys/un.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#endif
 #ifdef PTHREAD
 #include <pthread.h>
 #endif
@@ -787,6 +796,117 @@ prim ATH_on() {
 prim ATH_off() {
     Push=0;
 }
+
+prim athConnect() {
+    char           *hostName;
+    int             len, port;
+    int             tmp;
+    int             sock1;
+    int             exitStatus = 0;
+    struct sockaddr_in serv_addr;
+    struct hostent *hp;
+    int rc;
+
+    struct addrinfo *result = NULL;
+    struct addrinfo hint;
+
+    char portNumber[8];
+
+    Sl(2);
+    So(1);
+
+    memset(&hint, 0 , sizeof(hint));
+
+    hint.ai_family = AF_INET;
+    hint.ai_socktype = SOCK_STREAM;
+
+    port = S0;
+    hostName = S1;
+    Pop2;
+
+    sprintf(portNumber,"%d",port);
+
+    rc = getaddrinfo(hostName, portNumber, &hint, &result);
+
+        if( 0 == rc ) {
+        sock1 = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
+        if(sock1 < 0) {
+            exitStatus = -1;
+        } else {
+            tmp = connect(sock1, result->ai_addr, result->ai_addrlen );
+            if (tmp < 0) {
+                exitStatus = -1;
+            }
+        }
+    }
+    if (exitStatus == 0) {
+        Push=sock1;
+    }
+    Push=exitStatus;
+
+}
+
+prim athClose() {
+    int             sock;
+
+    Sl(1);
+    So(0);
+
+    sock = S0;
+    Pop;
+    close(sock);
+}
+
+prim athSend() {
+    char           *buffer;
+    int             len;
+    int flag=0;
+    int             sock2;
+    int             status;
+
+    Sl(3);
+    So(2);
+
+    sock2 = S0;
+    len = S1;
+    buffer = (char *)S2;
+    Npop(3);
+
+    status = send(sock2, buffer, len, 0);
+    Push=status;
+
+    flag = ( status < 0 ); 
+    Push = flag;
+}
+
+prim athRecv() {
+    int             n;
+    int             sock2;
+    int             len;
+    int flag = 0; 
+    char           *msg;
+
+    Sl(3);
+    So(1);
+
+    sock2 = S0;
+    len = S1;
+    msg =(char *)S2;
+    Npop(3);
+
+    n = recv(sock2, msg, len, 0);
+    Push = n;
+}
+
+// 
+// Add \n to a string
+// Stack : pointer -- pointer
+//
+prim athAddEOL() {
+    char *ptr = S0;
+    strcat(ptr,"\n");
+}
+
 
 prim ATH_dump() {
     Sl(2); // address len
@@ -5195,6 +5315,12 @@ static struct primfcn primt[] = {
 #endif /* EVALUATE */
 
 #ifdef ATH
+	{(char *)"0SOCKET-CONNECT",athConnect},
+	{(char *)"0SOCKET-CLOSE",athClose},
+	{(char *)"0SOCKET-SEND",athSend},
+	{(char *)"0SOCKET-RECV",athRecv},
+	{(char *)"0ADD-EOL",athAddEOL},
+
 	{(char *)"0ON",ATH_on},
 	{(char *)"0OFF",ATH_off},
 	{(char *)"0MKBUFFER",ATH_mkBuffer},
