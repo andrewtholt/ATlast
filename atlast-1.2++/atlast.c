@@ -893,7 +893,10 @@ prim athRecv() {
     len = S1;
     msg =(char *)S2;
     Npop(3);
-
+    //
+    // Wipe the buffer first
+    //
+    bzero(msg,len);
     n = recv(sock2, msg, len, 0);
     Push = n;
 }
