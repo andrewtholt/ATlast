@@ -780,6 +780,13 @@ void displayLineAscii(uint8_t *a) {
 	printf("\r\n");
 }
 
+prim ATH_on() {
+    Push=-1;
+}
+
+prim ATH_off() {
+    Push=0;
+}
 
 prim ATH_dump() {
     Sl(2); // address len
@@ -5188,6 +5195,8 @@ static struct primfcn primt[] = {
 #endif /* EVALUATE */
 
 #ifdef ATH
+	{(char *)"0ON",ATH_on},
+	{(char *)"0OFF",ATH_off},
 	{(char *)"0MKBUFFER",ATH_mkBuffer},
 	{(char *)"0MEMSAFE",ATH_memsafe},
 	{(char *)"0?MEMSAFE",ATH_qmemsafe},
