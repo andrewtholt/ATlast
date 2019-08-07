@@ -910,6 +910,47 @@ prim athAddEOL() {
     strcat(ptr,"\n");
 }
 
+prim athCmdGet() {
+    Sl(2);
+    So(1);
+
+    char cmd[255];
+    char in[255];
+    int sock = (int)S0;
+    char *name = (char *)S1;
+    Pop2;
+
+    bzero(cmd,255);
+    bzero(in,255);
+
+    sprintf(cmd,"GET %s\n",name);
+
+    int status = send(sock, cmd, strlen(cmd), 0);
+    status = recv(sock, in, 255, 0);
+
+    if(!strcmp(in,"ON\n")) {
+        Push=-1;
+    } else {
+        Push=0;
+    }
+}
+
+prim athCmdSet() {
+    int sock = (int)S0;
+    char *def=S1;
+    char *name= S2;
+
+    char cmd[255];
+    char in[255];
+
+    bzero(cmd,255);
+    bzero(in,255);
+
+    sprintf(cmd,"SET %s %s\n",name, def);
+
+    int status = send(sock, cmd, strlen(cmd), 0);
+    status = recv(sock, in, 255, 0);
+}
 
 prim ATH_dump() {
     Sl(2); // address len
@@ -2926,11 +2967,14 @@ prim P_cat()			      /* Fetch byte value from address */
 prim P_ccomma() 		      /* Store one byte on heap */
 {
     unsigned char *chp;
+    void *tmp;
 
     Sl(1);
+    tmp = (void *)S0;
 
     if ( ath_safe_memory == Truth ) {
-        Hpc(S0);
+        Hpc(tmp);
+//        Hpc(S0);
     }
     chp = ((unsigned char *) hptr);
     *chp++ = S0;
@@ -3115,8 +3159,10 @@ prim P_move() {
 
     memcpy( dest, src, len);
 }
+//
 // ATH find token
 //
+// Stack: addr char - addr
 prim P_strsep() {
     uint8_t *buffer;
     uint8_t *res=NULL;
@@ -3129,8 +3175,8 @@ prim P_strsep() {
     buffer=(uint8_t *)S1;
 
     res=strsep(&buffer, &delim);
-    Pop;
-    S0=(stackitem)res;
+    Pop2;
+    Push=(stackitem)res;
 }
 
 prim P_strcpy() 		      /* Copy string to address on stack */
@@ -5323,6 +5369,8 @@ static struct primfcn primt[] = {
 	{(char *)"0SOCKET-SEND",athSend},
 	{(char *)"0SOCKET-RECV",athRecv},
 	{(char *)"0ADD-EOL",athAddEOL},
+	{(char *)"0CMD-GET",athCmdGet},
+	{(char *)"0CMD-SET",athCmdSet},
 
 	{(char *)"0ON",ATH_on},
 	{(char *)"0OFF",ATH_off},
