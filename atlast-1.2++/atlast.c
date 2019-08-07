@@ -909,7 +909,9 @@ prim athAddEOL() {
     char *ptr = S0;
     strcat(ptr,"\n");
 }
-
+// 
+// name sock -- str:value
+//
 prim athCmdGet() {
     Sl(2);
     So(1);
@@ -934,11 +936,17 @@ prim athCmdGet() {
         Push=0;
     }
 }
-
+// 
+// Stack: str:name str:value sock 
+//
 prim athCmdSet() {
+    Sl(3);
+
     int sock = (int)S0;
     char *def=S1;
     char *name= S2;
+
+    Npop(3);
 
     char cmd[255];
     char in[255];
