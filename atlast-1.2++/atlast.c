@@ -941,6 +941,7 @@ prim athCmdGet() {
 //
 prim athCmdSet() {
     Sl(3);
+    Sl(1);
 
     int sock = (int)S0;
     char *def=S1;
@@ -958,6 +959,8 @@ prim athCmdSet() {
 
     int status = send(sock, cmd, strlen(cmd), 0);
     status = recv(sock, in, 255, 0);
+
+    Push = status;
 }
 
 prim ATH_dump() {
