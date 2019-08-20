@@ -3691,6 +3691,27 @@ prim P_type() {
     Pop;
 }
 
+prim ATH_sift() {
+	char outBuffer[132];
+    char *res=NULL;
+
+    Sl(1);
+    So(0);
+
+    char *name = (char *)S0;
+
+    Pop;
+    dictword *dw = dict;
+    while (dw != NULL) {
+        res=strcasestr( dw->wname+1, name);
+        if( res != NULL) {
+            printf("%s\n", dw->wname+1);
+        }
+        dw = dw->wnext;
+    }
+
+}
+
 /* List words */
 prim P_words() {
 	char outBuffer[132];
@@ -5345,6 +5366,7 @@ static struct primfcn primt[] = {
     {"1.(", P_dotparen},
     {"0TYPE", P_type},
     {"0WORDS", P_words},
+    {"0$SIFT", ATH_sift},
 	{"0EMIT", P_emit},
 #endif /* CONIO */
 
