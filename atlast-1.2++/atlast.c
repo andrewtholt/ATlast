@@ -1096,11 +1096,13 @@ prim ANSI_allocate() {
 
 prim ANSI_free() {
 	Sl(1);
+    So(1);
 
 	if(S0 != 0 ) {
 		free((void *)S0);
 	}
-	Push=0;
+//	Push=0;
+    S0 = 0;
 }
 
 #endif // ANSI
