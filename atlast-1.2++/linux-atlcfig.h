@@ -39,8 +39,9 @@
 #define BANNER
 #define ATH
 #define ANSI                /* Enable ANSI compatability words */
+#define LIBSER
 // #define PUBSUB              // Use the Small pub/sub system
-#define PTHREAD             // Pthreaded pubsub
+// #define PTHREAD             // Pthreaded pubsub
 // 
 // #define Keyhit
 // 

@@ -46,6 +46,7 @@
 
 #ifdef LINUX
 #include <unistd.h>
+#include <poll.h>
 #ifdef ATH
 // 
 // Socket includes
@@ -66,6 +67,13 @@
 #include "yportenv.h"
 #endif
 #endif
+#endif
+
+#ifdef LIBSER
+extern "C" {
+#include <libser.h>
+}
+#include <termios.h>
 #endif
 
 // #define MEMSTAT
@@ -2394,6 +2402,100 @@ static dictword *lookup( char *tkname)
     return dw;
 }
 
+#ifdef LINUX
+
+// Stack : addr len fd -- actual
+//
+prim P_fdRead() {
+    char *data = (char *)S2;
+    int len=(int)S1;
+    int fd = (int)(S0);
+    Pop2;
+
+    bzero(data,len);
+
+    ssize_t actual = read(fd,data,len);
+
+    S0=actual;
+
+}
+
+// Stack : addr len fd -- actual
+//
+prim P_fdWrite() {
+    char *data = (char *)S2;
+    int len=(int)S1;
+    int fd = (int)(S0);
+    Pop2;
+
+    ssize_t actual = write(fd,data,len);
+
+    S0=actual;
+}
+
+prim P_strstr() {
+    char *needle=(char *)S0;
+    char *haystack=(char *)S1;
+    Pop;
+
+    char *res = strstr(haystack, needle);
+    S0=res;
+}
+
+prim P_strcasestr() {
+    char *needle=(char *)S0;
+    char *haystack=(char *)S1;
+    Pop;
+
+    char *res = strcasestr(haystack, needle);
+    S0=res;
+}
+
+#endif
+
+#ifdef LIBSER
+prim ATH_wouldBlock() {
+    int ret;
+    Sl(1);
+    So(1);
+
+    int fd = S0;
+
+    bool flag = wouldIblock(fd,0);
+
+    ret = (flag) ? -1 : 0;
+
+    S0 = ret;
+}
+
+
+prim ATH_openSerialPort() {
+
+    Sl(2);
+    So(1);
+
+    speed_t baud = (speed_t)S0;
+    char *name = (char *)S1;
+
+    int fd = openSerialPort(name, baud);
+
+    Pop;
+    S0=fd;
+
+}
+
+prim ATH_flushSerialPort() {
+    Sl(1);
+    So(0);
+
+    int fd=(int)S0;
+    Pop;
+
+    flushSerialPort(fd );
+}
+
+
+#endif
 /* Gag me with a spoon!  Does no compiler but Turbo support
 #if defined(x) || defined(y) ?? */
 #ifdef EXPORT
@@ -5371,6 +5473,18 @@ static struct primfcn primt[] = {
     {"0$SIFT", ATH_sift},
 	{"0EMIT", P_emit},
 #endif /* CONIO */
+#ifdef LINUX
+    {"0FD-READ", P_fdRead},
+    {"0FD-WRITE", P_fdWrite},
+    {"0?BLOCK", ATH_wouldBlock},
+    {"0STRSTR", P_strstr},
+    {"0STRCASESTR", P_strcasestr},
+#endif
+
+#ifdef LIBSER
+    {"0OPEN-SERIAL-PORT", ATH_openSerialPort},
+    {"0FLUSH-SERIAL-PORT", ATH_flushSerialPort},
+#endif
 
 #ifdef FILEIO
     {"0FILE", P_file},
