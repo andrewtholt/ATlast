@@ -20,6 +20,11 @@
 #include "atlcfig.h"
 #include <inttypes.h>
 
+#ifdef NVRAMRC
+#warning "nvramrc"
+#include "nvramrc.h"
+#endif
+
 #ifdef PUBSUB
 #warning "PubSub defined"
 #include <Small.h>
@@ -231,6 +236,7 @@ int main(int argc, char *argv[]) {
 
 
 #endif
+
 #ifdef LINUX
     sprintf(t,"0x%x constant TABLE",table);
     sprintf(t,"0x%" PRIx64 " constant TABLE",table);
@@ -244,6 +250,11 @@ int main(int argc, char *argv[]) {
 
 #endif
 
+    do {
+        memset(lineBuffer,0,MAX_LINE);
+        len=readLineFromArray(nvramrc,lineBuffer);
+        atl_eval(lineBuffer);
+    } while(len >= 0);
 
     /* If any include files were named, load each in turn before
        we execute the program. */

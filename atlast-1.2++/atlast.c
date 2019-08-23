@@ -2824,6 +2824,40 @@ prim P_leq()			      /* Test less than or equal */
     Pop;
 }
 
+// Stack: min max value -- ( min <= value < max )
+//
+prim P_between() {
+    Sl(3);
+    So(1);
+
+    int res;
+
+
+    int value = (int) S0;
+    int upperLimit = (int) S1;
+    int lowerLimit = (int) S2;
+    Pop2;
+
+    res = ( (value >= lowerLimit) && (value < upperLimit)) ? -1 : 0 ;
+    S0=res;
+
+}
+// 
+// Stack: addr -- addrn 
+//
+prim P_lstrip() {
+    char *ptr=(char *)S0;
+
+    if( *ptr != '\0') {
+        while( (*ptr >= 0) && (*ptr < '!')) {
+            ptr++;
+        }
+    }
+
+    S0=ptr;
+}
+
+
 prim P_and()			      /* Logical and */
 {
     Sl(2);
@@ -4749,8 +4783,19 @@ prim P_quit()			      /* Terminate execution */
 
 prim P_abort()			      /* Abort, clearing data stack */
 {
-    P_clear();			      /* Clear the data stack */
-    P_quit();			      /* Shut down execution */
+    Sl(1);
+    So(0);
+
+    int flag=(int)S0;
+    Pop;
+
+    if ( flag != 0 ) {
+        printf("Aborting\n");
+        P_clear();			      /* Clear the data stack */
+        pwalkback();
+        P_quit();			      /* Shut down execution */
+
+    }
 }
 
 prim P_abortq() 		      /* Abort, printing message */
@@ -5251,6 +5296,8 @@ static struct primfcn primt[] = {
     {"0<", P_lss},
     {"0>=", P_geq},
     {"0<=", P_leq},
+    {"0BETWEEN", P_between},
+    {"0LSTRIP", P_lstrip},
 
     {"0AND", P_and},
     {"0OR", P_or},
@@ -5505,7 +5552,7 @@ static struct primfcn primt[] = {
     {"0FTELL", P_ftell},
     {"0FSEEK", P_fseek},
     {"0FLOAD", P_fload},
-    {"0INCLUDE", P_include},
+    {"0$INCLUDE", P_include},
 #endif /* FILEIO */
 
 #ifdef EVALUATE
