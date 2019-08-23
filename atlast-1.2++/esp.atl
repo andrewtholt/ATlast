@@ -162,7 +162,12 @@ variable port
 
 : init
     init-run @ 0= if
-        "/dev/ttyUSB0" 0 open-serial-port  port !
+        "/dev/ttyUSB0" 0 open-serial-port dup 0< if
+            "Failed to open serial port\n" type
+            abort
+        else
+            port !
+        then
         port @ flush-serial-port
 
         disable-echo abort
