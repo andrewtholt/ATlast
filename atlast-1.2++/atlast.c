@@ -2470,7 +2470,6 @@ prim ATH_wouldBlock() {
 
 
 prim ATH_openSerialPort() {
-
     Sl(2);
     So(1);
 
@@ -2482,6 +2481,16 @@ prim ATH_openSerialPort() {
     Pop;
     S0=fd;
 
+}
+
+prim ATH_closeSerialPort() {
+    Sl(1);
+    So(0);
+
+    int fd = (int)S0;
+    Pop;
+
+    closeSerialPort(fd);
 }
 
 prim ATH_flushSerialPort() {
@@ -5530,6 +5539,7 @@ static struct primfcn primt[] = {
 
 #ifdef LIBSER
     {"0OPEN-SERIAL-PORT", ATH_openSerialPort},
+    {"0CLOSE-SERIAL-PORT", ATH_closeSerialPort},
     {"0FLUSH-SERIAL-PORT", ATH_flushSerialPort},
 #endif
 
