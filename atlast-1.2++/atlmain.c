@@ -166,7 +166,7 @@ int main(int argc, char *argv[]) {
 
     int opt;
 
-    while((opt = getopt(argc,argv, "C:DH:I:R:S:T?U")) != -1) {
+    while((opt = getopt(argc,argv, "C:DH:I:R:S:T?Uh")) != -1) {
         switch(opt) {
             case 'C':
                 chdir(optarg);
@@ -193,6 +193,7 @@ int main(int argc, char *argv[]) {
                 atl_trace = TRUE;
                 break;
             case '?':
+            case 'h':
             case 'U':
                 PR("Usage:  ATLAST [options] [inputfile]\n");
                 PR("        Options:\n");

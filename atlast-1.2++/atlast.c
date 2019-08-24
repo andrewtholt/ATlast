@@ -2625,7 +2625,7 @@ void atl_memstat() {
     static char fmt[] = "\t%-13s|\t%3ld   |\t%6ld|\t%13ld|\t%3ld %%|\n";
 //    static char fmt[] = "\t%-12s %6ld    %6ld    %6ld       %3ld %%\r\n";
     printf("\t+============+========+=======+==============+=======+\n");
-    printf("\t|Memory Area |  usage |  used | allocated    |in use |\n");
+    printf("\t|Memory Area |  usage |  used |   allocated  |in use |\n");
     printf("\t+============+========+=======+==============+=======+\n");
 
     int stack_pc = ( 100 * ((stk - stack)) ) / atl_stklen;
