@@ -6,3 +6,6 @@
 : include
     token $include
 ;
+
+: [char] char ; immediate
+

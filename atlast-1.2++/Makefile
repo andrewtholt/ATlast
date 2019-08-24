@@ -40,7 +40,7 @@ atlast.o:   atlast.c atldef.h atlcfig.h
 
 atldef.h:   atlast.h
 
-atlmain.o:  atlmain.c atlast.h
+atlmain.o:  atlmain.c atlast.h nvramrc.h
 	$(CC) $(CFLAGS) $(INCLUDE)  -c atlmain.c -o atlmain.o 
 
 primdeftest:
