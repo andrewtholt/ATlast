@@ -21,7 +21,7 @@
 #include <inttypes.h>
 
 #ifdef NVRAMRC
-#warning "nvramrc"
+// #warning "nvramrc"
 #include "nvramrc.h"
 #endif
 
@@ -257,27 +257,56 @@ int main(int argc, char *argv[]) {
         atl_eval(lineBuffer);
     } while(len >= 0);
 
+int stat;
+FILE *fp;
+
+#ifdef LINUX
+    char startFile[255];
+    char *atlPath = NULL;
+
+    atlPath = getenv("ATL_PATH");
+
+    if( atlPath != NULL ) {
+    	bzero(startFile,0);
+    	sprintf(startFile,"%s/start.atl",atlPath);
+
+    	int exist = access(startFile, R_OK);
+    	if ( exist < 0) {
+    		fprintf(stderr,"%s start up file is not accessible, or does not exist.\n\n", startFile);
+    	} else {
+    		fp = fopen(startFile, "r");
+    		if(fp == NULL) {
+    			fprintf(stderr, "Unable to open start file %s\n", startFile);
+    		} else {
+    			stat=atl_load(fp);
+    			close(fp);
+    		}
+    	}
+    }
+
+#endif
     /* If any include files were named, load each in turn before
        we execute the program. */
 
     for (i = 0; i < in; i++) {
-        int stat;
         char fn[132];
-        FILE *fp;
 
         V strcpy(fn, include[i]);
-        if (strchr(fn, '.') == NULL)
+        if (strchr(fn, '.') == NULL) {
             V strcat(fn, ".atl");
-        fp = fopen(fn,
+        }
+        fp = fopen(fn, "r");
+        /*
 #ifdef FBmode
                 "rb"
 #else
                 "r"
 #endif
                 );
+                */
+
         if (fp == NULL) {
-            V fprintf(stderr, "Unable to open include file %s\n",
-                    include[i]);
+            V fprintf(stderr, "Unable to open include file %s\n", include[i]);
             return 1;
         }
         stat = atl_load(fp);
