@@ -2600,8 +2600,8 @@ Exported char *atl_fgetsp(char *s, int n, FILE *stream) {
 // outBuffer
 // #warning MEMSTAT
 void atl_memstat() {
-    static char fmt[] = "   %-12s %6ld    %6ld    %6ld       %3ld %%\r\n";
-     printf("  Memory Area     usage     used    allocated   in use\r\n");
+//    static char fmt[] = "   %-12s %6ld    %6ld    %6ld       %3d %%\r\n";
+//     printf("  Memory Area     usage     used    allocated   in use\r\n");
 
      /*
      printf( fmt, "Stack",
@@ -2622,25 +2622,33 @@ void atl_memstat() {
             (100L * (hptr - heap)) / atl_heaplen);
 #else
 */
+    static char fmt[] = "\t%-13s|\t%3ld   |\t%6ld|\t%13ld|\t%3ld %%|\n";
+//    static char fmt[] = "\t%-12s %6ld    %6ld    %6ld       %3ld %%\r\n";
+    printf("\t+============+========+=======+==============+=======+\n");
+    printf("\t|Memory Area |  usage |  used | allocated    |in use |\n");
+    printf("\t+============+========+=======+==============+=======+\n");
 
-//    V printf("\n             Memory Usage Summary\n\n");
-//    V printf("                 Current   Maximum    Items     Percent\n");
-    V printf("  Memory Area     usage     used    allocated   in use \n");
+    int stack_pc = ( 100 * ((stk - stack)) ) / atl_stklen;
+    int stack_used = stk - stack ;
+    int stack_usage = (stackmax - stack);
 
-    V printf(fmt, "Stack",
-            ((long) (stackmax - stack)),
-            atl_stklen,
-            (100L * (stk - stack)) / atl_stklen);
-    V printf(fmt, "Return stack",
+//    printf("stk=%d  stack=%d atl_stklen %d stack_pc %d\n", stk,stack,atl_stklen, stack_pc);
+
+//    printf("\tStack\t\t%3d\t%6d\t%6d\t\t%3d %%\n",stack_used, stack_usage,atl_stklen, stack_pc);
+    printf(fmt, "|Stack",stack_used, stack_usage,atl_stklen, stack_pc);
+//    V printf(fmt, "Stack", ((long) (stackmax - stack)), (100L * (stk - stack)) / atl_stklen);
+
+    V printf(fmt, "|Return stack",
             ((long) (rstk - rstack)),
             ((long) (rstackmax - rstack)),
             atl_rstklen,
             (100L * (rstk - rstack)) / atl_rstklen);
-    V printf(fmt, "Heap---------",
+    V printf(fmt, "|Heap        ",
             ((long) (hptr - heap)),
             ((long) (heapmax - heap)),
             atl_heaplen,
             (100L * (hptr - heap)) / atl_heaplen);
+    printf("\t+============+========+=======+==============+=======+\n");
 }
 #endif /* MEMSTAT */
 
