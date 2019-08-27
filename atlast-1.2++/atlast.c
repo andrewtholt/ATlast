@@ -760,6 +760,17 @@ prim ATH_qfileio() {
     Push=0;
 #endif
 }
+
+prim ATH_qwordSize() {
+	Sl(0);
+	So(1);
+
+	int l = 8 * sizeof(void *);
+
+	Push=l;
+
+}
+
 prim ATH_memsafe() {
     Sl(1);
     ath_safe_memory = (S0 == 0) ? Falsity : Truth;
@@ -5607,6 +5618,7 @@ static struct primfcn primt[] = {
     {(char *)"0TOKEN", ATH_Token},
     {(char *)"0?LINUX", ATH_qlinux},
     {(char *)"0?FREERTOS", ATH_qfreertos},
+    {(char *)"0?WORD-SIZE", ATH_qwordSize},
     {(char *)"0MS", ATH_ms},
     {(char *)"0PWD", ATH_pwd},
     {(char *)"0CD", ATH_cd},
