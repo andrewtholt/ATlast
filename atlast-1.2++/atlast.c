@@ -1329,6 +1329,7 @@ prim FR_getSysTick() {
     Push=(stackitem)tick;
 }
 
+/*
 prim FR_cmdParse() {
 	Sl(2);
 
@@ -1342,6 +1343,7 @@ prim FR_cmdParse() {
 	res=cmdParse(db, msg);
 	S0=(stackitem)res;
 }
+*/
 
 
 prim FR_getPoolId() {
@@ -1433,59 +1435,6 @@ prim FR_semTake() {
 
     failFlag=(rc != pdPASS ) ? true : false ;
     S0=(stackitem)failFlag;
-}
-
-prim FR_getQid() {
-    extern struct taskData *task[LAST_TASK];
-
-    bool failFlag=true;
-
-    struct taskData *t;
-
-    Sl(1);
-
-    if (validTask( S0 )) {
-        // We have a valid task id ...
-        t=task[S0];
-        Pop;
-
-        xSemaphoreTake(task[USB_TASK]->lock, portMAX_DELAY );
-        if( t != NULL) {
-            Push=(stackitem)t->iam;
-            failFlag=false;
-        } else {
-            failFlag = true;
-        }
-        xSemaphoreGive(task[USB_TASK]->lock);
-    } else {
-        Pop;
-        failFlag=true;
-    }
-//    Push=failFlag;
-
-}
-
-prim FR_getTaskDb() {
-    Sl(1);
-
-    bool failFlag=true;
-
-    if (validTask( S0 )) {
-        xSemaphoreTake(task[S0]->lock, portMAX_DELAY );
-        S0 = (stackitem)task[S0]->db;
-        xSemaphoreGive(task[USB_TASK]->lock);
-        failFlag=false;
-    }
-    Push= failFlag ;
-}
-
-prim FR_setTaskDb() {
-	Sl(1);
-
-    xSemaphoreTake(task[S0]->lock, portMAX_DELAY );
-	task[S0]->db = (struct Small *)S0;
-    xSemaphoreGive(task[USB_TASK]->lock);
-    Pop;
 }
 
 prim FR_writePin() {
@@ -1644,570 +1593,6 @@ prim FR_rxXmodem() {
     xmodemReceive(BKPSRAM_BASE,2048);
 }
 #endif // FREERTOS
-
-#ifdef PUBSUB
-/*
- * Name: message@
- * Stack: <from> <timeout> <message ptr>
- *
- * Description:
- *  Receive a message, waiting for a specified number of milli seconds, and
- *  place the recieved message at ptr.
- */
-prim FR_getMessage() {
-#ifdef FREERTOS
-//	extern struct taskData *task[LAST_TASK];
-	BaseType_t rc;
-	uint32_t timeout;
-	volatile QueueHandle_t qh;
-    struct cmdMessage *out;
-    bool failFlag=true;
-
-	Sl(3);
-	So(1);
-
-    out = (struct cmdMessage *)S0;
-	timeout=S1;
-    qh=(QueueHandle_t)S2;
-
-    rc = xQueueReceive( qh, out, pdMS_TO_TICKS(timeout));
-
-	if( rc != pdPASS ) {
-		memset( out, 0, sizeof(struct cmdMessage) );
-	    failFlag=true;
-	} else {
-	    failFlag=false;
-	}
-    Pop2;
-
-	S0 = (stackitem)failFlag;
-#endif
-
-#ifdef LINUX
-	uint32_t timeout;
-	char *from;
-	struct mq_attr attr;
-	int rc=0;
-
-	struct cmdMessage *out;
-	Sl(3);
-	So(1);
-
-	out = S0;
-	timeout=S1;
-	from = S2;
-
-	mqd_t mq=mq_open(from, O_RDONLY);
-	if((mqd_t)-1 == mq) {
-		perror("MESSAGE@");
-	}
-	rc = mq_getattr(mq,&attr);
-
-	int len = mq_receive(mq,out,attr.mq_msgsize, NULL);
-	Npop(3);
-
-	if( len <0)  {
-		Push=-1;
-	} else {
-		Push=0;
-	}
-
-#endif
-
-}
-// Set fields in a message.
-//
-// <address> <value> -- <address>
-prim FR_setSender() {
-    Sl(2);
-    struct cmdMessage *msg;
-
-#ifdef FREERTOS
-    QueueHandle_t value;
-    value=(QueueHandle_t)S0;
-
-    msg = (struct cmdMessage *)S1;
-    msg->sender = value;
-#endif
-
-#ifdef LINUX
-    char *value;
-    value = (char *)S0;
-    strncpy(msg->sender, value,SENDER_SIZE );
-
-#endif
-
-
-    Pop;
-}
-// Get sender
-// <address> -- <sender>
-prim FR_getSender() {
-    struct cmdMessage *msg;
-
-    msg = (struct cmdMessage *)S0;
-    S0 = (stackitem)msg->sender;
-
-}
-// <struct address> <string> -- <struct address>
-//
-prim FR_setCmd() {
-	Sl(2);
-	So(1);
-
-    struct cmdMessage *msg;
-    char *cmd;
-
-    cmd = (char *)S0;
-    msg = (struct cmdMessage *)S1;
-
-    Pop;
-
-    strncpy(msg->payload.message.cmd, cmd, MAX_CMD);
-}
-
-prim FR_getCmd() {
-	Sl(1);
-	So(1);
-
-    struct cmdMessage *msg;
-    char *cmd;
-
-    msg = (struct cmdMessage *)S0;
-
-    S0 = msg->payload.message.cmd;
-}
-
-prim FR_setKey() {
-	Sl(2);
-	So(1);
-
-    struct cmdMessage *msg;
-    char *key;
-
-    key = (char *)S0;
-    msg = (struct cmdMessage *)S1;
-
-    Pop;
-
-    strncpy(msg->payload.message.key, key, MAX_KEY);
-}
-
-prim FR_getKey() {
-	Sl(1);
-	So(1);
-
-    struct cmdMessage *msg;
-
-    msg = (struct cmdMessage *)S0;
-
-    S0=msg->payload.message.key;
-}
-
-prim FR_setValue() {
-    struct cmdMessage *msg;
-    char *value;
-
-    value = (char *)S0;
-    msg = (struct cmdMessage *)S1;
-
-    Pop;
-
-    strncpy(msg->payload.message.value, value, MAX_VALUE);
-}
-
-prim FR_getValue() {
-    struct cmdMessage *msg;
-
-    msg = (struct cmdMessage *)S0;
-    S0=msg->payload.message.value;
-}
-
-
-prim FR_setFieldCnt() {
-	struct cmdMessage *msg;
-	uint8_t fields;
-
-	fields = (uint8_t)S0;
-	msg = (struct cmdMessage *)S1;
-
-
-	msg->payload.message.fields = fields;
-
-	Pop;
-
-}
-
-prim FR_getFieldCnt() {
-	Sl(1);
-	So(1);
-
-	struct cmdMessage *msg;
-
-	msg=(struct cmdMessage *)S0;
-
-	S0=(stackitem)msg->payload.message.fields;
-}
-
-//
-// populate a GET message
-// Stack <msg pointer> <sender> <key> --
-//
-prim FR_mkmsgGet() {
-    struct cmdMessage *msg;
-    char *key;
-
-    Sl(3);
-#ifdef FREERTOS
-    QueueHandle_t sender;
-#endif
-
-#ifdef LINUX
-    char *sender;
-#endif
-
-    key=(char *)S0;
-    msg=(struct cmdMessage *)S2;
-
-#ifdef FREERTOS
-    sender=(QueueHandle_t) S1;
-#endif
-
-    mkMsg(sender, msg, "GET", key, NULL);
-    Pop;
-    Pop2;
-}
-//
-// populate a SET message
-// Stack <msg pointer> <key> <value> --
-//
-prim FR_mkmsgSet() {
-    struct cmdMessage *msg;
-    char *key;
-    char *value;
-
-    Sl(3);
-
-#ifdef FREERTOS
-    QueueHandle_t sender;
-#endif
-
-#ifdef LINUX
-    char *sender;
-#endif
-
-    value=(char *)S0;
-    key=(char *)S1;
-    msg=(struct cmdMessage *)S2;
-
-#ifdef FREERTOS
-    sender=NULL;
-#endif
-
-    mkMsg(sender, msg, "SET", key, value);
-    Pop;
-    Pop2;
-}
-
-
-//
-// populate a SUB message
-// Stack <msg pointer> <sender> <key> --
-//
-prim FR_mkmsgSub() {
-    struct cmdMessage *msg;
-    char *key;
-
-#ifdef FREERTOS
-    QueueHandle_t sender;
-#endif
-
-#ifdef LINUX
-    char *sender;
-#endif
-
-    key=(char *)S0;
-#ifdef LINUX
-    strncpy(msg->sender,(char *)S1, SENDER_SIZE);
-#endif
-
-#ifdef FREERTOS
-    sender=(QueueHandle_t) S1;
-#endif
-    msg=(struct cmdMessage *)S2;
-
-    mkMsg(sender, msg, "SUB", key, NULL);
-    Pop;
-    Pop2;
-}
-//
-// populate an UNSUB message
-// Stack <msg pointer> <sender> <key> --
-//
-prim FR_mkmsgUnsub() {
-    struct cmdMessage *msg;
-    char *key;
-
-#ifdef FREERTOS
-    QueueHandle_t sender;
-#endif
-
-#ifdef LINUX
-    char *sender;
-#endif
-
-    key=(char *)S0;
-#ifdef LINUX
-    strncpy(msg->sender,(char *)S1, SENDER_SIZE);
-#endif
-
-#ifdef FREERTOS
-    sender=(QueueHandle_t) S1;
-#endif
-    msg=(struct cmdMessage *)S2;
-
-    mkMsg(sender, msg, "UNSUB", key, NULL);
-    Pop;
-    Pop2;
-}
-
-// TODO FreeRTOS Only and temporary at that
-// Ultimately these will become open close etc
-//
-#ifdef FREERTOS
-// <msg ptr> <sender> filename mode --
-//
-prim FR_mkmsgOpen() {
-	Sl(4);
-	So(0);
-
-	struct cmdMessage *out = S3;
-    QueueHandle_t sender = S2;
-	char *fname = S1;
-	char *mode = S0;
-
-	memset(out,0,sizeof(struct cmdMessage));
-
-	strcpy(out->payload.message.cmd, "OPEN");
-	strcpy(out->payload.message.key, fname);
-	strcpy(out->payload.message.value, mode);
-
-	out->payload.message.fields = 3;
-	out->sender = sender;
-
-	Npop(4);
-
-}
-#endif
-
-prim FR_putMessage() {
-	struct cmdMessage *out;
-	Sl(2);
-	So(1);
-#ifdef FREERTOS
-	volatile QueueHandle_t dest;
-	BaseType_t status = errQUEUE_FULL;
-	bool rc=true;;
-
-	Sl(2);
-	So(1);
-
-	dest = (QueueHandle_t ) S1;
-	out = (struct cmdMessage *)S0;
-
-	if ( (dest != NULL) && (out != NULL)) {
-		status = xQueueSendToBack(dest,out, osWaitForever);
-
-		if( rc == pdPASS) {
-			rc=false;
-		} else {
-			rc=true;
-		}
-	}
-	Pop2;
-//	S0=rc;
-
-#endif
-#ifdef LINUX
-	char *dest = (char *)S1;
-    int rc=0;
-
-	out = (struct cmdMessage *)S0;
-
-	mqd_t mq=mq_open(dest,O_WRONLY);
-	if ((mqd_t) -1 == mq) {
-		perror("MESSAGE! mq_open");
-		exit(2);
-	}
-    rc = mq_send(mq,out,sizeof(struct cmdMessage),(size_t)NULL);
-
-    mq_close( mq ) ;
-    Pop2;
-#endif
-	Push=rc;
-}
-
-#ifdef LINUX
-#ifdef PTHREAD
-extern pthread_mutex_t lock;
-prim PS_comms() {
-
-	pthread_mutex_unlock(&lock);
-    pthread_yield();
-    sleep(1);
-}
-#endif
-#endif
-
-prim FR_mkdb() {
-	So(1);
-
-	struct Small *db = newSmall();
-
-	Push = (stackitem) db;
-
-}
-
-prim FR_publish() {
-	char *name;
-	struct Small *db;
-	bool rc;
-
-	Sl(2);
-
-	name=(char *)S0;
-	db=(struct Small *)S1;
-
-	rc=dbPublish(db,name);
-
-	Pop2;
-
-	Push=rc;
-}
-
-prim FR_subCount() {
-    int32_t cnt;
-    char *key;
-    struct Small *db;
-
-    Sl(2);
-    So(1);
-
-    key=(char *)S0;
-    db=(struct Small *)S1;
-
-    cnt=(int32_t)getSubCount(db, key);
-    Pop;
-    S0=(int32_t)cnt;
-}
-
-
-
-prim FR_displayRecord() {
-    struct nlist *rec; 
-    Sl(1);
-    char localBuffer[80];
-
-    rec=(struct nlist *)S0;
-    sprintf(localBuffer,"Name      : %s\n", nlistGetName(rec));
-#ifdef LINUX
-    printf("%s",localBuffer);
-#else
-	atlastTxBuffer(console, (uint8_t *)localBuffer) ;
-#endif
-    sprintf(localBuffer,"Value     : %s\n", (char *)nlistGetDef(rec));
-#ifdef LINUX
-    printf("%s",localBuffer);
-#else
-	atlastTxBuffer(console, (uint8_t *)localBuffer) ;
-#endif
-
-
-    sprintf(localBuffer, "Published :" );
-
-    if(dbAmIPublished(rec)) {
-        strcat(localBuffer,"True\n");
-    } else {
-        strcat(localBuffer,"False\n");
-    }
-#ifdef LINUX
-    printf("%s",localBuffer);
-#else
-	atlastTxBuffer(console, (uint8_t *)localBuffer) ;
-#endif
-    Pop;
-}
-
-prim FR_addRecord() {
-	struct Small *db;
-	char *n;
-	char *v;
-	bool rc;
-
-	Sl(3);
-	So(1);
-
-	v=(char *)S0;
-	n=(char *)S1;
-	db=(struct Small *)S2;
-
-	rc = addRecord(db,n,v);
-
-	Npop(3);
-
-	Push=rc;
-
-}
-//    char *dbLookup(struct Small *db, const char *n);
-// Stack: db <key> -- <nlist>
-prim FR_lookupRecord() {
-	struct Small *db;
-	char *key;
-	struct nlist *rec;
-
-	Sl(2);
-	So(1);
-
-	key=(char *)S0;
-	db=(struct Small *)S1;
-    Pop2;
-
-	rec = dbLookupRec(db,key);
-
-    Push = (stackitem)rec;
-
-    if( rec == NULL ) {
-        Push = true;
-    } else {
-        Push = false;
-    }
-}
-
-prim FR_lookup() {
-
-	struct Small *db;
-	char *key;
-	char *value;
-
-	Sl(2);
-	So(1);
-
-	key=(char *)S0;
-	db=(struct Small *)S1;
-
-	value = dbLookup(db,key);
-	Pop2;
-
-	Push = (stackitem)value;
-
-	if( value == NULL) {
-		Push = true;
-	} else {
-		Push = false;
-	}
-
-}
-#endif
 
 /*  ALLOC  --  Allocate memory and error upon exhaustion.  */
 
@@ -2413,58 +1798,9 @@ static dictword *lookup( char *tkname)
     return dw;
 }
 
-#ifdef LINUX
-
-// Stack : addr len fd -- actual
-//
-prim P_fdRead() {
-    char *data = (char *)S2;
-    int len=(int)S1;
-    int fd = (int)(S0);
-    Pop2;
-
-    bzero(data,len);
-
-    ssize_t actual = read(fd,data,len);
-
-    S0=actual;
-
-}
-
-// Stack : addr len fd -- actual
-//
-prim P_fdWrite() {
-    char *data = (char *)S2;
-    int len=(int)S1;
-    int fd = (int)(S0);
-    Pop2;
-
-    ssize_t actual = write(fd,data,len);
-
-    S0=actual;
-}
-
-prim P_strstr() {
-    char *needle=(char *)S0;
-    char *haystack=(char *)S1;
-    Pop;
-
-    char *res = strstr(haystack, needle);
-    S0=res;
-}
-
-prim P_strcasestr() {
-    char *needle=(char *)S0;
-    char *haystack=(char *)S1;
-    Pop;
-
-    char *res = strcasestr(haystack, needle);
-    S0=res;
-}
-
-#endif
-
 #ifdef LIBSER
+
+
 prim ATH_wouldBlock() {
     int ret;
     Sl(1);
@@ -2478,7 +1814,6 @@ prim ATH_wouldBlock() {
 
     S0 = ret;
 }
-
 
 prim ATH_openSerialPort() {
     Sl(2);
@@ -5548,15 +4883,9 @@ static struct primfcn primt[] = {
     {"0$SIFT", ATH_sift},
 	{"0EMIT", P_emit},
 #endif /* CONIO */
-#ifdef LINUX
-    {"0FD-READ", P_fdRead},
-    {"0FD-WRITE", P_fdWrite},
-    {"0?BLOCK", ATH_wouldBlock},
-    {"0STRSTR", P_strstr},
-    {"0STRCASESTR", P_strcasestr},
-#endif
 
 #ifdef LIBSER
+    {"0?BLOCK", ATH_wouldBlock},
     {"0OPEN-SERIAL-PORT", ATH_openSerialPort},
     {"0CLOSE-SERIAL-PORT", ATH_closeSerialPort},
     {"0FLUSH-SERIAL-PORT", ATH_flushSerialPort},
@@ -5679,9 +5008,6 @@ static struct primfcn primt[] = {
 #endif
 
 	{(char *)"0RX", FR_rxXmodem},
-    {(char *)"0QID@", FR_getQid},
-    {(char *)"0DB@", FR_getTaskDb},
-    {(char *)"0DB!", FR_setTaskDb},
 
 	{(char *)"0WRITE-PIN", FR_writePin},
 	{(char *)"0READ-PIN", FR_readPin},
@@ -5691,7 +5017,6 @@ static struct primfcn primt[] = {
     {(char *)"0POOL-FREE", FR_poolFree } ,
     {(char *)"0POOL-ALLOCATE", FR_poolAllocate } ,
 
-    {(char *)"0CMD-PARSE", FR_cmdParse },
     {(char *)"0TICK@", FR_getSysTick },
 	{(char *)"0LCD-RESET", FR_lcdReset },
 	{(char *)"0LCD-REG-SET",FR_lcdRegSet},
@@ -5723,43 +5048,9 @@ static struct primfcn primt[] = {
 
 #endif
 #ifdef PUBSUB
-	{(char *)"0MKDB",     FR_mkdb},
-	{(char *)"0ADD-RECORD",  FR_addRecord},
-	{(char *)"0LOOKUP",  FR_lookup},
-	{(char *)"0LOOKUP-REC",  FR_lookupRecord},
-	{(char *)"0PUBLISH",  FR_publish},
-	{(char *)"0GET-SUBCOUNT",  FR_subCount},
-	{(char *)"0.RECORD",  FR_displayRecord},
-    {(char *)"0MESSAGE@", FR_getMessage},
-    {(char *)"0MESSAGE!", FR_putMessage},
+//    {(char *)"0MESSAGE@", FR_getMessage},
 #ifdef FREERTOS
     {(char *)"0EVENT@", FR_getEvent},
-    // This code is compiled if PUBSUB AND FREERTOS are defined
-    {(char *)"0MKMSG-GET", FR_mkmsgGet},
-    {(char *)"0MKMSG-SET", FR_mkmsgSet},
-    {(char *)"0MKMSG-SUB", FR_mkmsgSub},
-    {(char *)"0MKMSG-UNSUB", FR_mkmsgUnsub},
-
-    {(char *)"0MKMSG-OPEN", FR_mkmsgOpen},
-
-    {(char *)"0SET-CMD", FR_setCmd},
-    {(char *)"0GET-CMD", FR_getCmd},
-
-    {(char *)"0SET-KEY", FR_setKey},
-    {(char *)"0GET-KEY", FR_getKey},
-
-    {(char *)"0SET-VALUE", FR_setValue},
-    {(char *)"0GET-VALUE", FR_getValue},
-
-    {(char *)"0SET-FIELD-CNT", FR_setFieldCnt},
-    {(char *)"0GET-FIELD-CNT", FR_getFieldCnt},
-
-    {(char *)"0SET-SENDER", FR_setSender},
-    {(char *)"0GET-SENDER", FR_getSender},
-#endif
-#ifdef PTHREAD
-	// TODO Rename all in this section from FR_ to PS_
-    {(char *)"0COMMS", PS_comms},
 #endif
 
 #endif

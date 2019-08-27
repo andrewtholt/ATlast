@@ -25,32 +25,6 @@ extern prim P_here();
 extern prim P_swap();
 extern prim P_allot();
 
-#ifdef PUBSUB
-void mkMsg(void *from, struct cmdMessage *msg, char *cmd, char *key, char *value) {
-
-    memset(msg, 0, sizeof(struct cmdMessage));
-    msg->payload.message.fields=3;
-
-    strncpy(msg->sender,(char *)S1, SENDER_SIZE);
-
-    strncpy(msg->payload.message.cmd,cmd,sizeof(msg->payload.message.cmd));
-    if( value == NULL) {
-        msg->payload.message.fields=2;
-        msg->payload.message.value[0]='\0';
-    } else {
-        strncpy(msg->payload.message.value, value, sizeof(msg->payload.message.value));
-    }
-    if( key == NULL) {
-        msg->payload.message.fields=1;
-        msg->payload.message.key[0]='\0';
-        msg->payload.message.value[0]='\0';
-    } else {
-        strncpy(msg->payload.message.key, key, sizeof(msg->payload.message.key));
-    }
-
-}
-#endif
-
 prim ATH_initRamBlocks() {
     int size;
     Sl(1);
@@ -70,8 +44,9 @@ prim ATH_initRamBlocks() {
 prim crap() {
     printf("Hello\n");
 }
-
+//
 // <ptr> name -- ptr
+//
 prim ATH_getenv() {
     Sl(2); // On entry will use this many.
     So(1); // on exit will leave this many.
@@ -148,8 +123,60 @@ prim ATH_perror() {
     errno=0;
     Pop;
 }
+
+// Stack : addr len fd -- actual
+//
+prim P_fdRead() {
+    char *data = (char *)S2;
+    int len=(int)S1;
+    int fd = (int)(S0);
+    Pop2;
+
+    bzero(data,len);
+
+    ssize_t actual = read(fd,data,len);
+
+    S0=actual;
+
+}
+//
+// Stack : addr len fd -- actual
+//
+prim P_fdWrite() {
+    char *data = (char *)S2;
+    int len=(int)S1;
+    int fd = (int)(S0);
+    Pop2;
+
+    ssize_t actual = write(fd,data,len);
+
+    S0=actual;
+}
+
+prim P_strstr() {
+    char *needle=(char *)S0;
+    char *haystack=(char *)S1;
+    Pop;
+
+    char *res = strstr(haystack, needle);
+    S0=res;
+}
+
+prim P_strcasestr() {
+    char *needle=(char *)S0;
+    char *haystack=(char *)S1;
+    Pop;
+
+    char *res = strcasestr(haystack, needle);
+    S0=res;
+}
+
     
 static struct primfcn extras[] = {
+    {"0FD-READ", P_fdRead},
+    {"0FD-WRITE", P_fdWrite},
+    {"0STRSTR", P_strstr},
+    {"0STRCASESTR", P_strcasestr},
     {"0INIT-RAM", ATH_initRamBlocks},
     {"0GETENV", ATH_getenv},
     {"0MMAP", ATH_mmap},
