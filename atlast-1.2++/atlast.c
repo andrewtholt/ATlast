@@ -70,9 +70,7 @@
 #endif
 
 #ifdef LIBSER
-extern "C" {
 #include <libser.h>
-}
 #include <termios.h>
 #endif
 
@@ -1875,6 +1873,7 @@ prim ATH_flushSerialPort() {
     encountered and no characters were stored.	No end
     of line character is stored in the string buffer.
     */
+/*
 Exported char *atl_fgetsp(char *s, int n, int stream) {
 
 	int rc=0;
@@ -1882,7 +1881,6 @@ Exported char *atl_fgetsp(char *s, int n, int stream) {
 	int idx=0;
 
 	while(True) {
-//		rc = yaffs_read(stream, &ch, 1);
 		rc = read(stream, &ch, 1);
 		if(rc < 0) {
 			return errno;
@@ -1906,6 +1904,7 @@ Exported char *atl_fgetsp(char *s, int n, int stream) {
 	s[idx]='\0';
 	return s;
 }
+*/
 
 #ifdef LINUX
 Exported char *atl_fgetsp(char *s, int n, FILE *stream) {

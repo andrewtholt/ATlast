@@ -3,12 +3,13 @@
 
 include profile.mk
 VERSION = 1.2
-CC=g++ -g -I/usr/local/include
+# CC=g++ -g -I/usr/local/include
+CC=gcc -g -I/usr/local/include
 
 # LIBRARIES = -lm
 # LIBRARIES += -lrt -lpthread
 # LIBRARIES = -L/usr/local/lib -lsmall -lstdc++ -lrt -lpthread
-LIBRARIES = -L/usr/local/lib -lser
+LIBRARIES = -ldl -L/usr/local/lib -lser
 
 ATLCONFIG += -DCUSTOM -DALIGNMENT -DEXPORT -DREADONLYSTRINGS 
 LDFLAGS +=-Wl,--no-as-needed

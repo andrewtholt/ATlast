@@ -6,6 +6,7 @@
 #include <sys/mman.h>
 #include <errno.h>
 #include <string.h>
+#include <dlfcn.h>
 
 
 #include <sys/mman.h>
@@ -13,13 +14,18 @@
 #include <fcntl.h>           /* For O_* constants */
 
 
-#include "atldef.h"
+// #include "atldef.h"
 #ifdef PUBSUB
 #include "msgs.h"
 #endif
 
 // Move this into atlast once updated frm FreeRTOS version
 //
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include "atldef.h"
 
 extern prim P_here();
 extern prim P_swap();
@@ -171,6 +177,64 @@ prim P_strcasestr() {
     S0=res;
 }
 
+// Stack: libname -- handle 
+prim ATH_dlopen() {
+    Sl(1);
+    So(1);
+
+    char *libname=(char *)S0;
+
+    void *ret=dlopen(libname, RTLD_LAZY);
+
+    S0 = ret;
+}
+
+// Stack ( symbol_name handle -- addr )
+prim ATH_dlsym() {
+    Sl(2);
+    So(1);
+
+    char *symName = (char *)S1;
+    void *handle = (void *)S0;
+    Pop;
+
+    void *ret = dlsym(handle, symName);
+
+    S0 = ret;
+}
+
+// Stack: argN ... arg1 N fn  -- ret 
+prim ATH_ccall() {
+    So(1);
+    int i;
+    int arg[8];
+    int ret;
+
+    int (*fn)();
+
+    fn = (int (*)()) S0;
+    int narg=(int)S1;
+    Pop2;
+
+    for (i = 0; i < narg; i++) {
+        arg[i] = S0;
+        Pop;
+    }
+
+    switch (narg) {
+        case 0: ret = (*fn)(); break;
+        case 1: ret = (*fn)(arg[0]); break;
+        case 2: ret = (*fn)(arg[0], arg[1]); break;
+        case 3: ret = (*fn)(arg[0], arg[1], arg[2]); break;
+        case 4: ret = (*fn)(arg[0], arg[1], arg[2], arg[3]); break;
+        case 5: ret = (*fn)(arg[0], arg[1], arg[2], arg[3], arg[4]); break;
+        case 6: ret = (*fn)(arg[0], arg[1], arg[2], arg[3], arg[4], arg[5]); break;
+        case 7: ret = (*fn)(arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], arg[6]); break;
+        default:
+                break;
+    }
+    Push=S0;
+}
     
 static struct primfcn extras[] = {
     {"0FD-READ", P_fdRead},
@@ -180,6 +244,9 @@ static struct primfcn extras[] = {
     {"0INIT-RAM", ATH_initRamBlocks},
     {"0GETENV", ATH_getenv},
     {"0MMAP", ATH_mmap},
+    {"0DLOPEN", ATH_dlopen},
+    {"0DLSYM", ATH_dlsym},
+    {"0(CCALL)", ATH_ccall},
 #ifdef SYSVIPC
     {"0SHM-SIZE", ATH_shmSize},
     {"0SHM-OPEN", ATH_shmOpen},
@@ -192,3 +259,7 @@ static struct primfcn extras[] = {
 void extrasLoad() {
     atl_primdef( extras );
 }
+
+#ifdef __cplusplus
+}
+#endif
