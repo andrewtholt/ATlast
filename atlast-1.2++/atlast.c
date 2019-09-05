@@ -70,7 +70,9 @@
 #endif
 
 #ifdef LIBSER
+extern "C" {
 #include <libser.h>
+}
 #include <termios.h>
 #endif
 
