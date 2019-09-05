@@ -2457,11 +2457,19 @@ prim P_strcasestr() {
     char *needle=(char *)S0;
     char *haystack=(char *)S1;
     Pop;
+<<<<<<< HEAD
 
     char *res = strcasestr(haystack, needle);
     S0=res;
 }
 
+=======
+
+    char *res = strcasestr(haystack, needle);
+    S0=res;
+}
+
+>>>>>>> parent of 8c217d8... Removeded referencea to pubsub.
 #endif
 
 #ifdef LIBSER
