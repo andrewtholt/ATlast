@@ -1,0 +1,110 @@
+
+255 constant /buffer
+
+/buffer string in-buffer
+/buffer string out-buffer
+
+variable init-run
+variable sid
+
+
+: init ( add port )
+    init-run @ 0= if
+        socket-connect 0< if 
+            abort" "Socket-connect:"
+        then
+        sid !
+        -1 init-run !
+    then
+    clear
+;
+
+\ Stack: addr 
+: cmd
+    add-eol dup strlen sid @ socket-send 0<> if
+        abort" "socket-send:"
+    else
+        drop
+    then
+
+    in-buffer /buffer sid @ socket-recv 0= if
+        abort" "socket-recv:"
+    then
+
+    in-buffer 10 strsep drop
+;
+
+\ 
+\ Stack: cmd -- state (0|-1)
+: bool-cmd
+    cmd 
+\    in-buffer evaluate 0<> if abort" "evaluate:" then
+    in-buffer "ON" strcmp 0=
+;
+
+: .status 
+    "Fans  : " type "GET FANS" bool-cmd . cr
+;
+
+32 string set-fans-on
+"SET FANS ON" set-fans-on strcpy
+set-fans-on add-eol
+
+32 string set-fans-off
+"SET FANS OFF" set-fans-off strcpy
+set-fans-off add-eol
+
+32 string get-fans
+"GET FANS" get-fans strcpy
+
+32 string get-start
+"GET START" get-start strcpy
+
+32 string get-stop
+"GET START" get-stop strcpy
+
+set-fans-on  10 dump
+set-fans-off 10 dump
+get-fans     10 dump
+get-start    10 dump
+get-stop     10 dump
+
+variable count
+
+: t1
+\    "192.168.10.124" 9191 init
+
+\    get-fans  bool-cmd 
+    "FANS" sid @ cmd-get
+\    get-start bool-cmd 
+    "START" sid @ cmd-get
+    or
+\    get-stop  bool-cmd 
+    "STOP" sid @ cmd-get
+    not and
+
+    if 
+        "FANS" "ON" 
+    else
+        "FANS" "OFF"
+    then
+    sid @ cmd-set
+
+    clear
+;
+
+: t2
+    "192.168.10.124" 9191 init
+    0 count !
+    begin
+        in-buffer /buffer erase
+        count @ . cr
+        1 count +!
+        t1
+        500 ms
+    again
+;
+
+
+\ t2
+

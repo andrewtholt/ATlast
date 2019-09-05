@@ -3,8 +3,8 @@
 
 include profile.mk
 VERSION = 1.2
-# CC=g++ -g -I/usr/local/include
-CC=gcc -g -I/usr/local/include
+CC=g++ -g -I/usr/local/include
+# CC=gcc -g -I/usr/local/include
 
 # LIBRARIES = -lm
 # LIBRARIES += -lrt -lpthread

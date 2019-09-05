@@ -1,0 +1,6 @@
+
+1024 string buffer 
+
+"/dev/ttyUSB0" 0 open-serial-port constant port
+
+

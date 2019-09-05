@@ -177,6 +177,7 @@ prim P_strcasestr() {
     S0=res;
 }
 
+#ifdef DYN_LIB
 // Stack: libname -- handle 
 prim ATH_dlopen() {
     Sl(1);
@@ -235,6 +236,7 @@ prim ATH_ccall() {
     }
     Push=S0;
 }
+#endif // DYN_LIB
     
 static struct primfcn extras[] = {
     {"0FD-READ", P_fdRead},
@@ -244,9 +246,11 @@ static struct primfcn extras[] = {
     {"0INIT-RAM", ATH_initRamBlocks},
     {"0GETENV", ATH_getenv},
     {"0MMAP", ATH_mmap},
+#ifdef DL_LIB
     {"0DLOPEN", ATH_dlopen},
     {"0DLSYM", ATH_dlsym},
     {"0(CCALL)", ATH_ccall},
+#endif
 #ifdef SYSVIPC
     {"0SHM-SIZE", ATH_shmSize},
     {"0SHM-OPEN", ATH_shmOpen},
