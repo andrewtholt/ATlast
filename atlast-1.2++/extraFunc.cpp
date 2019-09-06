@@ -277,6 +277,20 @@ prim P_vectorJoin() {
 
     S0=res;
 }
+
+prim P_vectorAt() {
+    Sl(1);
+    So(1);
+
+    vector<string> *v = S0;
+    int idx = S1;
+    Pop;
+
+    string *res = new string();;
+
+    *res = v->at(idx);
+    S0 = res;
+}
 // 
 // Stack: string sep -- vector
 //
@@ -355,6 +369,7 @@ static struct primfcn cpp_extras [] = {
     {"0FROM-FRONT",P_takeFromFront},
     {"0VECTOR-SIZE",P_vectorSize},
     {"0VECTOR-JOIN",P_vectorJoin},
+    {"0VECTOR@",P_vectorAt},
 
     {"0NEW-STRING",P_newString},
     {"0STRING!",P_setString},
