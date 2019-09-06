@@ -20,20 +20,26 @@ extern atl_int ath_safe_memory;
 prim crap() {
     printf("Hello\n");
 }
-
+// 
+// Stack : -- vector
+//
 prim P_newVector() {
-//    vector<void *> *tst = new vector<void *>;
+    Sl(0);
+    So(1);
+
     vector<string> *tst = new vector<string>(0);
     Push = tst;
 }
-
+// 
+// Stack : string vector --
+//
 prim P_addToBack() {
-//    vector<void *> *tst ;
+    //    vector<void *> *tst ;
     vector<string> *tst ;
     char *value;
 
     Sl(2);
-    Sl(0);
+    So(0);
 
     tst=( vector<string> *)S0;
     value=(char *)S1;
@@ -43,15 +49,17 @@ prim P_addToBack() {
     tst->push_back(tmp);
     Pop2;
 }
-
+// 
+// Stack : vector -- string
+//
 prim P_takeFromFront() {
+    Sl(1);
+    So(1);
+
     vector<string> *tst ;
     char *value;
 
     string *tmp = new string;
-
-    Sl(1);
-    So(1);
 
     tst=( vector<string> *)S0;
 
@@ -59,15 +67,17 @@ prim P_takeFromFront() {
     tst->erase(tst->begin());
 
     /*
-    strncpy(rrString[rrIdx], tmp.c_str(), RR_STRING);
+       strncpy(rrString[rrIdx], tmp.c_str(), RR_STRING);
 
-    S0 = (char *) &rrString[rrIdx];
-    rrIdx = (rrIdx + 1) % RR_NUM;
-    */
+       S0 = (char *) &rrString[rrIdx];
+       rrIdx = (rrIdx + 1) % RR_NUM;
+       */
     S0 = tmp;
 
 }
-
+// 
+// Stack: vector -- int 
+//
 prim P_vectorSize() {
     vector<string> *tst ;
     char *value;
@@ -79,21 +89,25 @@ prim P_vectorSize() {
 
     S0=(int)tst->size();
 }
-
+// 
+// Stack: -- string
+//
 prim P_newString() {
     // 
     // Access to string means return pointers outside the heap.
     // In order for things like type to work I need to disable this.
     // Caveat Emptor
     //
-//    ath_safe_memory = 0;
+    //    ath_safe_memory = 0;
     Sl(0);
     So(1);
 
     string *str = new string();
     Push=str;
 }
-
+// 
+// Stack : addr string --
+//
 prim P_setString() {
     Sl(2);
     Sl(0);
@@ -104,7 +118,9 @@ prim P_setString() {
 
     str->assign( data );
 }
-
+// 
+// string -- addr
+//
 prim P_getString() {
     Sl(1);
     So(1);
@@ -117,7 +133,9 @@ prim P_getString() {
 
     S0=tmp;
 }
-
+// 
+// Stack : string -- 
+//
 prim P_typeString() {
     Sl(1);
     So(1);
@@ -128,7 +146,9 @@ prim P_typeString() {
 
     Pop;
 }
-
+// 
+// Stack: string -- addr
+//
 prim P_stringToCstr() {
     Sl(2);
     Sl(0);
@@ -140,7 +160,9 @@ prim P_stringToCstr() {
 
     strcpy(out, str->c_str());
 }
-
+// 
+// Stack: string -- int
+//
 prim P_stringToInt() {
     Sl(1);
     So(1);
@@ -152,7 +174,9 @@ prim P_stringToInt() {
 
     S0 = out;
 }
-
+// 
+// Stack : int -- string
+//
 prim P_intToString() {
     Sl(2);
     So(1);
@@ -163,7 +187,9 @@ prim P_intToString() {
 
     *str = to_string(in);
 }
-
+// 
+// Stack string1 string2 -- string1+string2
+//
 prim P_appendString() {
     Sl(2);
     Sl(0);
@@ -172,9 +198,6 @@ prim P_appendString() {
     string *base = S0;
 
     *add += *base;
-
-    cout << *add << endl;
-
 }
 
 vector<string> *split(string *str, char c = ' ') {
@@ -196,7 +219,6 @@ vector<string> *split(string *str, char c = ' ') {
             idx++;
             start=idx;
 
-            cout << tmp << endl;
             result->push_back(tmp);
         } else {
             noMatch++;
@@ -205,13 +227,62 @@ vector<string> *split(string *str, char c = ' ') {
     if ( start != stringLen) {
         tmp = str->substr( start, noMatch );
         result->push_back(tmp);
-        cout << tmp << endl;
     }
 
     return result;
 }
+// 
+// Take each member string of the vector, in turn and join them with the seperator
+// between.
+//
+// NOTE: If the seperator is 0 (NULL) then the elements are simply concatnated.
+// e.g.
+//
+// Vector contain "Hello","world"
+//
+// vector char " " vector-join 
+//
+// results in a string:
+//
+// "Hello world"
+//
+// Stack: vector sep -- string 
+//
+prim P_vectorJoin() {
+    string *res = new string();;
+    string sep;
 
+    int i=1;
+
+    vector<string> *v = S1;
+    char c = S0;
+
+    if (c != 0) {
+        string sep(1,c);
+    }
+    Pop;
+
+    int vecLen = v->size();
+
+    for (const auto &s: *v) {
+        res->append(s);
+
+        if( c !=0) {
+            if ( i != vecLen) {
+                res->append(sep);
+            }
+        }
+        i++;
+    }
+
+    S0=res;
+}
+// 
+// Stack: string sep -- vector
+//
 prim P_splitString() {
+    Sl(2);
+    So(1);
 
     char c = S0;
     string *str = S1;
@@ -219,7 +290,6 @@ prim P_splitString() {
 
     vector<string> *result= split( str, c );
     S0=result;
-
 }
 
 inline string *ltrim(string *s, const char* t = " \t\n\r\f\v") {
@@ -235,7 +305,9 @@ inline string *rtrim(string *s, const char* t = " \t\n\r\f\v") {
 string *trim(string *s, const char* t = " \t\n\r\f\v") {
     return ltrim(rtrim(s, t), t);
 }
-
+// 
+// Stack: string --
+//
 prim P_trimStringLeft() {
 
     string *tmp;
@@ -247,7 +319,9 @@ prim P_trimStringLeft() {
 
     S0 = tmp;
 }
-
+// 
+// Stack: string --
+//
 prim P_trimStringRight() {
 
     string *tmp;
@@ -259,7 +333,9 @@ prim P_trimStringRight() {
 
     S0 = tmp;
 }
-
+// 
+// Stack: string --
+//
 prim P_trimString() {
 
     string *tmp;
@@ -278,6 +354,8 @@ static struct primfcn cpp_extras [] = {
     {"0TO-BACK",P_addToBack},
     {"0FROM-FRONT",P_takeFromFront},
     {"0VECTOR-SIZE",P_vectorSize},
+    {"0VECTOR-JOIN",P_vectorJoin},
+
     {"0NEW-STRING",P_newString},
     {"0STRING!",P_setString},
     {"0STRING@",P_getString},
