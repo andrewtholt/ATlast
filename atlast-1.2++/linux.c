@@ -67,9 +67,11 @@ prim ATH_initRamBlocks() {
     memset((void *)S0, ' ', size);
 }
 
+/*
 prim crap() {
     printf("Hello\n");
 }
+*/
 
 // <ptr> name -- ptr
 prim ATH_getenv() {
@@ -158,7 +160,7 @@ static struct primfcn extras[] = {
     {"0SHM-OPEN", ATH_shmOpen},
 #endif
     {"0PERROR", ATH_perror},
-    {"0TESTING", crap},
+//    {"0TESTING", crap},
     {NULL, (codeptr) 0}
 };
 

@@ -12,9 +12,7 @@
 
 */
 #include <errno.h>
-#ifndef LINUX
-#include "dover.h"
-#endif
+
 #ifdef FREERTOS
 #include "tim.h"
 #include "FreeRTOS.h"
@@ -32,21 +30,13 @@
 #include <string.h>
 #include "atlcfig.h"
 #include "atlast.h"
-#ifdef PUBSUB
-
-#include "Small.h"
-#include "msgs.h"
-
-#ifdef LINUX
-#include <mqueue.h>
-#endif
-#endif
 
 // #include "atldef.h"
 
 #ifdef LINUX
 #include <unistd.h>
 #include <poll.h>
+#include <mqueue.h>
 #ifdef ATH
 // 
 // Socket includes
@@ -68,13 +58,7 @@
 #endif
 #endif
 #endif
-
-#ifdef LIBSER
-extern "C" {
 #include <libser.h>
-}
-#include <termios.h>
-#endif
 
 // #define MEMSTAT
 
@@ -1684,7 +1668,7 @@ prim FR_getMessage() {
 
 	out = S0;
 	timeout=S1;
-	from = S2;
+	from = S2; // mq name.  TODO change to a file descriptor
 
 	mqd_t mq=mq_open(from, O_RDONLY);
 	if((mqd_t)-1 == mq) {
@@ -5589,7 +5573,7 @@ static struct primfcn primt[] = {
 	{(char *)"0ON",ATH_on},
 	{(char *)"0OFF",ATH_off},
 	{(char *)"0MKBUFFER",ATH_mkBuffer},
-	{(char *)"0MEMSAFE",ATH_memsafe},
+	{(char *)"0MEMSAFE", ATH_memsafe},
 	{(char *)"0?MEMSAFE",ATH_qmemsafe},
 	{(char *)"0DUMP",ATH_dump},
 	{(char *)"0FILL",ATH_fill},

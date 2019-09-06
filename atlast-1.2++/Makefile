@@ -13,9 +13,9 @@ LIBRARIES = -L/usr/local/lib -lser
 ATLCONFIG += -DCUSTOM -DALIGNMENT -DEXPORT -DREADONLYSTRINGS 
 LDFLAGS +=-Wl,--no-as-needed
 
-CFLAGS += $(ATLCONFIG) -fPIC  -DLINUX -w -fpermissive # -Wwrite-strings
+CFLAGS += $(ATLCONFIG) -g -fPIC  -DLINUX -w -fpermissive # -Wwrite-strings
 
-ATLOBJ += atlast.o atlmain.o
+ATLOBJ += atlast.o atlmain.o extraFunc.o
 
 APPS = atlast # atlsmall # primdeftest
 
@@ -23,6 +23,9 @@ all:	$(APPS)
 
 linux.o:	linux.c
 	$(CC) $(CFLAGS) -c linux.c -o linux.o $(INCLUDE)
+
+extraFunc.o:	extraFunc.cpp extraFunc.h
+	g++  $(CFLAGS) -c extraFunc.cpp -o extraFunc.o
 
 mqtt.o:	mqtt.c
 	$(CC) $(CFLAGS) -c mqtt.c -o mqtt.o 
