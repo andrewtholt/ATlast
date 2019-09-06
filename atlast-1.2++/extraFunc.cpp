@@ -48,19 +48,26 @@ prim P_takeFromFront() {
     vector<string> *tst ;
     char *value;
 
+    string *tmp = new string;
+
     Sl(1);
     So(1);
 
     tst=( vector<string> *)S0;
-    string tmp = tst->front();
+
+    tmp->assign(tst->front());
     tst->erase(tst->begin());
 
+    /*
     strncpy(rrString[rrIdx], tmp.c_str(), RR_STRING);
 
     S0 = (char *) &rrString[rrIdx];
     rrIdx = (rrIdx + 1) % RR_NUM;
+    */
+    S0 = tmp;
 
 }
+
 prim P_vectorSize() {
     vector<string> *tst ;
     char *value;
@@ -134,6 +141,29 @@ prim P_stringToCstr() {
     strcpy(out, str->c_str());
 }
 
+prim P_stringToInt() {
+    Sl(1);
+    So(1);
+
+    int out;
+    string *str = S0;
+
+    out = stoi(*str,nullptr,0);
+
+    S0 = out;
+}
+
+prim P_intToString() {
+    Sl(2);
+    So(1);
+
+    int in = (int)S1;
+    string *str = S0;
+    Pop2;
+
+    *str = to_string(in);
+}
+
 prim P_appendString() {
     Sl(2);
     Sl(0);
@@ -147,6 +177,100 @@ prim P_appendString() {
 
 }
 
+vector<string> *split(string *str, char c = ' ') {
+
+    int idx=0;
+    int noMatch=0;
+    int start=0;
+
+    vector<string> *result = new vector<string>(0);
+
+    int stringLen = str->size();
+
+    string tmp;
+
+    for(idx=0; idx < str->size(); idx++) {  
+        if( str->at(idx) == c ) {
+            tmp = str->substr( start, noMatch );
+            noMatch = 1 ;
+            idx++;
+            start=idx;
+
+            cout << tmp << endl;
+            result->push_back(tmp);
+        } else {
+            noMatch++;
+        }
+    }
+    if ( start != stringLen) {
+        tmp = str->substr( start, noMatch );
+        result->push_back(tmp);
+        cout << tmp << endl;
+    }
+
+    return result;
+}
+
+prim P_splitString() {
+
+    char c = S0;
+    string *str = S1;
+    Pop;
+
+    vector<string> *result= split( str, c );
+    S0=result;
+
+}
+
+inline string *ltrim(string *s, const char* t = " \t\n\r\f\v") {
+    s->erase(0, s->find_first_not_of(t));
+    return s;
+}
+
+inline string *rtrim(string *s, const char* t = " \t\n\r\f\v") {
+    s->erase(s->find_last_not_of(t) + 1);
+    return s;
+}
+
+string *trim(string *s, const char* t = " \t\n\r\f\v") {
+    return ltrim(rtrim(s, t), t);
+}
+
+prim P_trimStringLeft() {
+
+    string *tmp;
+    Sl(1);
+    So(1);
+
+    string *str = S0;
+    tmp = ltrim(str);
+
+    S0 = tmp;
+}
+
+prim P_trimStringRight() {
+
+    string *tmp;
+    Sl(1);
+    So(1);
+
+    string *str = S0;
+    tmp = rtrim(str);
+
+    S0 = tmp;
+}
+
+prim P_trimString() {
+
+    string *tmp;
+    Sl(1);
+    So(1);
+
+    string *str = S0;
+    tmp = trim(str);
+
+    S0 = tmp;
+}
 
 static struct primfcn cpp_extras [] = {
     {"0TESTING", crap},
@@ -159,7 +283,14 @@ static struct primfcn cpp_extras [] = {
     {"0STRING@",P_getString},
     {"0STRING-TYPE",P_typeString},
     {"0STRING-APPEND",P_appendString},
+    {"0STRING-SPLIT",P_splitString},
+    {"0STRING-LEFT-TRIM",P_trimStringLeft},
+    {"0STRING-RIGHT-TRIM",P_trimStringRight},
+    {"0STRING-TRIM",P_trimString},
+
     {"0STOC",P_stringToCstr},
+    {"0STOI",P_stringToInt},
+    {"0ITOS",P_intToString},
     {NULL, (codeptr) 0}
 };
 
