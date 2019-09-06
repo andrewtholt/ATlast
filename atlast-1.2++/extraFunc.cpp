@@ -161,6 +161,19 @@ prim P_stringToCstr() {
     strcpy(out, str->c_str());
 }
 // 
+// Stack : addr -- string
+//
+prim P_cstrToString() {
+    Sl(1);
+    So(1);
+
+    char *cstring = S0;
+
+    string *out = new string( cstring );
+
+    S0 = out;
+}
+// 
 // Stack: string -- int
 //
 prim P_stringToInt() {
@@ -277,7 +290,9 @@ prim P_vectorJoin() {
 
     S0=res;
 }
-
+// 
+// Stack : idx vector -- string
+//
 prim P_vectorAt() {
     Sl(1);
     So(1);
@@ -291,6 +306,34 @@ prim P_vectorAt() {
     *res = v->at(idx);
     S0 = res;
 }
+
+// 
+// Stack : string idx vector -- 
+//
+prim P_vectorPut() {
+    Sl(3);
+    So(0);
+
+    vector<string> *v = S0;
+    int idx = S1;
+    string *str = S2;
+    Npop(3);
+    
+    v->at(idx) = *str;
+
+}
+
+prim P_vectorDump() {
+    vector<string> *v = S0;
+    Pop;
+
+    int idx=0;
+    for(auto i : *v) {
+        cout << "[" << idx << "]:" + i << endl;
+        idx++;
+    }
+}
+
 // 
 // Stack: string sep -- vector
 //
@@ -370,6 +413,8 @@ static struct primfcn cpp_extras [] = {
     {"0VECTOR-SIZE",P_vectorSize},
     {"0VECTOR-JOIN",P_vectorJoin},
     {"0VECTOR@",P_vectorAt},
+    {"0VECTOR!",P_vectorPut},
+    {"0VECTOR-DUMP",P_vectorDump},
 
     {"0NEW-STRING",P_newString},
     {"0STRING!",P_setString},
@@ -382,6 +427,7 @@ static struct primfcn cpp_extras [] = {
     {"0STRING-TRIM",P_trimString},
 
     {"0STOC",P_stringToCstr},
+    {"0CTOS", P_cstrToString},
     {"0STOI",P_stringToInt},
     {"0ITOS",P_intToString},
     {NULL, (codeptr) 0}
