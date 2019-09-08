@@ -334,6 +334,19 @@ prim P_vectorDump() {
     }
 }
 
+prim P_vectorDestroy() {
+    vector<string> *v = S0;
+    Pop;
+
+    for(string i : *v) {
+        string *tmp = new string();
+        tmp->assign(v->front());
+        v->erase(v->begin());
+        delete tmp;
+    }
+    delete v;
+}
+
 // 
 // Stack: string sep -- vector
 //
@@ -405,6 +418,14 @@ prim P_trimString() {
     S0 = tmp;
 }
 
+prim P_destroyString() {
+    string *str = S0;
+    Pop;
+
+    delete str;
+}
+
+
 static struct primfcn cpp_extras [] = {
     {"0TESTING", crap},
     {"0NEW-VECTOR",P_newVector},
@@ -415,6 +436,7 @@ static struct primfcn cpp_extras [] = {
     {"0VECTOR@",P_vectorAt},
     {"0VECTOR!",P_vectorPut},
     {"0VECTOR-DUMP",P_vectorDump},
+    {"0VECTOR-DESTROY",P_vectorDestroy},
 
     {"0NEW-STRING",P_newString},
     {"0STRING!",P_setString},
@@ -425,6 +447,7 @@ static struct primfcn cpp_extras [] = {
     {"0STRING-LEFT-TRIM",P_trimStringLeft},
     {"0STRING-RIGHT-TRIM",P_trimStringRight},
     {"0STRING-TRIM",P_trimString},
+    {"0STRING-DESTROY",P_destroyString},
 
     {"0STOC",P_stringToCstr},
     {"0CTOS", P_cstrToString},
