@@ -1,6 +1,9 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <memory>
+
+#include <boost/any.hpp>
 
 #include <stdio.h>
 #include <string.h>
@@ -13,12 +16,17 @@ using namespace std;
 
 char rrString[RR_NUM][RR_STRING];
 
+vector<boost::any> objectStack;
+
 static int rrIdx = 0;
 
 extern atl_int ath_safe_memory;
 
 prim crap() {
     printf("Hello\n");
+    boost::any *ptr;
+
+    Push=ptr;
 }
 // 
 // Stack : -- vector
@@ -150,15 +158,17 @@ prim P_typeString() {
 // Stack: string -- addr
 //
 prim P_stringToCstr() {
-    Sl(2);
+    Sl(1);
     Sl(0);
+    char *out = (char *)S0;
+    Pop;
 
-    string *str = S0;
-    char *out = (char *)S1;
+    shared_ptr<string> ptr ;
 
-    Pop2;
+    ptr = boost::any_cast<shared_ptr<string>>(objectStack.back());
+    objectStack.pop_back();
 
-    strcpy(out, str->c_str());
+    strcpy(out, ptr->c_str());
 }
 // 
 // Stack : addr -- string
@@ -167,11 +177,10 @@ prim P_cstrToString() {
     Sl(1);
     So(1);
 
-    char *cstring = S0;
+    shared_ptr<string> ptr = make_shared<string>((char *)S0);
+    Pop;
 
-    string *out = new string( cstring );
-
-    S0 = out;
+    objectStack.push_back( (boost::any) ptr );
 }
 // 
 // Stack: string -- int
