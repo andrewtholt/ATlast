@@ -166,8 +166,8 @@ dictword *atl_vardef(char *name, int size);
 int atl_eval(char *sp);
 void atl_unwind( atl_statemark *mp);
 void atl_mark( atl_statemark *mp);
-static void exword( dictword *wp);
-static void trouble(char *kind);
+void exword( dictword *wp);
+void trouble(char *kind);
 
 #ifdef EXPORT
 extern char *atl_fgetsp();

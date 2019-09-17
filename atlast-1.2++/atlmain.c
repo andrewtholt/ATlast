@@ -212,9 +212,14 @@ int main(int argc, char *argv[]) {
     //
     atl_init();
 #ifdef LINUX
+#warning "Linux"
 #ifdef EXTRAS
+#warning "Extras"
     extern void extrasLoad();
+    extern void cpp_extrasLoad();
+
     extrasLoad();
+    cpp_extrasLoad();
 #endif
 #endif
 

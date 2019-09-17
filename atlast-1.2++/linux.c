@@ -6,7 +6,6 @@
 #include <sys/mman.h>
 #include <errno.h>
 #include <string.h>
-#include <dlfcn.h>
 
 
 #include <sys/mman.h>
@@ -14,7 +13,7 @@
 #include <fcntl.h>           /* For O_* constants */
 
 
-// #include "atldef.h"
+#include "atldef.h"
 #ifdef PUBSUB
 #include "msgs.h"
 #endif
@@ -22,14 +21,35 @@
 // Move this into atlast once updated frm FreeRTOS version
 //
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-#include "atldef.h"
-
 extern prim P_here();
 extern prim P_swap();
 extern prim P_allot();
+
+#ifdef PUBSUB
+void mkMsg(void *from, struct cmdMessage *msg, char *cmd, char *key, char *value) {
+
+    memset(msg, 0, sizeof(struct cmdMessage));
+    msg->payload.message.fields=3;
+
+    strncpy(msg->sender,(char *)S1, SENDER_SIZE);
+
+    strncpy(msg->payload.message.cmd,cmd,sizeof(msg->payload.message.cmd));
+    if( value == NULL) {
+        msg->payload.message.fields=2;
+        msg->payload.message.value[0]='\0';
+    } else {
+        strncpy(msg->payload.message.value, value, sizeof(msg->payload.message.value));
+    }
+    if( key == NULL) {
+        msg->payload.message.fields=1;
+        msg->payload.message.key[0]='\0';
+        msg->payload.message.value[0]='\0';
+    } else {
+        strncpy(msg->payload.message.key, key, sizeof(msg->payload.message.key));
+    }
+
+}
+#endif
 
 prim ATH_initRamBlocks() {
     int size;
@@ -47,12 +67,13 @@ prim ATH_initRamBlocks() {
     memset((void *)S0, ' ', size);
 }
 
+/*
 prim crap() {
     printf("Hello\n");
 }
-//
+*/
+
 // <ptr> name -- ptr
-//
 prim ATH_getenv() {
     Sl(2); // On entry will use this many.
     So(1); // on exit will leave this many.
@@ -129,137 +150,20 @@ prim ATH_perror() {
     errno=0;
     Pop;
 }
-
-// Stack : addr len fd -- actual
-//
-prim P_fdRead() {
-    char *data = (char *)S2;
-    int len=(int)S1;
-    int fd = (int)(S0);
-    Pop2;
-
-    bzero(data,len);
-
-    ssize_t actual = read(fd,data,len);
-
-    S0=actual;
-
-}
-//
-// Stack : addr len fd -- actual
-//
-prim P_fdWrite() {
-    char *data = (char *)S2;
-    int len=(int)S1;
-    int fd = (int)(S0);
-    Pop2;
-
-    ssize_t actual = write(fd,data,len);
-
-    S0=actual;
-}
-
-prim P_strstr() {
-    char *needle=(char *)S0;
-    char *haystack=(char *)S1;
-    Pop;
-
-    char *res = strstr(haystack, needle);
-    S0=res;
-}
-
-prim P_strcasestr() {
-    char *needle=(char *)S0;
-    char *haystack=(char *)S1;
-    Pop;
-
-    char *res = strcasestr(haystack, needle);
-    S0=res;
-}
-
-// Stack: libname -- handle 
-prim ATH_dlopen() {
-    Sl(1);
-    So(1);
-
-    char *libname=(char *)S0;
-
-    void *ret=dlopen(libname, RTLD_LAZY);
-
-    S0 = ret;
-}
-
-// Stack ( symbol_name handle -- addr )
-prim ATH_dlsym() {
-    Sl(2);
-    So(1);
-
-    char *symName = (char *)S1;
-    void *handle = (void *)S0;
-    Pop;
-
-    void *ret = dlsym(handle, symName);
-
-    S0 = ret;
-}
-
-// Stack: argN ... arg1 N fn  -- ret 
-prim ATH_ccall() {
-    So(1);
-    int i;
-    int arg[8];
-    int ret;
-
-    int (*fn)();
-
-    fn = (int (*)()) S0;
-    int narg=(int)S1;
-    Pop2;
-
-    for (i = 0; i < narg; i++) {
-        arg[i] = S0;
-        Pop;
-    }
-
-    switch (narg) {
-        case 0: ret = (*fn)(); break;
-        case 1: ret = (*fn)(arg[0]); break;
-        case 2: ret = (*fn)(arg[0], arg[1]); break;
-        case 3: ret = (*fn)(arg[0], arg[1], arg[2]); break;
-        case 4: ret = (*fn)(arg[0], arg[1], arg[2], arg[3]); break;
-        case 5: ret = (*fn)(arg[0], arg[1], arg[2], arg[3], arg[4]); break;
-        case 6: ret = (*fn)(arg[0], arg[1], arg[2], arg[3], arg[4], arg[5]); break;
-        case 7: ret = (*fn)(arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], arg[6]); break;
-        default:
-                break;
-    }
-    Push=S0;
-}
     
 static struct primfcn extras[] = {
-    {"0FD-READ", P_fdRead},
-    {"0FD-WRITE", P_fdWrite},
-    {"0STRSTR", P_strstr},
-    {"0STRCASESTR", P_strcasestr},
     {"0INIT-RAM", ATH_initRamBlocks},
     {"0GETENV", ATH_getenv},
     {"0MMAP", ATH_mmap},
-    {"0DLOPEN", ATH_dlopen},
-    {"0DLSYM", ATH_dlsym},
-    {"0(CCALL)", ATH_ccall},
 #ifdef SYSVIPC
     {"0SHM-SIZE", ATH_shmSize},
     {"0SHM-OPEN", ATH_shmOpen},
 #endif
     {"0PERROR", ATH_perror},
-    {"0TESTING", crap},
+//    {"0TESTING", crap},
     {NULL, (codeptr) 0}
 };
 
 void extrasLoad() {
     atl_primdef( extras );
 }
-
-#ifdef __cplusplus
-}
-#endif
