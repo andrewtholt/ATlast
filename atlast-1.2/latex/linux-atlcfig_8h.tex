@@ -1,0 +1,317 @@
+\hypertarget{linux-atlcfig_8h}{}\section{linux-\/atlcfig.h File Reference}
+\label{linux-atlcfig_8h}\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+Include dependency graph for linux-\/atlcfig.h\+:
+% FIG 0
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{linux-atlcfig_8h_ae47a1cb6076cec70cf9ea8efc1d5f3ff}{E\+M\+B\+E\+D\+D\+ED}
+\item 
+\#define \hyperlink{linux-atlcfig_8h_a48c036bd8ba1fdc29f0981ff7ee3d9b5}{I\+N\+D\+I\+V\+I\+D\+U\+A\+L\+LY}
+\item 
+\#define \hyperlink{linux-atlcfig_8h_af579248b8d4c16c0aeba3dff9ee8b10a}{A\+R\+R\+AY}~/$\ast$ Array subscripting words $\ast$/
+\item 
+\#define \hyperlink{linux-atlcfig_8h_abe022c8f09db1f0680a92293523f25dd}{B\+R\+E\+AK}~/$\ast$ Asynchronous break facility $\ast$/
+\item 
+\#define \hyperlink{linux-atlcfig_8h_a6e870e0dd56eee50bae52b101eb2634d}{C\+O\+M\+P\+I\+L\+E\+RW}~/$\ast$ Compiler-\/writing words $\ast$/
+\item 
+\#define \hyperlink{linux-atlcfig_8h_a1dd720c7eba235287553f1628c4687e8}{C\+O\+N\+IO}~/$\ast$ Interactive console I/O $\ast$/
+\item 
+\#define \hyperlink{linux-atlcfig_8h_a5e8c22a8ef7ae74e64818fed0e1427e5}{D\+E\+F\+F\+I\+E\+L\+DS}~/$\ast$ Definition field access for words $\ast$/
+\item 
+\#define \hyperlink{linux-atlcfig_8h_a8747af38b86aa2bbcda2f1b1aa0888c2}{D\+O\+U\+B\+LE}~/$\ast$ Double word primitives (2\+D\+U\+P) $\ast$/
+\item 
+\#define \hyperlink{linux-atlcfig_8h_ad3787f1b5599150eab9d3ca887d75640}{E\+V\+A\+L\+U\+A\+TE}~/$\ast$ The E\+V\+A\+L\+U\+A\+TE primitive $\ast$/
+\item 
+\#define \hyperlink{linux-atlcfig_8h_a6031789d52541d1bd1e7b028322fd7fd}{F\+I\+L\+E\+IO}~/$\ast$ File I/O primitives $\ast$/
+\item 
+\#define \hyperlink{linux-atlcfig_8h_a3a12ced9ae9a894dbc0a31282e769d63}{M\+E\+M\+M\+E\+S\+S\+A\+GE}~/$\ast$ Print message for \hyperlink{FreeRTOS_2atlast_8c_a119bff668c1f986f35cdc8a167c756bb}{stack}/\hyperlink{FreeRTOS_2atlast_8c_a631c4c438b300c6392fe526a50a041c3}{heap} errors $\ast$/
+\item 
+\#define \hyperlink{linux-atlcfig_8h_a90dbf4dc4f15c07ffcf27e0b757187a7}{M\+E\+M\+S\+T\+AT}
+\item 
+\#define \hyperlink{linux-atlcfig_8h_a59f8a4119207355f67b920d35ec6cc8e}{P\+R\+O\+L\+O\+G\+UE}~/$\ast$ Prologue processing and auto-\/init $\ast$/
+\item 
+\#define \hyperlink{linux-atlcfig_8h_ae957ba08823687327a6f74f8ba99cf01}{S\+H\+O\+R\+T\+C\+U\+TA}~/$\ast$ Shortcut integer arithmetic words $\ast$/
+\item 
+\#define \hyperlink{linux-atlcfig_8h_a7fb6c8bc5e9315d6ad8ecc8f29d22a9a}{S\+H\+O\+R\+T\+C\+U\+TC}~/$\ast$ Shortcut integer comparison $\ast$/
+\item 
+\#define \hyperlink{linux-atlcfig_8h_a0f4d394a3ab4e09bff60f714c66dc5ee}{S\+T\+R\+I\+NG}~/$\ast$ String functions $\ast$/
+\item 
+\#define \hyperlink{linux-atlcfig_8h_a21b97df85e65556468b28a576311271c}{S\+Y\+S\+T\+EM}~/$\ast$ System command function $\ast$/
+\item 
+\#define \hyperlink{linux-atlcfig_8h_aad9cc64d45a76ba0d37c00f8cd9caa37}{T\+R\+A\+CE}~/$\ast$ Execution tracing $\ast$/
+\item 
+\#define \hyperlink{linux-atlcfig_8h_a8a545fc997e24de1bdccb3454442ddee}{W\+A\+L\+K\+B\+A\+CK}~/$\ast$ Walkback trace $\ast$/
+\item 
+\#define \hyperlink{linux-atlcfig_8h_a1832f63df1cc6543af5e3de731b77dac}{W\+O\+R\+D\+S\+U\+S\+ED}~/$\ast$ Logging of words used and unused $\ast$/
+\item 
+\#define \hyperlink{linux-atlcfig_8h_a46c1fb0f4185dc45eda625530bc0fd73}{B\+A\+N\+N\+ER}
+\item 
+\#define \hyperlink{linux-atlcfig_8h_a55fc4596d1f1291f82c8574e9e4a8369}{A\+TH}
+\item 
+\#define \hyperlink{linux-atlcfig_8h_a9382b15380bf4f6adaafd94f1c78991a}{A\+N\+SI}~/$\ast$ Enable A\+N\+SI compatability words $\ast$/
+\item 
+\#define \hyperlink{linux-atlcfig_8h_a8d405b287035ae3af81f5b5ceceed4cd}{P\+T\+H\+R\+E\+AD}
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+char \hyperlink{linux-atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}{out\+Buffer} \mbox{[}255\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{linux-atlcfig_8h_a9382b15380bf4f6adaafd94f1c78991a}\label{linux-atlcfig_8h_a9382b15380bf4f6adaafd94f1c78991a}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!A\+N\+SI@{A\+N\+SI}}
+\index{A\+N\+SI@{A\+N\+SI}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{A\+N\+SI}{ANSI}}
+{\footnotesize\ttfamily \#define A\+N\+SI~/$\ast$ Enable A\+N\+SI compatability words $\ast$/}
+
+
+
+Definition at line 41 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_af579248b8d4c16c0aeba3dff9ee8b10a}\label{linux-atlcfig_8h_af579248b8d4c16c0aeba3dff9ee8b10a}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!A\+R\+R\+AY@{A\+R\+R\+AY}}
+\index{A\+R\+R\+AY@{A\+R\+R\+AY}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{A\+R\+R\+AY}{ARRAY}}
+{\footnotesize\ttfamily \#define A\+R\+R\+AY~/$\ast$ Array subscripting words $\ast$/}
+
+
+
+Definition at line 18 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_a55fc4596d1f1291f82c8574e9e4a8369}\label{linux-atlcfig_8h_a55fc4596d1f1291f82c8574e9e4a8369}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!A\+TH@{A\+TH}}
+\index{A\+TH@{A\+TH}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{A\+TH}{ATH}}
+{\footnotesize\ttfamily \#define A\+TH}
+
+
+
+Definition at line 40 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_a46c1fb0f4185dc45eda625530bc0fd73}\label{linux-atlcfig_8h_a46c1fb0f4185dc45eda625530bc0fd73}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!B\+A\+N\+N\+ER@{B\+A\+N\+N\+ER}}
+\index{B\+A\+N\+N\+ER@{B\+A\+N\+N\+ER}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{B\+A\+N\+N\+ER}{BANNER}}
+{\footnotesize\ttfamily \#define B\+A\+N\+N\+ER}
+
+
+
+Definition at line 39 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_abe022c8f09db1f0680a92293523f25dd}\label{linux-atlcfig_8h_abe022c8f09db1f0680a92293523f25dd}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!B\+R\+E\+AK@{B\+R\+E\+AK}}
+\index{B\+R\+E\+AK@{B\+R\+E\+AK}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{B\+R\+E\+AK}{BREAK}}
+{\footnotesize\ttfamily \#define B\+R\+E\+AK~/$\ast$ Asynchronous break facility $\ast$/}
+
+
+
+Definition at line 19 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_a6e870e0dd56eee50bae52b101eb2634d}\label{linux-atlcfig_8h_a6e870e0dd56eee50bae52b101eb2634d}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!C\+O\+M\+P\+I\+L\+E\+RW@{C\+O\+M\+P\+I\+L\+E\+RW}}
+\index{C\+O\+M\+P\+I\+L\+E\+RW@{C\+O\+M\+P\+I\+L\+E\+RW}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{C\+O\+M\+P\+I\+L\+E\+RW}{COMPILERW}}
+{\footnotesize\ttfamily \#define C\+O\+M\+P\+I\+L\+E\+RW~/$\ast$ Compiler-\/writing words $\ast$/}
+
+
+
+Definition at line 20 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_a1dd720c7eba235287553f1628c4687e8}\label{linux-atlcfig_8h_a1dd720c7eba235287553f1628c4687e8}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!C\+O\+N\+IO@{C\+O\+N\+IO}}
+\index{C\+O\+N\+IO@{C\+O\+N\+IO}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{C\+O\+N\+IO}{CONIO}}
+{\footnotesize\ttfamily \#define C\+O\+N\+IO~/$\ast$ Interactive console I/O $\ast$/}
+
+
+
+Definition at line 21 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_a5e8c22a8ef7ae74e64818fed0e1427e5}\label{linux-atlcfig_8h_a5e8c22a8ef7ae74e64818fed0e1427e5}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!D\+E\+F\+F\+I\+E\+L\+DS@{D\+E\+F\+F\+I\+E\+L\+DS}}
+\index{D\+E\+F\+F\+I\+E\+L\+DS@{D\+E\+F\+F\+I\+E\+L\+DS}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{D\+E\+F\+F\+I\+E\+L\+DS}{DEFFIELDS}}
+{\footnotesize\ttfamily \#define D\+E\+F\+F\+I\+E\+L\+DS~/$\ast$ Definition field access for words $\ast$/}
+
+
+
+Definition at line 22 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_a8747af38b86aa2bbcda2f1b1aa0888c2}\label{linux-atlcfig_8h_a8747af38b86aa2bbcda2f1b1aa0888c2}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!D\+O\+U\+B\+LE@{D\+O\+U\+B\+LE}}
+\index{D\+O\+U\+B\+LE@{D\+O\+U\+B\+LE}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{D\+O\+U\+B\+LE}{DOUBLE}}
+{\footnotesize\ttfamily \#define D\+O\+U\+B\+LE~/$\ast$ Double word primitives (2\+D\+U\+P) $\ast$/}
+
+
+
+Definition at line 23 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_ae47a1cb6076cec70cf9ea8efc1d5f3ff}\label{linux-atlcfig_8h_ae47a1cb6076cec70cf9ea8efc1d5f3ff}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!E\+M\+B\+E\+D\+D\+ED@{E\+M\+B\+E\+D\+D\+ED}}
+\index{E\+M\+B\+E\+D\+D\+ED@{E\+M\+B\+E\+D\+D\+ED}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{E\+M\+B\+E\+D\+D\+ED}{EMBEDDED}}
+{\footnotesize\ttfamily \#define E\+M\+B\+E\+D\+D\+ED}
+
+
+
+Definition at line 6 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_ad3787f1b5599150eab9d3ca887d75640}\label{linux-atlcfig_8h_ad3787f1b5599150eab9d3ca887d75640}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!E\+V\+A\+L\+U\+A\+TE@{E\+V\+A\+L\+U\+A\+TE}}
+\index{E\+V\+A\+L\+U\+A\+TE@{E\+V\+A\+L\+U\+A\+TE}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{E\+V\+A\+L\+U\+A\+TE}{EVALUATE}}
+{\footnotesize\ttfamily \#define E\+V\+A\+L\+U\+A\+TE~/$\ast$ The E\+V\+A\+L\+U\+A\+TE primitive $\ast$/}
+
+
+
+Definition at line 24 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_a6031789d52541d1bd1e7b028322fd7fd}\label{linux-atlcfig_8h_a6031789d52541d1bd1e7b028322fd7fd}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!F\+I\+L\+E\+IO@{F\+I\+L\+E\+IO}}
+\index{F\+I\+L\+E\+IO@{F\+I\+L\+E\+IO}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{F\+I\+L\+E\+IO}{FILEIO}}
+{\footnotesize\ttfamily \#define F\+I\+L\+E\+IO~/$\ast$ File I/O primitives $\ast$/}
+
+
+
+Definition at line 25 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_a48c036bd8ba1fdc29f0981ff7ee3d9b5}\label{linux-atlcfig_8h_a48c036bd8ba1fdc29f0981ff7ee3d9b5}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!I\+N\+D\+I\+V\+I\+D\+U\+A\+L\+LY@{I\+N\+D\+I\+V\+I\+D\+U\+A\+L\+LY}}
+\index{I\+N\+D\+I\+V\+I\+D\+U\+A\+L\+LY@{I\+N\+D\+I\+V\+I\+D\+U\+A\+L\+LY}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{I\+N\+D\+I\+V\+I\+D\+U\+A\+L\+LY}{INDIVIDUALLY}}
+{\footnotesize\ttfamily \#define I\+N\+D\+I\+V\+I\+D\+U\+A\+L\+LY}
+
+
+
+Definition at line 16 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_a3a12ced9ae9a894dbc0a31282e769d63}\label{linux-atlcfig_8h_a3a12ced9ae9a894dbc0a31282e769d63}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!M\+E\+M\+M\+E\+S\+S\+A\+GE@{M\+E\+M\+M\+E\+S\+S\+A\+GE}}
+\index{M\+E\+M\+M\+E\+S\+S\+A\+GE@{M\+E\+M\+M\+E\+S\+S\+A\+GE}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{M\+E\+M\+M\+E\+S\+S\+A\+GE}{MEMMESSAGE}}
+{\footnotesize\ttfamily \#define M\+E\+M\+M\+E\+S\+S\+A\+GE~/$\ast$ Print message for \hyperlink{FreeRTOS_2atlast_8c_a119bff668c1f986f35cdc8a167c756bb}{stack}/\hyperlink{FreeRTOS_2atlast_8c_a631c4c438b300c6392fe526a50a041c3}{heap} errors $\ast$/}
+
+
+
+Definition at line 27 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_a90dbf4dc4f15c07ffcf27e0b757187a7}\label{linux-atlcfig_8h_a90dbf4dc4f15c07ffcf27e0b757187a7}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!M\+E\+M\+S\+T\+AT@{M\+E\+M\+S\+T\+AT}}
+\index{M\+E\+M\+S\+T\+AT@{M\+E\+M\+S\+T\+AT}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{M\+E\+M\+S\+T\+AT}{MEMSTAT}}
+{\footnotesize\ttfamily \#define M\+E\+M\+S\+T\+AT}
+
+
+
+Definition at line 28 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_a59f8a4119207355f67b920d35ec6cc8e}\label{linux-atlcfig_8h_a59f8a4119207355f67b920d35ec6cc8e}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!P\+R\+O\+L\+O\+G\+UE@{P\+R\+O\+L\+O\+G\+UE}}
+\index{P\+R\+O\+L\+O\+G\+UE@{P\+R\+O\+L\+O\+G\+UE}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{P\+R\+O\+L\+O\+G\+UE}{PROLOGUE}}
+{\footnotesize\ttfamily \#define P\+R\+O\+L\+O\+G\+UE~/$\ast$ Prologue processing and auto-\/init $\ast$/}
+
+
+
+Definition at line 29 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_a8d405b287035ae3af81f5b5ceceed4cd}\label{linux-atlcfig_8h_a8d405b287035ae3af81f5b5ceceed4cd}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!P\+T\+H\+R\+E\+AD@{P\+T\+H\+R\+E\+AD}}
+\index{P\+T\+H\+R\+E\+AD@{P\+T\+H\+R\+E\+AD}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{P\+T\+H\+R\+E\+AD}{PTHREAD}}
+{\footnotesize\ttfamily \#define P\+T\+H\+R\+E\+AD}
+
+
+
+Definition at line 43 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_ae957ba08823687327a6f74f8ba99cf01}\label{linux-atlcfig_8h_ae957ba08823687327a6f74f8ba99cf01}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!S\+H\+O\+R\+T\+C\+U\+TA@{S\+H\+O\+R\+T\+C\+U\+TA}}
+\index{S\+H\+O\+R\+T\+C\+U\+TA@{S\+H\+O\+R\+T\+C\+U\+TA}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{S\+H\+O\+R\+T\+C\+U\+TA}{SHORTCUTA}}
+{\footnotesize\ttfamily \#define S\+H\+O\+R\+T\+C\+U\+TA~/$\ast$ Shortcut integer arithmetic words $\ast$/}
+
+
+
+Definition at line 32 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_a7fb6c8bc5e9315d6ad8ecc8f29d22a9a}\label{linux-atlcfig_8h_a7fb6c8bc5e9315d6ad8ecc8f29d22a9a}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!S\+H\+O\+R\+T\+C\+U\+TC@{S\+H\+O\+R\+T\+C\+U\+TC}}
+\index{S\+H\+O\+R\+T\+C\+U\+TC@{S\+H\+O\+R\+T\+C\+U\+TC}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{S\+H\+O\+R\+T\+C\+U\+TC}{SHORTCUTC}}
+{\footnotesize\ttfamily \#define S\+H\+O\+R\+T\+C\+U\+TC~/$\ast$ Shortcut integer comparison $\ast$/}
+
+
+
+Definition at line 33 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_a0f4d394a3ab4e09bff60f714c66dc5ee}\label{linux-atlcfig_8h_a0f4d394a3ab4e09bff60f714c66dc5ee}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!S\+T\+R\+I\+NG@{S\+T\+R\+I\+NG}}
+\index{S\+T\+R\+I\+NG@{S\+T\+R\+I\+NG}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{S\+T\+R\+I\+NG}{STRING}}
+{\footnotesize\ttfamily \#define S\+T\+R\+I\+NG~/$\ast$ String functions $\ast$/}
+
+
+
+Definition at line 34 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_a21b97df85e65556468b28a576311271c}\label{linux-atlcfig_8h_a21b97df85e65556468b28a576311271c}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!S\+Y\+S\+T\+EM@{S\+Y\+S\+T\+EM}}
+\index{S\+Y\+S\+T\+EM@{S\+Y\+S\+T\+EM}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{S\+Y\+S\+T\+EM}{SYSTEM}}
+{\footnotesize\ttfamily \#define S\+Y\+S\+T\+EM~/$\ast$ System command function $\ast$/}
+
+
+
+Definition at line 35 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_aad9cc64d45a76ba0d37c00f8cd9caa37}\label{linux-atlcfig_8h_aad9cc64d45a76ba0d37c00f8cd9caa37}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!T\+R\+A\+CE@{T\+R\+A\+CE}}
+\index{T\+R\+A\+CE@{T\+R\+A\+CE}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{T\+R\+A\+CE}{TRACE}}
+{\footnotesize\ttfamily \#define T\+R\+A\+CE~/$\ast$ Execution tracing $\ast$/}
+
+
+
+Definition at line 36 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_a8a545fc997e24de1bdccb3454442ddee}\label{linux-atlcfig_8h_a8a545fc997e24de1bdccb3454442ddee}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!W\+A\+L\+K\+B\+A\+CK@{W\+A\+L\+K\+B\+A\+CK}}
+\index{W\+A\+L\+K\+B\+A\+CK@{W\+A\+L\+K\+B\+A\+CK}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{W\+A\+L\+K\+B\+A\+CK}{WALKBACK}}
+{\footnotesize\ttfamily \#define W\+A\+L\+K\+B\+A\+CK~/$\ast$ Walkback trace $\ast$/}
+
+
+
+Definition at line 37 of file linux-\/atlcfig.\+h.
+
+\mbox{\Hypertarget{linux-atlcfig_8h_a1832f63df1cc6543af5e3de731b77dac}\label{linux-atlcfig_8h_a1832f63df1cc6543af5e3de731b77dac}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!W\+O\+R\+D\+S\+U\+S\+ED@{W\+O\+R\+D\+S\+U\+S\+ED}}
+\index{W\+O\+R\+D\+S\+U\+S\+ED@{W\+O\+R\+D\+S\+U\+S\+ED}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{W\+O\+R\+D\+S\+U\+S\+ED}{WORDSUSED}}
+{\footnotesize\ttfamily \#define W\+O\+R\+D\+S\+U\+S\+ED~/$\ast$ Logging of words used and unused $\ast$/}
+
+
+
+Definition at line 38 of file linux-\/atlcfig.\+h.
+
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{linux-atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}\label{linux-atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}} 
+\index{linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}!out\+Buffer@{out\+Buffer}}
+\index{out\+Buffer@{out\+Buffer}!linux-\/atlcfig.\+h@{linux-\/atlcfig.\+h}}
+\subsubsection{\texorpdfstring{out\+Buffer}{outBuffer}}
+{\footnotesize\ttfamily char out\+Buffer\mbox{[}255\mbox{]}}
+
+
+
+Definition at line 53 of file linux-\/atlcfig.\+h.
+

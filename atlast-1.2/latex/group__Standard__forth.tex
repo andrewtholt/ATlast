@@ -1,0 +1,197 @@
+\hypertarget{group__Standard__forth}{}\section{Standard\+\_\+forth}
+\label{group__Standard__forth}\index{Standard\+\_\+forth@{Standard\+\_\+forth}}
+Collaboration diagram for Standard\+\_\+forth\+:
+% FIG 0
+\subsection*{A\+T\+H\+\_\+dump}
+\label{_amgrp7c4ac1616c9c7cdc465887f74c419772}%
+\mbox{[}D\+U\+MP\mbox{]} Hex dump an area of memory.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em Number} & of bytes. \\
+\hline
+\mbox{\tt in}  & {\em Start} & address\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em None.} & Display, in hex, the contents of the memory.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+If you attempt to access a non-\/existant region of memory the interpreter will probably crash.
+\end{DoxyNote}
+
+\begin{DoxyCode}
+E.g.
+
+buffer 128 dump
+\end{DoxyCode}
+
+
+Where buffer is a pre-\/defined constant.
+
+
+
+ \begin{DoxyCompactItemize}
+\item 
+void \hyperlink{group__Standard__forth_ga2ad12d2555007300089d9072e6de2abf}{A\+T\+H\+\_\+dump} ()
+\end{DoxyCompactItemize}
+\subsection*{A\+T\+H\+\_\+erase}
+\label{_amgrpe5e318abffd38750c6838708ab1e7f1e}%
+\mbox{[}E\+R\+A\+SE\mbox{]} Set to 0 a region of memory.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em Number} & of bytes.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em None.} & Display, in hex, the contents of the memory.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+If you attempt to access a non-\/existant region of memory the interpreter will probably crash.
+\end{DoxyNote}
+E.\+g.
+
+buffer erase
+
+
+
+ \begin{DoxyCompactItemize}
+\item 
+void \hyperlink{group__Standard__forth_ga41d39e0bc8285a793b78ca6c6a254094}{A\+T\+H\+\_\+erase} ()
+\end{DoxyCompactItemize}
+\subsection*{A\+T\+H\+\_\+fill}
+\label{_amgrp895e7b34d52d131e20e1f804e9b188c4}%
+\mbox{[}E\+R\+A\+SE\mbox{]} Fill a region of R\+AM with the given 8 bit value.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em uint8\+\_\+t} & value. \\
+\hline
+\mbox{\tt in}  & {\em Count} & \\
+\hline
+\mbox{\tt in}  & {\em Address} & \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em None.} & Fill a region of R\+AM.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+If you attempt to access a non-\/existant region of memory the interpreter will probably crash.
+\end{DoxyNote}
+E.\+g.
+
+buffer 0xff 0xaa fill
+
+
+
+ \begin{DoxyCompactItemize}
+\item 
+void \hyperlink{group__Standard__forth_ga67975f3222fec3ffefd7ba74669464bb}{A\+T\+H\+\_\+fill} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{group__Standard__forth_ga2ad12d2555007300089d9072e6de2abf}\label{group__Standard__forth_ga2ad12d2555007300089d9072e6de2abf}} 
+\index{Standard\+\_\+forth@{Standard\+\_\+forth}!A\+T\+H\+\_\+dump@{A\+T\+H\+\_\+dump}}
+\index{A\+T\+H\+\_\+dump@{A\+T\+H\+\_\+dump}!Standard\+\_\+forth@{Standard\+\_\+forth}}
+\subsubsection{\texorpdfstring{A\+T\+H\+\_\+dump()}{ATH\_dump()}}
+{\footnotesize\ttfamily void A\+T\+H\+\_\+dump (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 953 of file atlast.\+c.
+
+
+\begin{DoxyCode}
+953                 \{
+954     \hyperlink{atldef_8h_a5926d5feea48dfae9eef1fb4e2bdb5fa}{Sl}(2); \textcolor{comment}{// address len}
+955 
+956     \textcolor{keywordtype}{int} length = \hyperlink{atldef_8h_a5cfab9793f7fd3ac4ab45eff41df9f37}{S0};
+957     uint8\_t *address = (uint8\_t *) \hyperlink{atldef_8h_a690d30e9ad3647835c243368b36d4c41}{S1};
+958     \textcolor{keywordtype}{int} lines=length/16;
+959 
+960     \textcolor{keywordflow}{if}(lines ==0 ) \{
+961         lines=1;
+962     \}
+963 \textcolor{preprocessor}{#ifdef FREERTOS}
+964     atlastTxBuffer(console, (uint8\_t *)\textcolor{stringliteral}{"\(\backslash\)r\(\backslash\)n"}) ;
+965 \textcolor{preprocessor}{#endif}
+966 
+967     \textcolor{keywordtype}{int} i=0;
+968     \textcolor{keywordflow}{for}( i = 0; i<length;i+=16) \{
+969 \textcolor{preprocessor}{#ifdef EMBEDDED}
+970         sprintf(\hyperlink{atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}{outBuffer},\textcolor{stringliteral}{"%08x:"}, (uintptr\_t)address);
+971 \textcolor{preprocessor}{#endif}
+972 \textcolor{preprocessor}{#ifdef FREERTOS}
+973     atlastTxBuffer(console, (uint8\_t *)\hyperlink{atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}{outBuffer}) ;
+974 \textcolor{preprocessor}{#else}
+975     printf(\textcolor{stringliteral}{"%s"}, \hyperlink{atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}{outBuffer});
+976 \textcolor{preprocessor}{#endif}
+977         \hyperlink{atlast_8c_aa52a6492fccb2787e471128ef336ed3a}{displayLineHex}( address );
+978         \hyperlink{atlast_8c_a04318a2c91b78c411d2c4f1fa2a7505b}{displayLineAscii}( address );
+979         address +=16;
+980     \}
+981 
+982     \hyperlink{atldef_8h_aa25c480f1a1ad10fdb756d8fd02a98ea}{Pop2};
+983 \}
+\end{DoxyCode}
+Here is the call graph for this function\+:
+% FIG 1
+\mbox{\Hypertarget{group__Standard__forth_ga41d39e0bc8285a793b78ca6c6a254094}\label{group__Standard__forth_ga41d39e0bc8285a793b78ca6c6a254094}} 
+\index{Standard\+\_\+forth@{Standard\+\_\+forth}!A\+T\+H\+\_\+erase@{A\+T\+H\+\_\+erase}}
+\index{A\+T\+H\+\_\+erase@{A\+T\+H\+\_\+erase}!Standard\+\_\+forth@{Standard\+\_\+forth}}
+\subsubsection{\texorpdfstring{A\+T\+H\+\_\+erase()}{ATH\_erase()}}
+{\footnotesize\ttfamily void A\+T\+H\+\_\+erase (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 985 of file atlast.\+c.
+
+
+\begin{DoxyCode}
+985                  \{
+986     \hyperlink{atldef_8h_a5926d5feea48dfae9eef1fb4e2bdb5fa}{Sl}(2);
+987 
+988     \textcolor{keywordtype}{int} length = \hyperlink{atldef_8h_a5cfab9793f7fd3ac4ab45eff41df9f37}{S0};
+989     uint8\_t *address = (uint8\_t *) \hyperlink{atldef_8h_a690d30e9ad3647835c243368b36d4c41}{S1};
+990 
+991     memset(address,0,length);
+992 
+993     \hyperlink{atldef_8h_aa25c480f1a1ad10fdb756d8fd02a98ea}{Pop2};
+994 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{group__Standard__forth_ga67975f3222fec3ffefd7ba74669464bb}\label{group__Standard__forth_ga67975f3222fec3ffefd7ba74669464bb}} 
+\index{Standard\+\_\+forth@{Standard\+\_\+forth}!A\+T\+H\+\_\+fill@{A\+T\+H\+\_\+fill}}
+\index{A\+T\+H\+\_\+fill@{A\+T\+H\+\_\+fill}!Standard\+\_\+forth@{Standard\+\_\+forth}}
+\subsubsection{\texorpdfstring{A\+T\+H\+\_\+fill()}{ATH\_fill()}}
+{\footnotesize\ttfamily void A\+T\+H\+\_\+fill (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 996 of file atlast.\+c.
+
+
+\begin{DoxyCode}
+996                 \{
+997     \hyperlink{atldef_8h_a5926d5feea48dfae9eef1fb4e2bdb5fa}{Sl}(3);
+998 
+999     uint8\_t d = \hyperlink{atldef_8h_a5cfab9793f7fd3ac4ab45eff41df9f37}{S0};
+1000     \textcolor{keywordtype}{int} length = \hyperlink{atldef_8h_a690d30e9ad3647835c243368b36d4c41}{S1};
+1001     uint8\_t *address = (uint8\_t *) \hyperlink{atldef_8h_ad5e70dee3c36d645b0eb1743b8a7d2bf}{S2} ;
+1002 
+1003     memset(address,d,length);
+1004 
+1005     \hyperlink{atldef_8h_aa25c480f1a1ad10fdb756d8fd02a98ea}{Pop2};
+1006     \hyperlink{atldef_8h_ad590ef6976fe2df5123108916638a353}{Pop};
+1007 \}
+\end{DoxyCode}

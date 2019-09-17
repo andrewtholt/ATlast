@@ -1,0 +1,1074 @@
+\hypertarget{atlast_8h}{}\section{atlast.\+h File Reference}
+\label{atlast_8h}\index{atlast.\+h@{atlast.\+h}}
+This graph shows which files directly or indirectly include this file\+:
+% FIG 0
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{atlast_8h_a514887c2d44f650bf5836e99dc5409b5}{A\+T\+L\+\_\+\+S\+N\+O\+RM}~0	      /$\ast$ Normal evaluation $\ast$/
+\item 
+\#define \hyperlink{atlast_8h_a9db9da1b9c7687258cc8b897961c3b61}{A\+T\+L\+\_\+\+S\+T\+A\+C\+K\+O\+V\+ER}~-\/1	      /$\ast$ Stack overflow $\ast$/
+\item 
+\#define \hyperlink{atlast_8h_a82ecaa37983b4dd5d448efaabbfe0cf9}{A\+T\+L\+\_\+\+S\+T\+A\+C\+K\+U\+N\+D\+ER}~-\/2	      /$\ast$ Stack underflow $\ast$/
+\item 
+\#define \hyperlink{atlast_8h_ace94231bcf1d05150b6e169d4f5a88e3}{A\+T\+L\+\_\+\+R\+S\+T\+A\+C\+K\+O\+V\+ER}~-\/3	      /$\ast$ Return \hyperlink{FreeRTOS_2atlast_8c_a119bff668c1f986f35cdc8a167c756bb}{stack} overflow $\ast$/
+\item 
+\#define \hyperlink{atlast_8h_ac47fec82762dc3f565014b61382c145a}{A\+T\+L\+\_\+\+R\+S\+T\+A\+C\+K\+U\+N\+D\+ER}~-\/4	      /$\ast$ Return \hyperlink{FreeRTOS_2atlast_8c_a119bff668c1f986f35cdc8a167c756bb}{stack} underflow $\ast$/
+\item 
+\#define \hyperlink{atlast_8h_a0c13350271981c1cbe24c3972620d24a}{A\+T\+L\+\_\+\+H\+E\+A\+P\+O\+V\+ER}~-\/5	      /$\ast$ Heap overflow $\ast$/
+\item 
+\#define \hyperlink{atlast_8h_a899f7b3c85b87f747602a0c121f54516}{A\+T\+L\+\_\+\+B\+A\+D\+P\+O\+I\+N\+T\+ER}~-\/6	      /$\ast$ Pointer outside the \hyperlink{FreeRTOS_2atlast_8c_a631c4c438b300c6392fe526a50a041c3}{heap} $\ast$/
+\item 
+\#define \hyperlink{atlast_8h_aa36a72f2e69677c202bc83cf2a2f0f6b}{A\+T\+L\+\_\+\+U\+N\+D\+E\+F\+I\+N\+ED}~-\/7	      /$\ast$ Undefined word $\ast$/
+\item 
+\#define \hyperlink{atlast_8h_a40b31fb9b1e63aece25ace955480f963}{A\+T\+L\+\_\+\+F\+O\+R\+G\+E\+T\+P\+R\+OT}~-\/8	      /$\ast$ Attempt to forget protected word $\ast$/
+\item 
+\#define \hyperlink{atlast_8h_ad8467e766d818ff4f7ecae6aea4bb0b4}{A\+T\+L\+\_\+\+N\+O\+T\+I\+N\+D\+EF}~-\/9	      /$\ast$ Compiler word outside definition $\ast$/
+\item 
+\#define \hyperlink{atlast_8h_ad2f55e65e2af58ea991753a246f93504}{A\+T\+L\+\_\+\+R\+U\+N\+S\+T\+R\+I\+NG}~-\/10	      /$\ast$ Unterminated string $\ast$/
+\item 
+\#define \hyperlink{atlast_8h_a0c74ce3dd95ef5800ba8f5a379f6ad7a}{A\+T\+L\+\_\+\+R\+U\+N\+C\+O\+MM}~-\/11	      /$\ast$ Unterminated comment in file $\ast$/
+\item 
+\#define \hyperlink{atlast_8h_add02f3c5ae8f553d81579ecb226eb636}{A\+T\+L\+\_\+\+B\+R\+E\+AK}~-\/12	      /$\ast$ Asynchronous break signal received $\ast$/
+\item 
+\#define \hyperlink{atlast_8h_a5892737ae8ddeab6a3075c69750008a3}{A\+T\+L\+\_\+\+D\+I\+V\+Z\+E\+RO}~-\/13	      /$\ast$ Attempt to divide by zero $\ast$/
+\item 
+\#define \hyperlink{atlast_8h_aed346d8f857c3b2b6dcf19b2ad42f510}{A\+T\+L\+\_\+\+A\+P\+P\+L\+I\+C\+A\+T\+I\+ON}~-\/14	      /$\ast$ Application primitive \hyperlink{FreeRTOS_2atlast_8c_a0621acaa25519b0ca6149b5e8ce8bee5}{atl\+\_\+error}() $\ast$/
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef long \hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int}
+\item 
+typedef double \hyperlink{atlast_8h_a63fed7e473eaa0a4f6da3ef177a84abd}{atl\+\_\+real}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{atlast_8h_a58f9de18b337d19aebc0e01ea7b9a897}{atl\+\_\+init} ()
+\item 
+void \hyperlink{atlast_8h_a8511f62a230c4d37df46a0cf7abf1ac9}{atl\+\_\+mark} ()
+\item 
+void \hyperlink{atlast_8h_ac7360cc0a171f1fb3ee406f8bba3edf9}{atl\+\_\+unwind} ()
+\item 
+void \hyperlink{atlast_8h_aa5b312683497a23193b8a0f1c598a3de}{atl\+\_\+break} ()
+\item 
+int \hyperlink{atlast_8h_af69d8df1817e444854d8bed194653dc3}{atl\+\_\+eval} ()
+\item 
+void \hyperlink{atlast_8h_ae2bcb2e7a5b185e458415dff27af3dfb}{atl\+\_\+memstat} ()
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int} \hyperlink{atlast_8h_a6954eb123491716e08dfbf05ca5390e5}{atl\+\_\+stklen}
+\item 
+\hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int} \hyperlink{atlast_8h_afd9331d1b5bbc754007c6dc8a0156b6b}{atl\+\_\+rstklen}
+\item 
+\hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int} \hyperlink{atlast_8h_ad9d3ef4d8938c4daa6a2e03a69f7ccbb}{atl\+\_\+heaplen}
+\item 
+\hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int} \hyperlink{atlast_8h_a6ccb5e82e550f35020b0591594806729}{atl\+\_\+ltempstr}
+\item 
+\hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int} \hyperlink{atlast_8h_a3c4150959a1e8cdf095d8af88424673f}{atl\+\_\+ntempstr}
+\item 
+\hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int} \hyperlink{atlast_8h_ae0c1edf4a5be638d243909d71cd93024}{atl\+\_\+trace}
+\item 
+\hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int} \hyperlink{atlast_8h_a7ae6f706be0bdcd2b904922bc2e95330}{atl\+\_\+walkback}
+\item 
+\hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int} \hyperlink{atlast_8h_ad33b0bf102655a19a58b2271a0608e3f}{atl\+\_\+comment}
+\item 
+\hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int} \hyperlink{atlast_8h_af06a96dde475881ffa956cc9a14bb259}{atl\+\_\+redef}
+\item 
+\hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int} \hyperlink{atlast_8h_a4e97b4cda19dc05788b627abf037b031}{atl\+\_\+errline}
+\end{DoxyCompactItemize}
+\subsection*{A\+T\+H\+\_\+file\+Dump}
+\label{_amgrp174e5fd71ff7d5dfd9caf88883243595}%
+\mbox{[}F\+D\+U\+MP\mbox{]} Hex dump a file.
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000001}{Todo}]change yaffs to eclofs\end{DoxyRefDesc}
+
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em Number} & of bytes. \\
+\hline
+\mbox{\tt in}  & {\em File} & name.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em None.} & Display, in hex, the contents of the given file.\\
+\hline
+\end{DoxyRetVals}
+
+\begin{DoxyCode}
+E.g.
+
+\textcolor{stringliteral}{"NAND/gauge.ini"} 32 fdump
+\end{DoxyCode}
+
+
+
+
+ \begin{DoxyCompactItemize}
+\item 
+void \hyperlink{atlast_8h_ae38f94a56afc0ead3a5549bdba1b2df9}{A\+T\+H\+\_\+file\+Dump} ()
+\end{DoxyCompactItemize}
+\subsection*{A\+T\+H\+\_\+dump}
+\label{_amgrp7c4ac1616c9c7cdc465887f74c419772}%
+\mbox{[}D\+U\+MP\mbox{]} Hex dump an area of memory.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em Number} & of bytes. \\
+\hline
+\mbox{\tt in}  & {\em Start} & address\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em None.} & Display, in hex, the contents of the memory.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+If you attempt to access a non-\/existant region of memory the interpreter will probably crash.
+\end{DoxyNote}
+
+\begin{DoxyCode}
+E.g.
+
+buffer 128 dump
+\end{DoxyCode}
+
+
+Where buffer is a pre-\/defined constant.
+
+
+
+ \begin{DoxyCompactItemize}
+\item 
+void \hyperlink{atlast_8h_a2ad12d2555007300089d9072e6de2abf}{A\+T\+H\+\_\+dump} ()
+\end{DoxyCompactItemize}
+\subsection*{A\+T\+H\+\_\+erase}
+\label{_amgrpe5e318abffd38750c6838708ab1e7f1e}%
+\mbox{[}E\+R\+A\+SE\mbox{]} Set to 0 a region of memory.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em Number} & of bytes.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em None.} & Display, in hex, the contents of the memory.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+If you attempt to access a non-\/existant region of memory the interpreter will probably crash.
+\end{DoxyNote}
+E.\+g.
+
+buffer erase
+
+
+
+ \begin{DoxyCompactItemize}
+\item 
+void \hyperlink{atlast_8h_a41d39e0bc8285a793b78ca6c6a254094}{A\+T\+H\+\_\+erase} ()
+\end{DoxyCompactItemize}
+\subsection*{A\+T\+H\+\_\+fill}
+\label{_amgrp895e7b34d52d131e20e1f804e9b188c4}%
+\mbox{[}E\+R\+A\+SE\mbox{]} Fill a region of R\+AM with the given 8 bit value.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em uint8\+\_\+t} & value. \\
+\hline
+\mbox{\tt in}  & {\em Count} & \\
+\hline
+\mbox{\tt in}  & {\em Address} & \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em None.} & Fill a region of R\+AM.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+If you attempt to access a non-\/existant region of memory the interpreter will probably crash.
+\end{DoxyNote}
+E.\+g.
+
+buffer 0xff 0xaa fill
+
+
+
+ \begin{DoxyCompactItemize}
+\item 
+void \hyperlink{atlast_8h_a67975f3222fec3ffefd7ba74669464bb}{A\+T\+H\+\_\+fill} ()
+\end{DoxyCompactItemize}
+\subsection*{I\+N\+I\+\_\+get\+Settings\+Db}
+\label{_amgrpfc8c1dcd0c01e2815c63700c130b9dec}%
+\mbox{[}S\+E\+T\+T\+I\+N\+G-\/\+DB@\mbox{]}
+
+
+\begin{DoxyRetVals}{Return values}
+{\em Global} & settings database instance.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+Using this can be dangerous, only for testing.
+\end{DoxyNote}
+E.\+g.
+
+
+
+ \begin{DoxyCompactItemize}
+\item 
+void \hyperlink{atlast_8h_a8e46a7ba8c25b44d2b44955daf55c9a0}{I\+N\+I\+\_\+get\+Settings\+Db} ()
+\end{DoxyCompactItemize}
+\subsection*{I\+N\+I\+\_\+get\+Boolean()}
+\label{_amgrp1446612007c862c78e38125e3b8f2262}%
+\mbox{[}I\+N\+I-\/\+G\+E\+T-\/\+B\+O\+O\+L\+E\+A\+N-\/\+DB@\mbox{]}
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em default} & value. \\
+\hline
+\mbox{\tt in}  & {\em char} & $\ast$ key name. \\
+\hline
+\mbox{\tt in}  & {\em char} & $\ast$ section name. \\
+\hline
+\mbox{\tt in}  & {\em db} & Instance\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em Global} & settings database instance.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+Using this can be dangerous, only for testing.
+\end{DoxyNote}
+
+\begin{DoxyCode}
+E.g.
+\end{DoxyCode}
+
+
+
+
+ \begin{DoxyCompactItemize}
+\item 
+void \hyperlink{atlast_8h_a7d6bb2b5740addca35e60bf40e56804d}{I\+N\+I\+\_\+get\+Boolean} ()
+\end{DoxyCompactItemize}
+\subsection*{F\+R\+\_\+yaffs\+Install()}
+\label{_amgrp69fc2a509d9a2f34114df83af50fdf17}%
+\mbox{[}Y\+A\+F\+F\+S-\/\+I\+N\+S\+T\+A\+LL\mbox{]} Install a device into the yaffs system.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em char} & $\ast$ N\+A\+ND device name.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em boolean} & fail flag.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+A fail flag is true, if the operation was a failure.
+\end{DoxyNote}
+
+\begin{DoxyCode}
+E.g.
+
+\textcolor{stringliteral}{"NAND1"} yaffs-install
+\end{DoxyCode}
+
+
+
+
+ \begin{DoxyCompactItemize}
+\item 
+void \hyperlink{atlast_8h_a607a1a8288ef9c9cd56b072cb2689130}{F\+R\+\_\+yaffs\+Install} ()
+\end{DoxyCompactItemize}
+\subsection*{F\+R\+\_\+yaffs\+Mount()}
+\label{_amgrp2bd9b8e86be1e88462b4681fc822adaa}%
+\mbox{[}Y\+A\+F\+F\+S-\/\+M\+O\+U\+NT\mbox{]} Make the filesystem(s) on the device accesible.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em char} & $\ast$ N\+A\+ND device name.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em boolean} & fail flag.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+A fail flag is true, if the operation was a failure.
+\end{DoxyNote}
+
+\begin{DoxyCode}
+E.g.
+
+\textcolor{stringliteral}{"NAND"} yaffs-mount
+\end{DoxyCode}
+
+
+
+
+ \begin{DoxyCompactItemize}
+\item 
+void \hyperlink{atlast_8h_ab6fa16e40ea011e52e902224ec7509c5}{F\+R\+\_\+yaffs\+Mount} ()
+\end{DoxyCompactItemize}
+\subsection*{F\+R\+\_\+yaffs\+Unmount()}
+\label{_amgrp020f55de454e9c5de4ea757e4973fe01}%
+\mbox{[}Y\+A\+F\+F\+S-\/\+U\+N\+M\+O\+U\+NT\mbox{]} Disconnect a filesystem.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em char} & $\ast$ N\+A\+ND device name.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em boolean} & fail flag.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+A fail flag is true, if the operation was a failure.
+\end{DoxyNote}
+
+\begin{DoxyCode}
+E.g.
+
+\textcolor{stringliteral}{"NAND"} yaffs-unmount
+\end{DoxyCode}
+
+
+
+
+ \begin{DoxyCompactItemize}
+\item 
+void \hyperlink{atlast_8h_a309395e8e03062b0799a0b893fd7e956}{F\+R\+\_\+yaffs\+Unmount} ()
+\end{DoxyCompactItemize}
+\subsection*{F\+R\+\_\+yaffsfs\+Create\+Def()}
+\label{_amgrpb3faee8fc29e26806a0ac467df160cba}%
+\mbox{[}O\+\_\+\+C\+R\+E\+AT\mbox{]} One of a number of constants used when opening files to set the mode
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em void} & \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em O\+\_\+\+C\+R\+E\+AT} & \\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+Conveniance funtions holding system constants. I will not document each, they are listed below\+:
+\end{DoxyNote}
+\tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Atlast Word }&\textbf{ Function  }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Atlast Word }&\textbf{ Function  }\\\cline{1-2}
+\endhead
+O\+\_\+\+R\+D\+O\+N\+LY &Read only \\\cline{1-2}
+O\+\_\+\+R\+D\+WR &Read write \\\cline{1-2}
+O\+\_\+\+T\+R\+U\+NC &Truncate file \\\cline{1-2}
+O\+\_\+\+W\+R\+O\+N\+LY &Write only \\\cline{1-2}
+O\+\_\+\+A\+P\+P\+E\+ND &Append to end \\\cline{1-2}
+\end{longtabu}
+Example of usage
+
+
+\begin{DoxyCode}
+\(\backslash\) Create and open a file read/write and store the
+\(\backslash\) file handle in \textcolor{stringliteral}{'dataFile'}
+
+file dataFile
+
+\textcolor{stringliteral}{"test.txt"} O\_CREATE O\_RDWR or dataFile fopen
+\end{DoxyCode}
+
+
+
+
+ \begin{DoxyCompactItemize}
+\item 
+void \hyperlink{atlast_8h_aa2e2e9ccf847821f6f2e11a48e7053a6}{F\+R\+\_\+yaffs\+Create\+Def} ()
+\end{DoxyCompactItemize}
+\subsection*{F\+R\+\_\+yaffs\+Seek\+Set()}
+\label{_amgrp05a3957e588269d2ceceb665690a9eab}%
+\mbox{[}S\+E\+E\+K\+\_\+\+S\+ET\mbox{]} One of a number of constants used when to set the position in a file.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em void} & \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em S\+E\+E\+K\+\_\+\+S\+ET} & \\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+Conveniance funtions holding system constants. I will not document each, they are listed below\+:
+\end{DoxyNote}
+\tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Atlast Word }&\textbf{ Function  }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Atlast Word }&\textbf{ Function  }\\\cline{1-2}
+\endhead
+S\+E\+E\+K\+\_\+\+S\+ET &Move to spec \\\cline{1-2}
+S\+E\+E\+K\+\_\+\+C\+UR &Read write \\\cline{1-2}
+S\+E\+E\+K\+\_\+\+E\+ND &Truncate file \\\cline{1-2}
+\end{longtabu}
+Example of usage
+
+
+\begin{DoxyCode}
+\(\backslash\) Move the file position 32 bytes from the start of
+\(\backslash\) the file.
+
+32 SEEK\_SET dataFile fseek
+\end{DoxyCode}
+ 
+
+ \begin{DoxyCompactItemize}
+\item 
+void \hyperlink{atlast_8h_ab73110ca8e638c04f0c14b72b794dd03}{F\+R\+\_\+yaffs\+\_\+yaffs\+Seek\+Set} ()
+\end{DoxyCompactItemize}
+\subsection*{F\+R\+\_\+data\+Size()}
+\label{_amgrpd6b2a5dda38cfc33583bbba43430dfb0}%
+\mbox{[}D\+A\+T\+A-\/\+S\+I\+ZE\mbox{]} Return size of a batch data record.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em void} & \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em int} & size\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+
+\end{DoxyNote}
+Example of usage
+
+
+\begin{DoxyCode}
+\(\backslash\) Allocate a region of memeory to hold the size
+\(\backslash\) and save the pointer in a constant.
+
+data-size allocate constant /record
+\end{DoxyCode}
+ \begin{DoxyCompactItemize}
+\item 
+void \hyperlink{atlast_8h_a57258584292422172c9a44668113d2d4}{F\+R\+\_\+data\+Size} ()
+\end{DoxyCompactItemize}
+\subsection*{F\+R\+\_\+batch\+Init()}
+\label{_amgrpc704afecfb048798e8557f86c1f95aa8}%
+\mbox{[}B\+A\+T\+C\+H-\/\+I\+N\+IT\mbox{]} Setup the files for a batching instance.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em Basename} & for batch files. \\
+\hline
+\mbox{\tt in}  & {\em Max} & number of batches. \\
+\hline
+\mbox{\tt in}  & {\em Max} & number of readings.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyRetVals}{Return values}
+{\em Instance} & of class.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+Generally only done once hwne the gauge is \textquotesingle{}out of the box\textquotesingle{}
+\end{DoxyNote}
+Example of usage
+
+
+\begin{DoxyCode}
+\(\backslash\) 
+\(\backslash\) Setup \textcolor{keywordflow}{for} 2500 batches, 10 000 reading
+\(\backslash\)
+
+10000 2500 batch batch-init constant batchData
+\end{DoxyCode}
+ \begin{DoxyCompactItemize}
+\item 
+void \hyperlink{atlast_8h_a82381ca4badad5182c46003a5e23b0dd}{F\+R\+\_\+batch\+Init} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{atlast_8h_aed346d8f857c3b2b6dcf19b2ad42f510}\label{atlast_8h_aed346d8f857c3b2b6dcf19b2ad42f510}} 
+\index{atlast.\+h@{atlast.\+h}!A\+T\+L\+\_\+\+A\+P\+P\+L\+I\+C\+A\+T\+I\+ON@{A\+T\+L\+\_\+\+A\+P\+P\+L\+I\+C\+A\+T\+I\+ON}}
+\index{A\+T\+L\+\_\+\+A\+P\+P\+L\+I\+C\+A\+T\+I\+ON@{A\+T\+L\+\_\+\+A\+P\+P\+L\+I\+C\+A\+T\+I\+ON}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{A\+T\+L\+\_\+\+A\+P\+P\+L\+I\+C\+A\+T\+I\+ON}{ATL\_APPLICATION}}
+{\footnotesize\ttfamily \#define A\+T\+L\+\_\+\+A\+P\+P\+L\+I\+C\+A\+T\+I\+ON~-\/14	      /$\ast$ Application primitive \hyperlink{FreeRTOS_2atlast_8c_a0621acaa25519b0ca6149b5e8ce8bee5}{atl\+\_\+error}() $\ast$/}
+
+
+
+Definition at line 60 of file atlast.\+h.
+
+\mbox{\Hypertarget{atlast_8h_a899f7b3c85b87f747602a0c121f54516}\label{atlast_8h_a899f7b3c85b87f747602a0c121f54516}} 
+\index{atlast.\+h@{atlast.\+h}!A\+T\+L\+\_\+\+B\+A\+D\+P\+O\+I\+N\+T\+ER@{A\+T\+L\+\_\+\+B\+A\+D\+P\+O\+I\+N\+T\+ER}}
+\index{A\+T\+L\+\_\+\+B\+A\+D\+P\+O\+I\+N\+T\+ER@{A\+T\+L\+\_\+\+B\+A\+D\+P\+O\+I\+N\+T\+ER}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{A\+T\+L\+\_\+\+B\+A\+D\+P\+O\+I\+N\+T\+ER}{ATL\_BADPOINTER}}
+{\footnotesize\ttfamily \#define A\+T\+L\+\_\+\+B\+A\+D\+P\+O\+I\+N\+T\+ER~-\/6	      /$\ast$ Pointer outside the \hyperlink{FreeRTOS_2atlast_8c_a631c4c438b300c6392fe526a50a041c3}{heap} $\ast$/}
+
+
+
+Definition at line 52 of file atlast.\+h.
+
+\mbox{\Hypertarget{atlast_8h_add02f3c5ae8f553d81579ecb226eb636}\label{atlast_8h_add02f3c5ae8f553d81579ecb226eb636}} 
+\index{atlast.\+h@{atlast.\+h}!A\+T\+L\+\_\+\+B\+R\+E\+AK@{A\+T\+L\+\_\+\+B\+R\+E\+AK}}
+\index{A\+T\+L\+\_\+\+B\+R\+E\+AK@{A\+T\+L\+\_\+\+B\+R\+E\+AK}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{A\+T\+L\+\_\+\+B\+R\+E\+AK}{ATL\_BREAK}}
+{\footnotesize\ttfamily \#define A\+T\+L\+\_\+\+B\+R\+E\+AK~-\/12	      /$\ast$ Asynchronous break signal received $\ast$/}
+
+
+
+Definition at line 58 of file atlast.\+h.
+
+\mbox{\Hypertarget{atlast_8h_a5892737ae8ddeab6a3075c69750008a3}\label{atlast_8h_a5892737ae8ddeab6a3075c69750008a3}} 
+\index{atlast.\+h@{atlast.\+h}!A\+T\+L\+\_\+\+D\+I\+V\+Z\+E\+RO@{A\+T\+L\+\_\+\+D\+I\+V\+Z\+E\+RO}}
+\index{A\+T\+L\+\_\+\+D\+I\+V\+Z\+E\+RO@{A\+T\+L\+\_\+\+D\+I\+V\+Z\+E\+RO}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{A\+T\+L\+\_\+\+D\+I\+V\+Z\+E\+RO}{ATL\_DIVZERO}}
+{\footnotesize\ttfamily \#define A\+T\+L\+\_\+\+D\+I\+V\+Z\+E\+RO~-\/13	      /$\ast$ Attempt to divide by zero $\ast$/}
+
+
+
+Definition at line 59 of file atlast.\+h.
+
+\mbox{\Hypertarget{atlast_8h_a40b31fb9b1e63aece25ace955480f963}\label{atlast_8h_a40b31fb9b1e63aece25ace955480f963}} 
+\index{atlast.\+h@{atlast.\+h}!A\+T\+L\+\_\+\+F\+O\+R\+G\+E\+T\+P\+R\+OT@{A\+T\+L\+\_\+\+F\+O\+R\+G\+E\+T\+P\+R\+OT}}
+\index{A\+T\+L\+\_\+\+F\+O\+R\+G\+E\+T\+P\+R\+OT@{A\+T\+L\+\_\+\+F\+O\+R\+G\+E\+T\+P\+R\+OT}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{A\+T\+L\+\_\+\+F\+O\+R\+G\+E\+T\+P\+R\+OT}{ATL\_FORGETPROT}}
+{\footnotesize\ttfamily \#define A\+T\+L\+\_\+\+F\+O\+R\+G\+E\+T\+P\+R\+OT~-\/8	      /$\ast$ Attempt to forget protected word $\ast$/}
+
+
+
+Definition at line 54 of file atlast.\+h.
+
+\mbox{\Hypertarget{atlast_8h_a0c13350271981c1cbe24c3972620d24a}\label{atlast_8h_a0c13350271981c1cbe24c3972620d24a}} 
+\index{atlast.\+h@{atlast.\+h}!A\+T\+L\+\_\+\+H\+E\+A\+P\+O\+V\+ER@{A\+T\+L\+\_\+\+H\+E\+A\+P\+O\+V\+ER}}
+\index{A\+T\+L\+\_\+\+H\+E\+A\+P\+O\+V\+ER@{A\+T\+L\+\_\+\+H\+E\+A\+P\+O\+V\+ER}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{A\+T\+L\+\_\+\+H\+E\+A\+P\+O\+V\+ER}{ATL\_HEAPOVER}}
+{\footnotesize\ttfamily \#define A\+T\+L\+\_\+\+H\+E\+A\+P\+O\+V\+ER~-\/5	      /$\ast$ Heap overflow $\ast$/}
+
+
+
+Definition at line 51 of file atlast.\+h.
+
+\mbox{\Hypertarget{atlast_8h_ad8467e766d818ff4f7ecae6aea4bb0b4}\label{atlast_8h_ad8467e766d818ff4f7ecae6aea4bb0b4}} 
+\index{atlast.\+h@{atlast.\+h}!A\+T\+L\+\_\+\+N\+O\+T\+I\+N\+D\+EF@{A\+T\+L\+\_\+\+N\+O\+T\+I\+N\+D\+EF}}
+\index{A\+T\+L\+\_\+\+N\+O\+T\+I\+N\+D\+EF@{A\+T\+L\+\_\+\+N\+O\+T\+I\+N\+D\+EF}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{A\+T\+L\+\_\+\+N\+O\+T\+I\+N\+D\+EF}{ATL\_NOTINDEF}}
+{\footnotesize\ttfamily \#define A\+T\+L\+\_\+\+N\+O\+T\+I\+N\+D\+EF~-\/9	      /$\ast$ Compiler word outside definition $\ast$/}
+
+
+
+Definition at line 55 of file atlast.\+h.
+
+\mbox{\Hypertarget{atlast_8h_ace94231bcf1d05150b6e169d4f5a88e3}\label{atlast_8h_ace94231bcf1d05150b6e169d4f5a88e3}} 
+\index{atlast.\+h@{atlast.\+h}!A\+T\+L\+\_\+\+R\+S\+T\+A\+C\+K\+O\+V\+ER@{A\+T\+L\+\_\+\+R\+S\+T\+A\+C\+K\+O\+V\+ER}}
+\index{A\+T\+L\+\_\+\+R\+S\+T\+A\+C\+K\+O\+V\+ER@{A\+T\+L\+\_\+\+R\+S\+T\+A\+C\+K\+O\+V\+ER}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{A\+T\+L\+\_\+\+R\+S\+T\+A\+C\+K\+O\+V\+ER}{ATL\_RSTACKOVER}}
+{\footnotesize\ttfamily \#define A\+T\+L\+\_\+\+R\+S\+T\+A\+C\+K\+O\+V\+ER~-\/3	      /$\ast$ Return \hyperlink{FreeRTOS_2atlast_8c_a119bff668c1f986f35cdc8a167c756bb}{stack} overflow $\ast$/}
+
+
+
+Definition at line 49 of file atlast.\+h.
+
+\mbox{\Hypertarget{atlast_8h_ac47fec82762dc3f565014b61382c145a}\label{atlast_8h_ac47fec82762dc3f565014b61382c145a}} 
+\index{atlast.\+h@{atlast.\+h}!A\+T\+L\+\_\+\+R\+S\+T\+A\+C\+K\+U\+N\+D\+ER@{A\+T\+L\+\_\+\+R\+S\+T\+A\+C\+K\+U\+N\+D\+ER}}
+\index{A\+T\+L\+\_\+\+R\+S\+T\+A\+C\+K\+U\+N\+D\+ER@{A\+T\+L\+\_\+\+R\+S\+T\+A\+C\+K\+U\+N\+D\+ER}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{A\+T\+L\+\_\+\+R\+S\+T\+A\+C\+K\+U\+N\+D\+ER}{ATL\_RSTACKUNDER}}
+{\footnotesize\ttfamily \#define A\+T\+L\+\_\+\+R\+S\+T\+A\+C\+K\+U\+N\+D\+ER~-\/4	      /$\ast$ Return \hyperlink{FreeRTOS_2atlast_8c_a119bff668c1f986f35cdc8a167c756bb}{stack} underflow $\ast$/}
+
+
+
+Definition at line 50 of file atlast.\+h.
+
+\mbox{\Hypertarget{atlast_8h_a0c74ce3dd95ef5800ba8f5a379f6ad7a}\label{atlast_8h_a0c74ce3dd95ef5800ba8f5a379f6ad7a}} 
+\index{atlast.\+h@{atlast.\+h}!A\+T\+L\+\_\+\+R\+U\+N\+C\+O\+MM@{A\+T\+L\+\_\+\+R\+U\+N\+C\+O\+MM}}
+\index{A\+T\+L\+\_\+\+R\+U\+N\+C\+O\+MM@{A\+T\+L\+\_\+\+R\+U\+N\+C\+O\+MM}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{A\+T\+L\+\_\+\+R\+U\+N\+C\+O\+MM}{ATL\_RUNCOMM}}
+{\footnotesize\ttfamily \#define A\+T\+L\+\_\+\+R\+U\+N\+C\+O\+MM~-\/11	      /$\ast$ Unterminated comment in file $\ast$/}
+
+
+
+Definition at line 57 of file atlast.\+h.
+
+\mbox{\Hypertarget{atlast_8h_ad2f55e65e2af58ea991753a246f93504}\label{atlast_8h_ad2f55e65e2af58ea991753a246f93504}} 
+\index{atlast.\+h@{atlast.\+h}!A\+T\+L\+\_\+\+R\+U\+N\+S\+T\+R\+I\+NG@{A\+T\+L\+\_\+\+R\+U\+N\+S\+T\+R\+I\+NG}}
+\index{A\+T\+L\+\_\+\+R\+U\+N\+S\+T\+R\+I\+NG@{A\+T\+L\+\_\+\+R\+U\+N\+S\+T\+R\+I\+NG}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{A\+T\+L\+\_\+\+R\+U\+N\+S\+T\+R\+I\+NG}{ATL\_RUNSTRING}}
+{\footnotesize\ttfamily \#define A\+T\+L\+\_\+\+R\+U\+N\+S\+T\+R\+I\+NG~-\/10	      /$\ast$ Unterminated string $\ast$/}
+
+
+
+Definition at line 56 of file atlast.\+h.
+
+\mbox{\Hypertarget{atlast_8h_a514887c2d44f650bf5836e99dc5409b5}\label{atlast_8h_a514887c2d44f650bf5836e99dc5409b5}} 
+\index{atlast.\+h@{atlast.\+h}!A\+T\+L\+\_\+\+S\+N\+O\+RM@{A\+T\+L\+\_\+\+S\+N\+O\+RM}}
+\index{A\+T\+L\+\_\+\+S\+N\+O\+RM@{A\+T\+L\+\_\+\+S\+N\+O\+RM}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{A\+T\+L\+\_\+\+S\+N\+O\+RM}{ATL\_SNORM}}
+{\footnotesize\ttfamily \#define A\+T\+L\+\_\+\+S\+N\+O\+RM~0	      /$\ast$ Normal evaluation $\ast$/}
+
+
+
+Definition at line 46 of file atlast.\+h.
+
+\mbox{\Hypertarget{atlast_8h_a9db9da1b9c7687258cc8b897961c3b61}\label{atlast_8h_a9db9da1b9c7687258cc8b897961c3b61}} 
+\index{atlast.\+h@{atlast.\+h}!A\+T\+L\+\_\+\+S\+T\+A\+C\+K\+O\+V\+ER@{A\+T\+L\+\_\+\+S\+T\+A\+C\+K\+O\+V\+ER}}
+\index{A\+T\+L\+\_\+\+S\+T\+A\+C\+K\+O\+V\+ER@{A\+T\+L\+\_\+\+S\+T\+A\+C\+K\+O\+V\+ER}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{A\+T\+L\+\_\+\+S\+T\+A\+C\+K\+O\+V\+ER}{ATL\_STACKOVER}}
+{\footnotesize\ttfamily \#define A\+T\+L\+\_\+\+S\+T\+A\+C\+K\+O\+V\+ER~-\/1	      /$\ast$ Stack overflow $\ast$/}
+
+
+
+Definition at line 47 of file atlast.\+h.
+
+\mbox{\Hypertarget{atlast_8h_a82ecaa37983b4dd5d448efaabbfe0cf9}\label{atlast_8h_a82ecaa37983b4dd5d448efaabbfe0cf9}} 
+\index{atlast.\+h@{atlast.\+h}!A\+T\+L\+\_\+\+S\+T\+A\+C\+K\+U\+N\+D\+ER@{A\+T\+L\+\_\+\+S\+T\+A\+C\+K\+U\+N\+D\+ER}}
+\index{A\+T\+L\+\_\+\+S\+T\+A\+C\+K\+U\+N\+D\+ER@{A\+T\+L\+\_\+\+S\+T\+A\+C\+K\+U\+N\+D\+ER}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{A\+T\+L\+\_\+\+S\+T\+A\+C\+K\+U\+N\+D\+ER}{ATL\_STACKUNDER}}
+{\footnotesize\ttfamily \#define A\+T\+L\+\_\+\+S\+T\+A\+C\+K\+U\+N\+D\+ER~-\/2	      /$\ast$ Stack underflow $\ast$/}
+
+
+
+Definition at line 48 of file atlast.\+h.
+
+\mbox{\Hypertarget{atlast_8h_aa36a72f2e69677c202bc83cf2a2f0f6b}\label{atlast_8h_aa36a72f2e69677c202bc83cf2a2f0f6b}} 
+\index{atlast.\+h@{atlast.\+h}!A\+T\+L\+\_\+\+U\+N\+D\+E\+F\+I\+N\+ED@{A\+T\+L\+\_\+\+U\+N\+D\+E\+F\+I\+N\+ED}}
+\index{A\+T\+L\+\_\+\+U\+N\+D\+E\+F\+I\+N\+ED@{A\+T\+L\+\_\+\+U\+N\+D\+E\+F\+I\+N\+ED}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{A\+T\+L\+\_\+\+U\+N\+D\+E\+F\+I\+N\+ED}{ATL\_UNDEFINED}}
+{\footnotesize\ttfamily \#define A\+T\+L\+\_\+\+U\+N\+D\+E\+F\+I\+N\+ED~-\/7	      /$\ast$ Undefined word $\ast$/}
+
+
+
+Definition at line 53 of file atlast.\+h.
+
+
+
+\subsection{Typedef Documentation}
+\mbox{\Hypertarget{atlast_8h_a6412b0dbba3e91ae7c47966799260256}\label{atlast_8h_a6412b0dbba3e91ae7c47966799260256}} 
+\index{atlast.\+h@{atlast.\+h}!atl\+\_\+int@{atl\+\_\+int}}
+\index{atl\+\_\+int@{atl\+\_\+int}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{atl\+\_\+int}{atl\_int}}
+{\footnotesize\ttfamily typedef long \hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int}}
+
+
+
+Definition at line 24 of file atlast.\+h.
+
+\mbox{\Hypertarget{atlast_8h_a63fed7e473eaa0a4f6da3ef177a84abd}\label{atlast_8h_a63fed7e473eaa0a4f6da3ef177a84abd}} 
+\index{atlast.\+h@{atlast.\+h}!atl\+\_\+real@{atl\+\_\+real}}
+\index{atl\+\_\+real@{atl\+\_\+real}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{atl\+\_\+real}{atl\_real}}
+{\footnotesize\ttfamily typedef double \hyperlink{atlast_8h_a63fed7e473eaa0a4f6da3ef177a84abd}{atl\+\_\+real}}
+
+
+
+Definition at line 25 of file atlast.\+h.
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{atlast_8h_a2ad12d2555007300089d9072e6de2abf}\label{atlast_8h_a2ad12d2555007300089d9072e6de2abf}} 
+\index{atlast.\+h@{atlast.\+h}!A\+T\+H\+\_\+dump@{A\+T\+H\+\_\+dump}}
+\index{A\+T\+H\+\_\+dump@{A\+T\+H\+\_\+dump}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{A\+T\+H\+\_\+dump()}{ATH\_dump()}}
+{\footnotesize\ttfamily void A\+T\+H\+\_\+dump (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 953 of file atlast.\+c.
+
+
+\begin{DoxyCode}
+953                 \{
+954     \hyperlink{atldef_8h_a5926d5feea48dfae9eef1fb4e2bdb5fa}{Sl}(2); \textcolor{comment}{// address len}
+955 
+956     \textcolor{keywordtype}{int} length = \hyperlink{atldef_8h_a5cfab9793f7fd3ac4ab45eff41df9f37}{S0};
+957     uint8\_t *address = (uint8\_t *) \hyperlink{atldef_8h_a690d30e9ad3647835c243368b36d4c41}{S1};
+958     \textcolor{keywordtype}{int} lines=length/16;
+959 
+960     \textcolor{keywordflow}{if}(lines ==0 ) \{
+961         lines=1;
+962     \}
+963 \textcolor{preprocessor}{#ifdef FREERTOS}
+964     atlastTxBuffer(console, (uint8\_t *)\textcolor{stringliteral}{"\(\backslash\)r\(\backslash\)n"}) ;
+965 \textcolor{preprocessor}{#endif}
+966 
+967     \textcolor{keywordtype}{int} i=0;
+968     \textcolor{keywordflow}{for}( i = 0; i<length;i+=16) \{
+969 \textcolor{preprocessor}{#ifdef EMBEDDED}
+970         sprintf(\hyperlink{atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}{outBuffer},\textcolor{stringliteral}{"%08x:"}, (uintptr\_t)address);
+971 \textcolor{preprocessor}{#endif}
+972 \textcolor{preprocessor}{#ifdef FREERTOS}
+973     atlastTxBuffer(console, (uint8\_t *)\hyperlink{atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}{outBuffer}) ;
+974 \textcolor{preprocessor}{#else}
+975     printf(\textcolor{stringliteral}{"%s"}, \hyperlink{atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}{outBuffer});
+976 \textcolor{preprocessor}{#endif}
+977         \hyperlink{atlast_8c_aa52a6492fccb2787e471128ef336ed3a}{displayLineHex}( address );
+978         \hyperlink{atlast_8c_a04318a2c91b78c411d2c4f1fa2a7505b}{displayLineAscii}( address );
+979         address +=16;
+980     \}
+981 
+982     \hyperlink{atldef_8h_aa25c480f1a1ad10fdb756d8fd02a98ea}{Pop2};
+983 \}
+\end{DoxyCode}
+Here is the call graph for this function\+:
+% FIG 1
+\mbox{\Hypertarget{atlast_8h_a41d39e0bc8285a793b78ca6c6a254094}\label{atlast_8h_a41d39e0bc8285a793b78ca6c6a254094}} 
+\index{atlast.\+h@{atlast.\+h}!A\+T\+H\+\_\+erase@{A\+T\+H\+\_\+erase}}
+\index{A\+T\+H\+\_\+erase@{A\+T\+H\+\_\+erase}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{A\+T\+H\+\_\+erase()}{ATH\_erase()}}
+{\footnotesize\ttfamily void A\+T\+H\+\_\+erase (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 985 of file atlast.\+c.
+
+
+\begin{DoxyCode}
+985                  \{
+986     \hyperlink{atldef_8h_a5926d5feea48dfae9eef1fb4e2bdb5fa}{Sl}(2);
+987 
+988     \textcolor{keywordtype}{int} length = \hyperlink{atldef_8h_a5cfab9793f7fd3ac4ab45eff41df9f37}{S0};
+989     uint8\_t *address = (uint8\_t *) \hyperlink{atldef_8h_a690d30e9ad3647835c243368b36d4c41}{S1};
+990 
+991     memset(address,0,length);
+992 
+993     \hyperlink{atldef_8h_aa25c480f1a1ad10fdb756d8fd02a98ea}{Pop2};
+994 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{atlast_8h_ae38f94a56afc0ead3a5549bdba1b2df9}\label{atlast_8h_ae38f94a56afc0ead3a5549bdba1b2df9}} 
+\index{atlast.\+h@{atlast.\+h}!A\+T\+H\+\_\+file\+Dump@{A\+T\+H\+\_\+file\+Dump}}
+\index{A\+T\+H\+\_\+file\+Dump@{A\+T\+H\+\_\+file\+Dump}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{A\+T\+H\+\_\+file\+Dump()}{ATH\_fileDump()}}
+{\footnotesize\ttfamily void A\+T\+H\+\_\+file\+Dump (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{atlast_8h_a67975f3222fec3ffefd7ba74669464bb}\label{atlast_8h_a67975f3222fec3ffefd7ba74669464bb}} 
+\index{atlast.\+h@{atlast.\+h}!A\+T\+H\+\_\+fill@{A\+T\+H\+\_\+fill}}
+\index{A\+T\+H\+\_\+fill@{A\+T\+H\+\_\+fill}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{A\+T\+H\+\_\+fill()}{ATH\_fill()}}
+{\footnotesize\ttfamily void A\+T\+H\+\_\+fill (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 996 of file atlast.\+c.
+
+
+\begin{DoxyCode}
+996                 \{
+997     \hyperlink{atldef_8h_a5926d5feea48dfae9eef1fb4e2bdb5fa}{Sl}(3);
+998 
+999     uint8\_t d = \hyperlink{atldef_8h_a5cfab9793f7fd3ac4ab45eff41df9f37}{S0};
+1000     \textcolor{keywordtype}{int} length = \hyperlink{atldef_8h_a690d30e9ad3647835c243368b36d4c41}{S1};
+1001     uint8\_t *address = (uint8\_t *) \hyperlink{atldef_8h_ad5e70dee3c36d645b0eb1743b8a7d2bf}{S2} ;
+1002 
+1003     memset(address,d,length);
+1004 
+1005     \hyperlink{atldef_8h_aa25c480f1a1ad10fdb756d8fd02a98ea}{Pop2};
+1006     \hyperlink{atldef_8h_ad590ef6976fe2df5123108916638a353}{Pop};
+1007 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{atlast_8h_aa5b312683497a23193b8a0f1c598a3de}\label{atlast_8h_aa5b312683497a23193b8a0f1c598a3de}} 
+\index{atlast.\+h@{atlast.\+h}!atl\+\_\+break@{atl\+\_\+break}}
+\index{atl\+\_\+break@{atl\+\_\+break}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{atl\+\_\+break()}{atl\_break()}}
+{\footnotesize\ttfamily void atl\+\_\+break (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 6271 of file atlast.\+c.
+
+
+\begin{DoxyCode}
+6272 \{
+6273     \hyperlink{atlast_8c_adf6d8c5392cdd32117dec18190a4109a}{broken} = \hyperlink{atldef_8h_ae7d38601dfbd73adbe5c1b3ec34e0e13a6d32c34708a0a3507c4bdb89219d650b}{True};              \textcolor{comment}{/* Set break request */}
+6274 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{atlast_8h_af69d8df1817e444854d8bed194653dc3}\label{atlast_8h_af69d8df1817e444854d8bed194653dc3}} 
+\index{atlast.\+h@{atlast.\+h}!atl\+\_\+eval@{atl\+\_\+eval}}
+\index{atl\+\_\+eval@{atl\+\_\+eval}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{atl\+\_\+eval()}{atl\_eval()}}
+{\footnotesize\ttfamily int atl\+\_\+eval (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{atlast_8h_a58f9de18b337d19aebc0e01ea7b9a897}\label{atlast_8h_a58f9de18b337d19aebc0e01ea7b9a897}} 
+\index{atlast.\+h@{atlast.\+h}!atl\+\_\+init@{atl\+\_\+init}}
+\index{atl\+\_\+init@{atl\+\_\+init}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{atl\+\_\+init()}{atl\_init()}}
+{\footnotesize\ttfamily void atl\+\_\+init (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{atlast_8h_a8511f62a230c4d37df46a0cf7abf1ac9}\label{atlast_8h_a8511f62a230c4d37df46a0cf7abf1ac9}} 
+\index{atlast.\+h@{atlast.\+h}!atl\+\_\+mark@{atl\+\_\+mark}}
+\index{atl\+\_\+mark@{atl\+\_\+mark}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{atl\+\_\+mark()}{atl\_mark()}}
+{\footnotesize\ttfamily void atl\+\_\+mark (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{atlast_8h_ae2bcb2e7a5b185e458415dff27af3dfb}\label{atlast_8h_ae2bcb2e7a5b185e458415dff27af3dfb}} 
+\index{atlast.\+h@{atlast.\+h}!atl\+\_\+memstat@{atl\+\_\+memstat}}
+\index{atl\+\_\+memstat@{atl\+\_\+memstat}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{atl\+\_\+memstat()}{atl\_memstat()}}
+{\footnotesize\ttfamily void atl\+\_\+memstat (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 2503 of file atlast.\+c.
+
+
+\begin{DoxyCode}
+2503                    \{
+2504     \textcolor{keyword}{static} \textcolor{keywordtype}{char} fmt[] = \textcolor{stringliteral}{"   %-12s %6ld    %6ld    %6ld       %3ld %%\(\backslash\)r\(\backslash\)n"};
+2505 \textcolor{preprocessor}{#ifdef EMBEDDED}
+2506      sprintf(\hyperlink{atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}{outBuffer},\textcolor{stringliteral}{"  Memory Area     usage     used    allocated   in use\(\backslash\)r\(\backslash\)n"});
+2507 \textcolor{preprocessor}{#ifdef FREERTOS}
+2508      atlastTxBuffer(console, (uint8\_t *)\hyperlink{atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}{outBuffer}) ;
+2509 \textcolor{preprocessor}{#else}
+2510      printf(\textcolor{stringliteral}{"%s"},\hyperlink{atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}{outBuffer});
+2511 \textcolor{preprocessor}{#endif}
+2512 
+2513      sprintf(\hyperlink{atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}{outBuffer}, fmt, \textcolor{stringliteral}{"Stack"},
+2514             ((\textcolor{keywordtype}{long}) (\hyperlink{atlast_8c_a56d9cb259e66ac2fbd1f90a60ae67c46}{stk} - \hyperlink{atlast_8c_a119bff668c1f986f35cdc8a167c756bb}{stack})),
+2515             ((\textcolor{keywordtype}{long}) (\hyperlink{atlast_8c_ad095c4d45a7959f697a6208f794c6757}{stackmax} - \hyperlink{atlast_8c_a119bff668c1f986f35cdc8a167c756bb}{stack})),
+2516             \hyperlink{atlast_8c_a6954eb123491716e08dfbf05ca5390e5}{atl\_stklen},
+2517             (100L * (\hyperlink{atlast_8c_a56d9cb259e66ac2fbd1f90a60ae67c46}{stk} - \hyperlink{atlast_8c_a119bff668c1f986f35cdc8a167c756bb}{stack})) / \hyperlink{atlast_8c_a6954eb123491716e08dfbf05ca5390e5}{atl\_stklen});
+2518 
+2519 \textcolor{preprocessor}{#ifdef FREERTOS}
+2520      atlastTxBuffer(console, (uint8\_t *)\hyperlink{atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}{outBuffer}) ;
+2521 \textcolor{preprocessor}{#else}
+2522      printf(\textcolor{stringliteral}{"%s"},\hyperlink{atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}{outBuffer});
+2523 \textcolor{preprocessor}{#endif}
+2524      sprintf(\hyperlink{atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}{outBuffer},fmt, \textcolor{stringliteral}{"Return stack"},
+2525             ((\textcolor{keywordtype}{long}) (\hyperlink{atlast_8c_a6986671df914edb9c7ea1b54419dd3e2}{rstk} - \hyperlink{atlast_8c_aa9ee089f8f1b18fab703fc807242b216}{rstack})),
+2526             ((\textcolor{keywordtype}{long}) (\hyperlink{atlast_8c_ace3065136a9d5969b3d14a965c8bfbcb}{rstackmax} - \hyperlink{atlast_8c_aa9ee089f8f1b18fab703fc807242b216}{rstack})),
+2527             \hyperlink{atlast_8c_afd9331d1b5bbc754007c6dc8a0156b6b}{atl\_rstklen},
+2528             (100L * (\hyperlink{atlast_8c_a6986671df914edb9c7ea1b54419dd3e2}{rstk} - \hyperlink{atlast_8c_aa9ee089f8f1b18fab703fc807242b216}{rstack})) / \hyperlink{atlast_8c_afd9331d1b5bbc754007c6dc8a0156b6b}{atl\_rstklen});
+2529 \textcolor{preprocessor}{#ifdef FREERTOS}
+2530      atlastTxBuffer(console, (uint8\_t *)\hyperlink{atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}{outBuffer}) ;
+2531 \textcolor{preprocessor}{#else}
+2532      printf(\textcolor{stringliteral}{"%s"},\hyperlink{atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}{outBuffer});
+2533 \textcolor{preprocessor}{#endif}
+2534      sprintf(\hyperlink{atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}{outBuffer},fmt, \textcolor{stringliteral}{"Heap"},
+2535             ((\textcolor{keywordtype}{long}) (\hyperlink{atlast_8c_a82779c608ec84572d01d1912deb1ccfc}{hptr} - \hyperlink{atlast_8c_a631c4c438b300c6392fe526a50a041c3}{heap})),
+2536             ((\textcolor{keywordtype}{long}) (\hyperlink{atlast_8c_a327ffdd3f551c78139c7a9b67f2764b3}{heapmax} - \hyperlink{atlast_8c_a631c4c438b300c6392fe526a50a041c3}{heap})),
+2537             \hyperlink{atlast_8c_ad9d3ef4d8938c4daa6a2e03a69f7ccbb}{atl\_heaplen},
+2538             (100L * (\hyperlink{atlast_8c_a82779c608ec84572d01d1912deb1ccfc}{hptr} - \hyperlink{atlast_8c_a631c4c438b300c6392fe526a50a041c3}{heap})) / \hyperlink{atlast_8c_ad9d3ef4d8938c4daa6a2e03a69f7ccbb}{atl\_heaplen});
+2539 \textcolor{preprocessor}{#ifdef FREERTOS}
+2540      atlastTxBuffer(console, (uint8\_t *)\hyperlink{atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}{outBuffer}) ;
+2541 \textcolor{preprocessor}{#else}
+2542      printf(\textcolor{stringliteral}{"%s"},\hyperlink{atlcfig_8h_a2f25dee1596892b07e30dd78f5ebe81b}{outBuffer});
+2543 \textcolor{preprocessor}{#endif}
+2544 \textcolor{preprocessor}{#else}
+2545 
+2546 \textcolor{comment}{//    V printf("\(\backslash\)n             Memory Usage Summary\(\backslash\)n\(\backslash\)n");}
+2547 \textcolor{comment}{//    V printf("                 Current   Maximum    Items     Percent\(\backslash\)n");}
+2548     \hyperlink{atlast_8c_af40a326b23c68a27cebe60f16634a2cb}{V} printf(\textcolor{stringliteral}{"  Memory Area     usage     used    allocated   in use \(\backslash\)n"});
+2549 
+2550     \hyperlink{atlast_8c_af40a326b23c68a27cebe60f16634a2cb}{V} printf(fmt, \textcolor{stringliteral}{"Stack"},
+2551             ((\textcolor{keywordtype}{long}) (\hyperlink{atlast_8c_ad095c4d45a7959f697a6208f794c6757}{stackmax} - \hyperlink{atlast_8c_a119bff668c1f986f35cdc8a167c756bb}{stack})),
+2552             \hyperlink{atlast_8c_a6954eb123491716e08dfbf05ca5390e5}{atl\_stklen},
+2553             (100L * (\hyperlink{atlast_8c_a56d9cb259e66ac2fbd1f90a60ae67c46}{stk} - \hyperlink{atlast_8c_a119bff668c1f986f35cdc8a167c756bb}{stack})) / \hyperlink{atlast_8c_a6954eb123491716e08dfbf05ca5390e5}{atl\_stklen});
+2554     \hyperlink{atlast_8c_af40a326b23c68a27cebe60f16634a2cb}{V} printf(fmt, \textcolor{stringliteral}{"Return stack"},
+2555             ((\textcolor{keywordtype}{long}) (\hyperlink{atlast_8c_a6986671df914edb9c7ea1b54419dd3e2}{rstk} - \hyperlink{atlast_8c_aa9ee089f8f1b18fab703fc807242b216}{rstack})),
+2556             ((\textcolor{keywordtype}{long}) (\hyperlink{atlast_8c_ace3065136a9d5969b3d14a965c8bfbcb}{rstackmax} - \hyperlink{atlast_8c_aa9ee089f8f1b18fab703fc807242b216}{rstack})),
+2557             \hyperlink{atlast_8c_afd9331d1b5bbc754007c6dc8a0156b6b}{atl\_rstklen},
+2558             (100L * (\hyperlink{atlast_8c_a6986671df914edb9c7ea1b54419dd3e2}{rstk} - \hyperlink{atlast_8c_aa9ee089f8f1b18fab703fc807242b216}{rstack})) / \hyperlink{atlast_8c_afd9331d1b5bbc754007c6dc8a0156b6b}{atl\_rstklen});
+2559     \hyperlink{atlast_8c_af40a326b23c68a27cebe60f16634a2cb}{V} printf(fmt, \textcolor{stringliteral}{"Heap---------"},
+2560             ((\textcolor{keywordtype}{long}) (\hyperlink{atlast_8c_a82779c608ec84572d01d1912deb1ccfc}{hptr} - \hyperlink{atlast_8c_a631c4c438b300c6392fe526a50a041c3}{heap})),
+2561             ((\textcolor{keywordtype}{long}) (\hyperlink{atlast_8c_a327ffdd3f551c78139c7a9b67f2764b3}{heapmax} - \hyperlink{atlast_8c_a631c4c438b300c6392fe526a50a041c3}{heap})),
+2562             \hyperlink{atlast_8c_ad9d3ef4d8938c4daa6a2e03a69f7ccbb}{atl\_heaplen},
+2563             (100L * (\hyperlink{atlast_8c_a82779c608ec84572d01d1912deb1ccfc}{hptr} - \hyperlink{atlast_8c_a631c4c438b300c6392fe526a50a041c3}{heap})) / \hyperlink{atlast_8c_ad9d3ef4d8938c4daa6a2e03a69f7ccbb}{atl\_heaplen});
+2564 \textcolor{preprocessor}{#endif}
+2565 \}
+\end{DoxyCode}
+Here is the caller graph for this function\+:
+% FIG 2
+\mbox{\Hypertarget{atlast_8h_ac7360cc0a171f1fb3ee406f8bba3edf9}\label{atlast_8h_ac7360cc0a171f1fb3ee406f8bba3edf9}} 
+\index{atlast.\+h@{atlast.\+h}!atl\+\_\+unwind@{atl\+\_\+unwind}}
+\index{atl\+\_\+unwind@{atl\+\_\+unwind}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{atl\+\_\+unwind()}{atl\_unwind()}}
+{\footnotesize\ttfamily void atl\+\_\+unwind (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{atlast_8h_a82381ca4badad5182c46003a5e23b0dd}\label{atlast_8h_a82381ca4badad5182c46003a5e23b0dd}} 
+\index{atlast.\+h@{atlast.\+h}!F\+R\+\_\+batch\+Init@{F\+R\+\_\+batch\+Init}}
+\index{F\+R\+\_\+batch\+Init@{F\+R\+\_\+batch\+Init}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{F\+R\+\_\+batch\+Init()}{FR\_batchInit()}}
+{\footnotesize\ttfamily void F\+R\+\_\+batch\+Init (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{atlast_8h_a57258584292422172c9a44668113d2d4}\label{atlast_8h_a57258584292422172c9a44668113d2d4}} 
+\index{atlast.\+h@{atlast.\+h}!F\+R\+\_\+data\+Size@{F\+R\+\_\+data\+Size}}
+\index{F\+R\+\_\+data\+Size@{F\+R\+\_\+data\+Size}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{F\+R\+\_\+data\+Size()}{FR\_dataSize()}}
+{\footnotesize\ttfamily void F\+R\+\_\+data\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{atlast_8h_ab73110ca8e638c04f0c14b72b794dd03}\label{atlast_8h_ab73110ca8e638c04f0c14b72b794dd03}} 
+\index{atlast.\+h@{atlast.\+h}!F\+R\+\_\+yaffs\+\_\+yaffs\+Seek\+Set@{F\+R\+\_\+yaffs\+\_\+yaffs\+Seek\+Set}}
+\index{F\+R\+\_\+yaffs\+\_\+yaffs\+Seek\+Set@{F\+R\+\_\+yaffs\+\_\+yaffs\+Seek\+Set}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{F\+R\+\_\+yaffs\+\_\+yaffs\+Seek\+Set()}{FR\_yaffs\_yaffsSeekSet()}}
+{\footnotesize\ttfamily void F\+R\+\_\+yaffs\+\_\+yaffs\+Seek\+Set (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{atlast_8h_aa2e2e9ccf847821f6f2e11a48e7053a6}\label{atlast_8h_aa2e2e9ccf847821f6f2e11a48e7053a6}} 
+\index{atlast.\+h@{atlast.\+h}!F\+R\+\_\+yaffs\+Create\+Def@{F\+R\+\_\+yaffs\+Create\+Def}}
+\index{F\+R\+\_\+yaffs\+Create\+Def@{F\+R\+\_\+yaffs\+Create\+Def}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{F\+R\+\_\+yaffs\+Create\+Def()}{FR\_yaffsCreateDef()}}
+{\footnotesize\ttfamily void F\+R\+\_\+yaffs\+Create\+Def (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{atlast_8h_a607a1a8288ef9c9cd56b072cb2689130}\label{atlast_8h_a607a1a8288ef9c9cd56b072cb2689130}} 
+\index{atlast.\+h@{atlast.\+h}!F\+R\+\_\+yaffs\+Install@{F\+R\+\_\+yaffs\+Install}}
+\index{F\+R\+\_\+yaffs\+Install@{F\+R\+\_\+yaffs\+Install}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{F\+R\+\_\+yaffs\+Install()}{FR\_yaffsInstall()}}
+{\footnotesize\ttfamily void F\+R\+\_\+yaffs\+Install (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{atlast_8h_ab6fa16e40ea011e52e902224ec7509c5}\label{atlast_8h_ab6fa16e40ea011e52e902224ec7509c5}} 
+\index{atlast.\+h@{atlast.\+h}!F\+R\+\_\+yaffs\+Mount@{F\+R\+\_\+yaffs\+Mount}}
+\index{F\+R\+\_\+yaffs\+Mount@{F\+R\+\_\+yaffs\+Mount}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{F\+R\+\_\+yaffs\+Mount()}{FR\_yaffsMount()}}
+{\footnotesize\ttfamily void F\+R\+\_\+yaffs\+Mount (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{atlast_8h_a309395e8e03062b0799a0b893fd7e956}\label{atlast_8h_a309395e8e03062b0799a0b893fd7e956}} 
+\index{atlast.\+h@{atlast.\+h}!F\+R\+\_\+yaffs\+Unmount@{F\+R\+\_\+yaffs\+Unmount}}
+\index{F\+R\+\_\+yaffs\+Unmount@{F\+R\+\_\+yaffs\+Unmount}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{F\+R\+\_\+yaffs\+Unmount()}{FR\_yaffsUnmount()}}
+{\footnotesize\ttfamily void F\+R\+\_\+yaffs\+Unmount (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{atlast_8h_a7d6bb2b5740addca35e60bf40e56804d}\label{atlast_8h_a7d6bb2b5740addca35e60bf40e56804d}} 
+\index{atlast.\+h@{atlast.\+h}!I\+N\+I\+\_\+get\+Boolean@{I\+N\+I\+\_\+get\+Boolean}}
+\index{I\+N\+I\+\_\+get\+Boolean@{I\+N\+I\+\_\+get\+Boolean}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{I\+N\+I\+\_\+get\+Boolean()}{INI\_getBoolean()}}
+{\footnotesize\ttfamily void I\+N\+I\+\_\+get\+Boolean (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{atlast_8h_a8e46a7ba8c25b44d2b44955daf55c9a0}\label{atlast_8h_a8e46a7ba8c25b44d2b44955daf55c9a0}} 
+\index{atlast.\+h@{atlast.\+h}!I\+N\+I\+\_\+get\+Settings\+Db@{I\+N\+I\+\_\+get\+Settings\+Db}}
+\index{I\+N\+I\+\_\+get\+Settings\+Db@{I\+N\+I\+\_\+get\+Settings\+Db}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{I\+N\+I\+\_\+get\+Settings\+Db()}{INI\_getSettingsDb()}}
+{\footnotesize\ttfamily void I\+N\+I\+\_\+get\+Settings\+Db (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{atlast_8h_ad33b0bf102655a19a58b2271a0608e3f}\label{atlast_8h_ad33b0bf102655a19a58b2271a0608e3f}} 
+\index{atlast.\+h@{atlast.\+h}!atl\+\_\+comment@{atl\+\_\+comment}}
+\index{atl\+\_\+comment@{atl\+\_\+comment}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{atl\+\_\+comment}{atl\_comment}}
+{\footnotesize\ttfamily \hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int} atl\+\_\+comment}
+
+
+
+Definition at line 187 of file atlast.\+c.
+
+\mbox{\Hypertarget{atlast_8h_a4e97b4cda19dc05788b627abf037b031}\label{atlast_8h_a4e97b4cda19dc05788b627abf037b031}} 
+\index{atlast.\+h@{atlast.\+h}!atl\+\_\+errline@{atl\+\_\+errline}}
+\index{atl\+\_\+errline@{atl\+\_\+errline}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{atl\+\_\+errline}{atl\_errline}}
+{\footnotesize\ttfamily \hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int} atl\+\_\+errline}
+
+
+
+Definition at line 190 of file atlast.\+c.
+
+\mbox{\Hypertarget{atlast_8h_ad9d3ef4d8938c4daa6a2e03a69f7ccbb}\label{atlast_8h_ad9d3ef4d8938c4daa6a2e03a69f7ccbb}} 
+\index{atlast.\+h@{atlast.\+h}!atl\+\_\+heaplen@{atl\+\_\+heaplen}}
+\index{atl\+\_\+heaplen@{atl\+\_\+heaplen}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{atl\+\_\+heaplen}{atl\_heaplen}}
+{\footnotesize\ttfamily \hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int} atl\+\_\+heaplen}
+
+
+
+Definition at line 181 of file atlast.\+c.
+
+\mbox{\Hypertarget{atlast_8h_a6ccb5e82e550f35020b0591594806729}\label{atlast_8h_a6ccb5e82e550f35020b0591594806729}} 
+\index{atlast.\+h@{atlast.\+h}!atl\+\_\+ltempstr@{atl\+\_\+ltempstr}}
+\index{atl\+\_\+ltempstr@{atl\+\_\+ltempstr}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{atl\+\_\+ltempstr}{atl\_ltempstr}}
+{\footnotesize\ttfamily \hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int} atl\+\_\+ltempstr}
+
+
+
+Definition at line 182 of file atlast.\+c.
+
+\mbox{\Hypertarget{atlast_8h_a3c4150959a1e8cdf095d8af88424673f}\label{atlast_8h_a3c4150959a1e8cdf095d8af88424673f}} 
+\index{atlast.\+h@{atlast.\+h}!atl\+\_\+ntempstr@{atl\+\_\+ntempstr}}
+\index{atl\+\_\+ntempstr@{atl\+\_\+ntempstr}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{atl\+\_\+ntempstr}{atl\_ntempstr}}
+{\footnotesize\ttfamily \hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int} atl\+\_\+ntempstr}
+
+
+
+Definition at line 183 of file atlast.\+c.
+
+\mbox{\Hypertarget{atlast_8h_af06a96dde475881ffa956cc9a14bb259}\label{atlast_8h_af06a96dde475881ffa956cc9a14bb259}} 
+\index{atlast.\+h@{atlast.\+h}!atl\+\_\+redef@{atl\+\_\+redef}}
+\index{atl\+\_\+redef@{atl\+\_\+redef}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{atl\+\_\+redef}{atl\_redef}}
+{\footnotesize\ttfamily \hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int} atl\+\_\+redef}
+
+
+
+Definition at line 188 of file atlast.\+c.
+
+\mbox{\Hypertarget{atlast_8h_afd9331d1b5bbc754007c6dc8a0156b6b}\label{atlast_8h_afd9331d1b5bbc754007c6dc8a0156b6b}} 
+\index{atlast.\+h@{atlast.\+h}!atl\+\_\+rstklen@{atl\+\_\+rstklen}}
+\index{atl\+\_\+rstklen@{atl\+\_\+rstklen}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{atl\+\_\+rstklen}{atl\_rstklen}}
+{\footnotesize\ttfamily \hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int} atl\+\_\+rstklen}
+
+
+
+Definition at line 179 of file atlast.\+c.
+
+\mbox{\Hypertarget{atlast_8h_a6954eb123491716e08dfbf05ca5390e5}\label{atlast_8h_a6954eb123491716e08dfbf05ca5390e5}} 
+\index{atlast.\+h@{atlast.\+h}!atl\+\_\+stklen@{atl\+\_\+stklen}}
+\index{atl\+\_\+stklen@{atl\+\_\+stklen}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{atl\+\_\+stklen}{atl\_stklen}}
+{\footnotesize\ttfamily \hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int} atl\+\_\+stklen}
+
+
+
+Definition at line 178 of file atlast.\+c.
+
+\mbox{\Hypertarget{atlast_8h_ae0c1edf4a5be638d243909d71cd93024}\label{atlast_8h_ae0c1edf4a5be638d243909d71cd93024}} 
+\index{atlast.\+h@{atlast.\+h}!atl\+\_\+trace@{atl\+\_\+trace}}
+\index{atl\+\_\+trace@{atl\+\_\+trace}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{atl\+\_\+trace}{atl\_trace}}
+{\footnotesize\ttfamily \hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int} atl\+\_\+trace}
+
+
+
+Definition at line 185 of file atlast.\+c.
+
+\mbox{\Hypertarget{atlast_8h_a7ae6f706be0bdcd2b904922bc2e95330}\label{atlast_8h_a7ae6f706be0bdcd2b904922bc2e95330}} 
+\index{atlast.\+h@{atlast.\+h}!atl\+\_\+walkback@{atl\+\_\+walkback}}
+\index{atl\+\_\+walkback@{atl\+\_\+walkback}!atlast.\+h@{atlast.\+h}}
+\subsubsection{\texorpdfstring{atl\+\_\+walkback}{atl\_walkback}}
+{\footnotesize\ttfamily \hyperlink{atlast_8h_a6412b0dbba3e91ae7c47966799260256}{atl\+\_\+int} atl\+\_\+walkback}
+
+
+
+Definition at line 186 of file atlast.\+c.
+
