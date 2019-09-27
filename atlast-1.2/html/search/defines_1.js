@@ -1,5 +1,0 @@
-var searchData=
-[
-  ['banner',['BANNER',['../atlcfig_8h.html#a46c1fb0f4185dc45eda625530bc0fd73',1,'BANNER():&#160;atlcfig.h'],['../freertos-atlcfig_8h.html#a46c1fb0f4185dc45eda625530bc0fd73',1,'BANNER():&#160;freertos-atlcfig.h'],['../linux-atlcfig_8h.html#a46c1fb0f4185dc45eda625530bc0fd73',1,'BANNER():&#160;linux-atlcfig.h'],['../small-linux-atlcfig_8h.html#a46c1fb0f4185dc45eda625530bc0fd73',1,'BANNER():&#160;small-linux-atlcfig.h'],['../termux-atlcfig_8h.html#a46c1fb0f4185dc45eda625530bc0fd73',1,'BANNER():&#160;termux-atlcfig.h']]],
-  ['break',['BREAK',['../atlcfig_8h.html#abe022c8f09db1f0680a92293523f25dd',1,'BREAK():&#160;atlcfig.h'],['../FreeRTOS_2atlast_8c.html#abe022c8f09db1f0680a92293523f25dd',1,'BREAK():&#160;atlast.c'],['../freertos-atlcfig_8h.html#abe022c8f09db1f0680a92293523f25dd',1,'BREAK():&#160;freertos-atlcfig.h'],['../linux-atlcfig_8h.html#abe022c8f09db1f0680a92293523f25dd',1,'BREAK():&#160;linux-atlcfig.h'],['../small-linux-atlcfig_8h.html#abe022c8f09db1f0680a92293523f25dd',1,'BREAK():&#160;small-linux-atlcfig.h'],['../termux-atlcfig_8h.html#abe022c8f09db1f0680a92293523f25dd',1,'BREAK():&#160;termux-atlcfig.h']]]
-];

@@ -1,9 +1,0 @@
-digraph "P_nest"
-{
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  rankdir="LR";
-  Node676 [label="P_nest",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-  Node676 -> Node677 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node677 [label="P_semicolon",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$atlast_8c.html#a701abedd82f8c68ae1124091f5b0db03"];
-}
