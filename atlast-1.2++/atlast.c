@@ -1020,7 +1020,7 @@ prim ATH_bye() {
 	atl_eval("0 DBG_RUN !");
 #endif
 
-#ifdef LINUX
+#if defined(LINUX) || defined(DARWIN)
 	exit(0);
 #endif
 }
