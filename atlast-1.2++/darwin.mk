@@ -1,5 +1,8 @@
 CC=gcc
 BASIC=""
+ATLCONFIG=-DDARWIN -L/usr/local/lib -lser
+ATLFLAGS=""
+
 # ATLCONFIG=-DLINUX
 # ATLCONFIG=-DMQTT
 

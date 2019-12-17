@@ -10,7 +10,7 @@ VERSION = 1.2
 # LIBRARIES = -L/usr/local/lib -lsmall -lstdc++ -lrt -lpthread
 
 ATLCONFIG += -DCUSTOM -DALIGNMENT -DEXPORT -DREADONLYSTRINGS
-LDFLAGS +=-Wl 
+# LDFLAGS +=-Wl 
 
 CFLAGS += $(ATLCONFIG) # -DLINUX # -DMQ
 

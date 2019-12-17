@@ -33,10 +33,12 @@
 
 // #include "atldef.h"
 
-#ifdef LINUX
+#if defined(LINUX)
+#include <mqueue.h>
+#endif
+#if defined(LINUX) || defined(DARWIN)
 #include <unistd.h>
 #include <poll.h>
-#include <mqueue.h>
 #ifdef ATH
 // 
 // Socket includes
@@ -313,7 +315,7 @@ static stackitem s_flit;
 #endif
 /*  Forward functions  */
 
-STATIC void exword(), trouble();
+// STATIC void exword(), trouble();
 #ifndef NOMEMCHECK
 STATIC void notcomp(), divzero();
 #endif
@@ -4177,7 +4179,7 @@ prim P_fload()			      /* Load source file:  fd -- evalstat */
 prim P_include() {
     int estat;
     Sl(1);
-#ifdef LINUX
+#if defined(LINUX) || defined(DARWIN)
     FILE *fd;
 
 
@@ -5821,7 +5823,8 @@ static void pwalkback() {
 
 /*  TROUBLE  --  Common handler for serious errors.  */
 
-static void trouble(char *kind) {
+// static void trouble(char *kind) {
+void trouble(char *kind) {
 #ifdef MEMMESSAGE
     printf("\n%s.\r\n", kind); // EMBEDDED
 #endif
@@ -5913,7 +5916,8 @@ static void divzero()
 
 /*  EXWORD  --	Execute a word (and any sub-words it may invoke). */
 
-static void exword( dictword *wp) {
+// static void exword( dictword *wp) {
+void exword( dictword *wp) {
     curword = wp;
 #ifdef TRACE
     if (atl_trace) {
