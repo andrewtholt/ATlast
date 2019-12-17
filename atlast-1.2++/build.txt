@@ -28,7 +28,7 @@ Runing this:
 
 ./build.sh clean
 
-Now does a 'clean' allowing ./build.sh to be substitude for make in tools 
+Now do a 'clean' allowing ./build.sh to be substitude for make in tools 
 such as eclipse.
 
 -a passes arguments to make, e.g.
@@ -36,7 +36,7 @@ such as eclipse.
 ./build.sh -a clean
 ./build.sh -a atlast
 
--d Shows what make would do/
+-d Shows what make would do.
 
 -p Selects a profile.  Each profile is in a file with a .mk extension by default
 an empty file name basic.mk is pointed to by profile.mk.  To create a new profile add your options into a file of your choice (e.g. fred.mk) and then:
