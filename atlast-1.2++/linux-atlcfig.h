@@ -41,7 +41,7 @@
 #define ANSI                /* Enable ANSI compatability words */
 #define LIBSER
 #define NVRAMRC
-#define EXTRAS
+// #define EXTRAS
 // #define PUBSUB              // Use the Small pub/sub system
 // #define PTHREAD             // Pthreaded pubsub
 // 

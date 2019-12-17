@@ -227,7 +227,6 @@ int main(int argc, char *argv[]) {
     extern void mqttLoad();
     mqttLoad();
 #endif
-
     int8_t len=0;
     uint8_t lineBuffer[MAX_LINE];
     char t[132];
