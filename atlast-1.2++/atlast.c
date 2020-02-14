@@ -192,9 +192,9 @@ atl_int atl_redef = Truth;	      /* Allow redefinition without issuing
                                      the "not unique" message. */
 atl_int atl_errline = 0;	      /* Line where last atl_load failed */
 
-#ifdef ATH
+// #ifdef ATH
 atl_int ath_safe_memory = Truth;
-#endif
+// #endif
 
 /*  Local variables  */
 
@@ -323,13 +323,19 @@ STATIC void notcomp(), divzero();
 STATIC void pwalkback();
 #endif
 
+prim ATH_Token() {
+    V token(&instream);
+
+    V strcpy(strbuf[cstrbuf], tokbuf);
+    Push = (stackitem) strbuf[cstrbuf];
+}
 #ifdef ATH
 void ATH_Features() {
 
 #ifdef ARRAY
     printf("\n    ARRAY\r\n");
 #else
-    printf(""\nNOT ARRAY\r\n");
+    printf("\nNOT ARRAY\r\n");
 #endif
 
 #ifdef EMBEDDED
@@ -484,12 +490,6 @@ prim ATH_Instream() {
     Push=(stackitem)instream;
 }
 
-prim ATH_Token() {
-    V token(&instream);
-
-    V strcpy(strbuf[cstrbuf], tokbuf);
-    Push = (stackitem) strbuf[cstrbuf];
-}
 
 prim ATH_pwd() {
     Sl(2); // pointer to a memory area large enough to hold the biggest path
@@ -1024,6 +1024,7 @@ prim ATH_bye() {
 	exit(0);
 #endif
 }
+#endif // ATH
 
 int8_t readLineFromArray(uint8_t *src, uint8_t *dest) {
     uint8_t ch;
@@ -1047,7 +1048,6 @@ int8_t readLineFromArray(uint8_t *src, uint8_t *dest) {
     }
     return len;
 }
-#endif // ATH
 #ifdef ANSI
 prim ANSI_cell() {
     So(1);
@@ -5322,6 +5322,7 @@ static struct primfcn primt[] = {
     {"0>R", P_tor},
     {"0R>", P_rfrom},
     {"0R@", P_rfetch},
+    {"0TOKEN", ATH_Token},
 
 #ifdef SHORTCUTA
     {"01+", P_1plus},
@@ -5455,7 +5456,7 @@ static struct primfcn primt[] = {
 
 #ifdef SYSTEM
     {"0SYSTEM", P_system},
-    {"0BYE", ATH_bye},
+//    {"0BYE", ATH_bye},
 #endif
 #ifdef TRACE
     {"0TRACE", P_trace},
@@ -5526,7 +5527,6 @@ static struct primfcn primt[] = {
 #ifdef LINUX
     {"0FD-READ", P_fdRead},
     {"0FD-WRITE", P_fdWrite},
-    {"0?BLOCK", ATH_wouldBlock},
     {"0STRSTR", P_strstr},
     {"0STRCASESTR", P_strcasestr},
 #endif
@@ -5535,6 +5535,7 @@ static struct primfcn primt[] = {
     {"0OPEN-SERIAL-PORT", ATH_openSerialPort},
     {"0CLOSE-SERIAL-PORT", ATH_closeSerialPort},
     {"0FLUSH-SERIAL-PORT", ATH_flushSerialPort},
+    {"0?BLOCK", ATH_wouldBlock},
 #endif
 
 #ifdef FILEIO
@@ -5590,7 +5591,7 @@ static struct primfcn primt[] = {
 	{(char *)"0?FILEIO",ATH_qfileio},
     {(char *)"0.FEATURES", ATH_Features},
     {(char *)"0TIB", ATH_Instream},
-    {(char *)"0TOKEN", ATH_Token},
+//    {(char *)"0TOKEN", ATH_Token},
     {(char *)"0?LINUX", ATH_qlinux},
     {(char *)"0?FREERTOS", ATH_qfreertos},
     {(char *)"0MS", ATH_ms},

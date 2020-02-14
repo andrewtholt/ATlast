@@ -8,14 +8,14 @@ CC=g++ -std=c++11 -g -I/usr/local/include
 # LIBRARIES = -lm
 # LIBRARIES += -lrt -lpthread
 # LIBRARIES = -L/usr/local/lib -lsmall -lstdc++ -lrt -lpthread
-LIBRARIES = -L/usr/local/lib -lser
+# LIBRARIES = -L/usr/local/lib -lser
 
 ATLCONFIG += -DCUSTOM -DALIGNMENT -DEXPORT -DREADONLYSTRINGS 
 LDFLAGS +=-Wl,--no-as-needed
 
-CFLAGS += $(ATLCONFIG) -g -fPIC  -DLINUX -w -fpermissive # -Wwrite-strings
+CFLAGS += $(ATLCONFIG) -Wfatal-errors -g -fPIC  -DLINUX -w -fpermissive # -Wwrite-strings
 
-ATLOBJ += atlast.o atlmain.o extraFunc.o
+ATLOBJ += atlast.o atlmain.o # extraFunc.o
 
 APPS = atlast # atlsmall # primdeftest
 

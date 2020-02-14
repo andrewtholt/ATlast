@@ -37,9 +37,9 @@
 #define WALKBACK              /* Walkback trace */
 #define WORDSUSED             /* Logging of words used and unused */
 #define BANNER
-#define ATH
+// #define ATH
 #define ANSI                /* Enable ANSI compatability words */
-#define LIBSER
+// #define LIBSER
 #define NVRAMRC
 // #define EXTRAS
 // #define PUBSUB              // Use the Small pub/sub system
