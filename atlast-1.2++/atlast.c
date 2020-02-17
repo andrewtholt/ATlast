@@ -112,7 +112,7 @@ static int token( char **);
 #define DEFFIELDS		      /* Definition field access for words */
 #define DOUBLE			      /* Double word primitives (2DUP) */
 #define EVALUATE		      /* The EVALUATE primitive */
-#define FILEIO			      /* File I/O primitives */
+ #define FILEIO			      /* File I/O primitives */
 #define MATH			      /* Math functions */
 #define MEMMESSAGE		      /* Print message for stack/heap errors */
 #define PROLOGUE		      /* Prologue processing and auto-init */
@@ -329,7 +329,8 @@ prim ATH_Token() {
     V strcpy(strbuf[cstrbuf], tokbuf);
     Push = (stackitem) strbuf[cstrbuf];
 }
-#ifdef ATH
+
+// #ifdef ATH
 void ATH_Features() {
 
 #ifdef ARRAY
@@ -450,7 +451,7 @@ void ATH_Features() {
     printf("    WORDSUSED\r\n");
 #else
     printf("NOT WORDSUSED\r\n");
-#endif
+#endif 
 
 // ------------------
 #ifdef ATH
@@ -485,6 +486,7 @@ void ATH_Features() {
     printf("NOT ANSI\r\n");
 #endif
 }
+#ifdef ATH
 
 prim ATH_Instream() {
     Push=(stackitem)instream;
@@ -5589,7 +5591,7 @@ static struct primfcn primt[] = {
 	{(char *)"0DECIMAL",ATH_dec},
 	{(char *)"0BYE",ATH_bye},
 	{(char *)"0?FILEIO",ATH_qfileio},
-    {(char *)"0.FEATURES", ATH_Features},
+//    {(char *)"0.FEATURES", ATH_Features},
     {(char *)"0TIB", ATH_Instream},
 //    {(char *)"0TOKEN", ATH_Token},
     {(char *)"0?LINUX", ATH_qlinux},
@@ -5607,6 +5609,7 @@ static struct primfcn primt[] = {
     {(char *)"0BANNER", ATH_banner},
 
 #endif
+    {(char *)"0.FEATURES", ATH_Features},
 
 #ifdef ANSI
     {(char *)"0CELL", ANSI_cell},
