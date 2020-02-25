@@ -13,11 +13,12 @@ printf "uint8_t nvramrc[] = \""
 
 while read -r LINE; do 
     if [ ${#LINE} -ge 0 ]; then
-        T=$($ECHO $LINE | grep -o '^[^\\]*')
+        T=$($ECHO $LINE | grep -o '^[^\\]*') 
         L=$($ECHO $T | grep -o '^[^(]*')
+        M=$($ECHO $L | sed 's/\"/\\\"/g')
 
-        if [  ${#L} -gt 0 ]; then
-            $ECHO -n "$L\\n"
+        if [  ${#M} -gt 0 ]; then
+            $ECHO -n "$M\\n"
         fi
 #        if [ "$L" = " \\" ]; then
 #            exit
