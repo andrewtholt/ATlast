@@ -22,7 +22,7 @@
 #define DEFFIELDS             /* Definition field access for words */
 #define DOUBLE                /* Double word primitives (2DUP) */
 #define EVALUATE              /* The EVALUATE primitive */
-#define FILEIO                /* File I/O primitives */
+// #define FILEIO                /* File I/O primitives */
 // #define MATH                  /* Math functions */
 #define MEMMESSAGE            /* Print message for stack/heap errors */
 #define MEMSTAT
@@ -32,7 +32,7 @@
 #define SHORTCUTA             /* Shortcut integer arithmetic words */
 #define SHORTCUTC             /* Shortcut integer comparison */
 #define STRING                /* String functions */
-#define SYSTEM                /* System command function */
+// #define SYSTEM                /* System command function */
 #define TRACE                 /* Execution tracing */
 #define WALKBACK              /* Walkback trace */
 #define WORDSUSED             /* Logging of words used and unused */

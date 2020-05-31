@@ -54,12 +54,13 @@
 #endif
 
 #ifdef FILEIO
-#ifdef FREERTOS
-#ifdef YAFFS
-#include "yportenv.h"
+    #ifdef FREERTOS
+        #ifdef YAFFS
+            #include "yportenv.h"
+        #endif
+    #endif
 #endif
-#endif
-#endif
+
 #include <libser.h>
 
 // #define MEMSTAT
@@ -112,7 +113,7 @@ static int token( char **);
 #define DEFFIELDS		      /* Definition field access for words */
 #define DOUBLE			      /* Double word primitives (2DUP) */
 #define EVALUATE		      /* The EVALUATE primitive */
- #define FILEIO			      /* File I/O primitives */
+#define FILEIO			      /* File I/O primitives */
 #define MATH			      /* Math functions */
 #define MEMMESSAGE		      /* Print message for stack/heap errors */
 #define PROLOGUE		      /* Prologue processing and auto-init */
@@ -2499,9 +2500,9 @@ prim ATH_flushSerialPort() {
 #define FgetspNeeded
 #endif
 #ifdef FILEIO
-#ifndef FgetspNeeded
-#define FgetspNeeded
-#endif
+    #ifndef FgetspNeeded
+        #define FgetspNeeded
+    #endif
 #endif
 
 #ifdef FgetspNeeded
