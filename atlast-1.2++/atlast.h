@@ -17,6 +17,8 @@
 
 */
 
+// ATH
+#define OUTBUFFER 255
 #ifdef UCLINUX
 #define atl_int	long	      /* Stack integer type */
 #define atl_real double	      /* Real number type */

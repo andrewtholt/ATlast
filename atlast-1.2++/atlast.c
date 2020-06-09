@@ -86,8 +86,8 @@
 // extern osPoolId mpool_id;
 
 // extern UART_HandleTypeDef *console;
-// extern char *outBuffer;
 #endif
+extern char outBuffer[];
 #endif
 
 static int token( char **);
@@ -3729,20 +3729,21 @@ prim P_dot() {
     Sl(1);
 //    stackitem top=S0;
     int top=S0;
-    char outBuffer[32];
+//    char outBuffer[32];
+    char buff[32];
 
     switch(base) {
     case 10:
-        sprintf(outBuffer,"%d",top);
+        sprintf(buff,"%d",top);
     	break;
     case 16:
-        sprintf(outBuffer,"%x",top);
+        sprintf(buff,"%x",top);
     	break;
     default:
-        sprintf(outBuffer,"%d",top);
+        sprintf(buff,"%d",top);
     	break;
     }
-     printf("%s",outBuffer);
+    printf("%s",buff);
 
     Pop;
 }
@@ -3836,7 +3837,8 @@ prim P_type() {
 }
 
 prim ATH_sift() {
-	char outBuffer[132];
+//	char outBuffer[132];
+//	extern char *outBuffer;
     char *res=NULL;
 
     Sl(1);
@@ -3858,7 +3860,8 @@ prim ATH_sift() {
 
 /* List words */
 prim P_words() {
-	char outBuffer[132];
+//	char outBuffer[132];
+// extern char outBuffer[];
 #ifndef Keyhit
     int key = 0;
 #endif

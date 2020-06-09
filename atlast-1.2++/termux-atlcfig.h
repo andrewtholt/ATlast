@@ -49,9 +49,6 @@
 // #define ATH
 // 
 
-
-char outBuffer[255];
-
 #ifdef PUBSUB
 #ifdef PTHREAD
 #include <pthread.h>

@@ -1,6 +1,8 @@
 #include <stdbool.h>
 #ifndef __ATLAST_CFIG
 #define __ATLAST_CFIG
+
+#pragma message( "atlcfig.h" )
 // TODO Remove all references to EMBEDDED in io words.
 // Output to a buffer is the norm.
 #define EMBEDDED            // Mods for use in an embedded system.
@@ -22,7 +24,7 @@
 #define DEFFIELDS             /* Definition field access for words */
 #define DOUBLE                /* Double word primitives (2DUP) */
 #define EVALUATE              /* The EVALUATE primitive */
-#define FILEIO                /* File I/O primitives */
+// #define FILEIO                /* File I/O primitives */
 // #define MATH                  /* Math functions */
 #define MEMMESSAGE            /* Print message for stack/heap errors */
 #define MEMSTAT
@@ -37,8 +39,9 @@
 #define WALKBACK              /* Walkback trace */
 #define WORDSUSED             /* Logging of words used and unused */
 #define BANNER
-#define ATH
+// #define ATH
 #define ANSI                /* Enable ANSI compatability words */
+#define NVRAMRC
 // #define PUBSUB              // Use the Small pub/sub system
 // #define PTHREAD             // Pthreaded pubsub
 // 
@@ -47,7 +50,6 @@
 // Stuff added by me
 // 
 
-char outBuffer[255];
 
 #ifdef PUBSUB
 #ifdef PTHREAD

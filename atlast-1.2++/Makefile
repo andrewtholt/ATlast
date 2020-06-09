@@ -13,11 +13,12 @@ CC=g++ -std=c++11 -g -I/usr/local/include
 ATLCONFIG += -DCUSTOM -DALIGNMENT -DEXPORT -DREADONLYSTRINGS 
 LDFLAGS +=-Wl,--no-as-needed
 
-CFLAGS += $(ATLCONFIG) -Wfatal-errors -g -fPIC  -DLINUX -w -fpermissive # -Wwrite-strings
+# CFLAGS += $(ATLCONFIG) -Wfatal-errors -g -fPIC  -DLINUX -w -fpermissive # -Wwrite-strings
+CFLAGS += $(ATLCONFIG) -Wl,--no-as-needed -Wfatal-errors -g -fPIC  -DLINUX -w -fpermissive # -Wwrite-strings
 
 ATLOBJ += atlast.o atlmain.o # extraFunc.o
 
-APPS = atlast # atlsmall # primdeftest
+APPS = atlast atlsmall # primdeftest
 
 all:	$(APPS)
 
@@ -36,7 +37,7 @@ atlast: $(ATLOBJ) # mqtt.o
 # CFLAGS += -I/usr/local/lib/Small
 
 atlsmall: $(ATLOBJ) atlMinMain.c
-	$(CC) $(CFLAGS) $(LDFLAGS) atlMinMain.c atlast.o -o atlsmall $(LIBRARIES)
+	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,--no-as-needed  atlMinMain.c atlast.o -o atlsmall $(LIBRARIES)
 
 atlast.o:   atlast.c atldef.h atlcfig.h 
 	$(CC) $(CFLAGS) $(INCLUDE) -c atlast.c -o atlast.o 

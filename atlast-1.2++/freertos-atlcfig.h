@@ -41,5 +41,4 @@
 // 
 
 
-char outBuffer[255];
 #endif

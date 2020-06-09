@@ -145,6 +145,7 @@ void *doSmall(void *arg) {
 #endif
 
 /*  MAIN  --  Main program.  */
+char outBuffer[OUTBUFFER];
 
 int main(int argc, char *argv[]) {
     int i;
@@ -255,12 +256,13 @@ int main(int argc, char *argv[]) {
 
 #endif
 
+#ifdef NVRAMRC
     do {
         memset(lineBuffer,0,MAX_LINE);
         len=readLineFromArray(nvramrc,lineBuffer);
         atl_eval(lineBuffer);
     } while(len >= 0);
-
+#endif
 int stat;
 FILE *fp;
 

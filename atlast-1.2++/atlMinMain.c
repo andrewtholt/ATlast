@@ -6,12 +6,12 @@
 #include "atlast.h"
 #include "atlcfig.h"
 #include "atldef.h"
-#include "atlsrc.h"
 
 // uint8_t nvramrc[] = ": tst \n10 0 do \ni . cr \nloop \n; \n \n";
+uint8_t nvramrc[] = ": sifting\ntoken $sift\n;\n: [char] char ;";
 //
 
-#include "atlsrc.h"
+char outBuffer[OUTBUFFER];
 
 int main() {
     char t[132];
