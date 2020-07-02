@@ -5,15 +5,15 @@ import sys
 import re
 
 def usage():
-    print
-    print 'Usage: mkSrc.py -v -f "<file1.atl> .... <filen.atl>" -o <output.h>'
-    print
-    print 'Synopsys:'
-    print '\tConcatenate the contents of the files given in to a string and'
-    print '\tproduce a C header file.  If -o not given results are sent to stdout.'
-    print 'Example:'
-    print '\tmkSrc.py -f "f1.atl f2.atl" -o src.h'
-    print
+    print()
+    print('Usage: mkSrc.py -v -f "<file1.atl> .... <filen.atl>" -o <output.h>')
+    print()
+    print('Synopsys:')
+    print('\tConcatenate the contents of the files given in to a string and')
+    print('\tproduce a C header file.  If -o not given results are sent to stdout.')
+    print('Example:')
+    print('\tmkSrc.py -f "f1.atl f2.atl" -o src.h')
+    print()
 
 def removeComments( code ):
     out=""
@@ -56,7 +56,7 @@ def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:], "dhf:o:v",[])
     except getopt.GetoptError as err:
-        print str(err)
+        print(str(err))
         usage()
         sys.exit(2)
 
@@ -74,6 +74,7 @@ def main():
             verbose=True
 
     if debug:
+        print( "files :"+files,file=sys.stderr )
         print >> sys.stderr, "files :",files
         print >> sys.stderr, "Output:" + outFile
 
@@ -108,13 +109,13 @@ def main():
     res=header + output
 
     if len(outFile) == 0:
-        print
-        print res
-        print
+        print()
+        print(res)
+        print()
     else:
         f=open(outFile,'w')
-        print >>f
-        print >>f, res 
+        print(file=f)
+        print( res, file=f)
 
 
 # print removeComments( "test      ( test ) and \\ more" )
