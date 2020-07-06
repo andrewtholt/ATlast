@@ -4182,7 +4182,7 @@ prim P_fload()			      /* Load source file:  fd -- evalstat */
     Push = estat;
 }
 
-prim P_include() {
+prim P_dInclude() {
     int estat;
     Sl(1);
 #if defined(LINUX) || defined(DARWIN)
@@ -4209,6 +4209,11 @@ prim P_include() {
     yaffs_close(fd);
 #endif
     Pop;
+}
+
+prim P_include() {
+    ATH_Token();
+    P_dInclude();
 }
 
 #endif /* FILEIO */
@@ -5566,7 +5571,8 @@ static struct primfcn primt[] = {
     {"0FTELL", P_ftell},
     {"0FSEEK", P_fseek},
     {"0FLOAD", P_fload},
-    {"0$INCLUDE", P_include},
+    {"0$INCLUDE", P_dInclude},
+    {"1INCLUDE", P_include},
 #endif /* FILEIO */
 
 #ifdef EVALUATE

@@ -24,7 +24,7 @@
 #define DEFFIELDS             /* Definition field access for words */
 #define DOUBLE                /* Double word primitives (2DUP) */
 #define EVALUATE              /* The EVALUATE primitive */
-// #define FILEIO                /* File I/O primitives */
+#define FILEIO                /* File I/O primitives */
 // #define MATH                  /* Math functions */
 #define MEMMESSAGE            /* Print message for stack/heap errors */
 #define MEMSTAT
@@ -39,7 +39,7 @@
 #define WALKBACK              /* Walkback trace */
 #define WORDSUSED             /* Logging of words used and unused */
 #define BANNER
-// #define ATH
+#define ATH
 #define ANSI                /* Enable ANSI compatability words */
 #define NVRAMRC
 // #define PUBSUB              // Use the Small pub/sub system
