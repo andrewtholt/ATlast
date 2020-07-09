@@ -3858,6 +3858,11 @@ prim ATH_sift() {
 
 }
 
+prim ATH_sifting() {
+    ATH_Token();
+    ATH_sift();
+} 
+
 /* List words */
 prim P_words() {
 //	char outBuffer[132];
@@ -5536,6 +5541,7 @@ static struct primfcn primt[] = {
     {"0TYPE", P_type},
     {"0WORDS", P_words},
     {"0$SIFT", ATH_sift},
+    {"1SIFTING", ATH_sifting},
 	{"0EMIT", P_emit},
 #endif /* CONIO */
 #ifdef LINUX

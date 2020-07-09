@@ -1,6 +1,9 @@
-: sifting
-    token $sift
-;
+\ 
+\ Sifting now a prim
+\ 
+\ : sifting
+\     token $sift
+\ ;
 
 : [char] char ; immediate
 

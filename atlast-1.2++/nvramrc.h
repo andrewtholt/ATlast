@@ -4,7 +4,8 @@
 #ifndef __ATL_SRC
 #define __ATL_SRC
 
-uint8_t nvramrc[] = ": sifting\ntoken $sift\n;\n: [char] char ; immediate\n";
+// uint8_t nvramrc[] = ": sifting\ntoken $sift\n;\n: [char] char ; immediate\n";
+uint8_t nvramrc[] = "";
 
 #endif
 
