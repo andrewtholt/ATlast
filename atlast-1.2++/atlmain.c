@@ -217,9 +217,12 @@ int main(int argc, char *argv[]) {
 #ifdef EXTRAS
 #warning "Extras"
     extern void extrasLoad();
-    extern void cpp_extrasLoad();
 
     extrasLoad();
+#endif
+
+#ifdef CPP_EXTRAS
+    extern void cpp_extrasLoad();
     cpp_extrasLoad();
 #endif
 #endif

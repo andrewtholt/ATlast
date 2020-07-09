@@ -3,7 +3,10 @@
 #include <iostream>
 #include <memory>
 
+#ifdef CPP_EXTRAS
 #include <boost/any.hpp>
+vector<boost::any> objectStack;
+#endif
 
 #include <stdio.h>
 #include <string.h>
@@ -14,19 +17,14 @@ using namespace std;
 #define RR_STRING 255
 #define RR_NUM 4
 
-char rrString[RR_NUM][RR_STRING];
+// char rrString[RR_NUM][RR_STRING];
+// static int rrIdx = 0;
 
-vector<boost::any> objectStack;
-
-static int rrIdx = 0;
 
 extern atl_int ath_safe_memory;
 
 prim crap() {
     printf("Hello\n");
-    boost::any *ptr;
-
-    Push=ptr;
 }
 // 
 // Stack : -- vector
@@ -154,6 +152,7 @@ prim P_typeString() {
 
     Pop;
 }
+#ifdef CPP_EXTRAS
 // 
 // Stack: string -- addr
 //
@@ -182,6 +181,7 @@ prim P_cstrToString() {
 
     objectStack.push_back( (boost::any) ptr );
 }
+#endif
 // 
 // Stack: string -- int
 //
@@ -458,8 +458,10 @@ static struct primfcn cpp_extras [] = {
     {"0STRING-TRIM",P_trimString},
     {"0STRING-DESTROY",P_destroyString},
 
+#ifdef CPP_EXTRAS
     {"0STOC",P_stringToCstr},
     {"0CTOS", P_cstrToString},
+#endif
     {"0STOI",P_stringToInt},
     {"0ITOS",P_intToString},
     {NULL, (codeptr) 0}
