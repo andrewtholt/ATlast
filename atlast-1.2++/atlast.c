@@ -5610,7 +5610,6 @@ static struct primfcn primt[] = {
 	{(char *)"0DECIMAL",ATH_dec},
 	{(char *)"0BYE",ATH_bye},
 	{(char *)"0?FILEIO",ATH_qfileio},
-//    {(char *)"0.FEATURES", ATH_Features},
     {(char *)"0TIB", ATH_Instream},
 //    {(char *)"0TOKEN", ATH_Token},
     {(char *)"0?LINUX", ATH_qlinux},
