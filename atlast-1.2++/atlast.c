@@ -481,6 +481,12 @@ void ATH_Features() {
     printf("NOT FREERTOS\r\n");
 #endif
 
+#ifdef SOCKET
+    printf("    SOCKET\r\n");
+#else
+    printf("NOT SOCKET\r\n");
+#endif
+
 #ifdef ANSI
     printf("    ANSI\r\n");
 #else
@@ -898,16 +904,7 @@ prim athRecv() {
     n = recv(sock2, msg, len, 0);
     Push = n;
 }
-#endif
 
-// 
-// Add \n to a string
-// Stack : pointer -- pointer
-//
-prim athAddEOL() {
-    char *ptr = S0;
-    strcat(ptr,"\n");
-}
 // 
 // name sock -- str:value
 //
@@ -960,6 +957,15 @@ prim athCmdSet() {
     status = recv(sock, in, 255, 0);
 
     Push = status;
+}
+#endif
+// 
+// Add \n to a string
+// Stack : pointer -- pointer
+//
+prim athAddEOL() {
+    char *ptr = S0;
+    strcat(ptr,"\n");
 }
 
 prim ATH_dump() {
@@ -5593,11 +5599,12 @@ static struct primfcn primt[] = {
 	{(char *)"0SOCKET-CLOSE",athClose},
 	{(char *)"0SOCKET-SEND",athSend},
 	{(char *)"0SOCKET-RECV",athRecv},
-#endif
-	{(char *)"0ADD-EOL",athAddEOL},
+
 	{(char *)"0CMD-GET",athCmdGet},
 	{(char *)"0CMD-SET",athCmdSet},
+#endif
 
+	{(char *)"0ADD-EOL", athAddEOL},
 	{(char *)"0ON",ATH_on},
 	{(char *)"0OFF",ATH_off},
 	{(char *)"0MKBUFFER",ATH_mkBuffer},
@@ -5619,8 +5626,9 @@ static struct primfcn primt[] = {
     {(char *)"0?LINUX", ATH_qlinux},
     {(char *)"0?FREERTOS", ATH_qfreertos},
     {(char *)"0MS", ATH_ms},
-    {(char *)"0PWD", ATH_pwd},
+    {(char *)"0(PWD)", ATH_pwd},
     {(char *)"0CD", ATH_cd},
+
     {(char *)"0DIR", RT_dir},
     {(char *)"0TOUCH", RT_touch},
     {(char *)"0MKFILE", RT_mkfile},

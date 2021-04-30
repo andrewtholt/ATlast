@@ -1,11 +1,17 @@
 
-: sifting
-    token $sift
-;
-
-: include
-    token $include
-;
+\ : sifting
+\    token $sift
+\ ;
 
 : [char] char ; immediate
+
+
+255 constant /dirbuf
+/dirbuf string dirbuf
+
+: pwd 
+    dirbuf dup /dirbuf (pwd) 0= if
+        type cr
+    then
+;
 

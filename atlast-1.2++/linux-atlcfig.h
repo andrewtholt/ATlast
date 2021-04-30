@@ -51,7 +51,7 @@
 //
 // #define ATH
 // 
-#define SOCKET
+// #define SOCKET
 
 // char outBuffer[255];
 
