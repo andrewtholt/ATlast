@@ -2,7 +2,7 @@
 #ifndef __ATLAST_CFIG
 #define __ATLAST_CFIG
 
-#pragma message( "atlcfig.h" )
+// #pragma message( "atlcfig.h" )
 // TODO Remove all references to EMBEDDED in io words.
 // Output to a buffer is the norm.
 #define EMBEDDED            // Mods for use in an embedded system.

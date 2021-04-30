@@ -4,11 +4,13 @@
 #include <stdbool.h>
 
 #include "atlast.h"
-#include "atlcfig.h"
+#include "small-linux-atlcfig.h"
+// #include "atlcfig.h"
 #include "atldef.h"
 
 // uint8_t nvramrc[] = ": tst \n10 0 do \ni . cr \nloop \n; \n \n";
-uint8_t nvramrc[] = ": sifting\ntoken $sift\n;\n: [char] char ;";
+// uint8_t nvramrc[] = ": sifting\ntoken $sift\n;\n: [char] char ;";
+uint8_t nvramrc[] = "" ;
 //
 
 char outBuffer[OUTBUFFER];

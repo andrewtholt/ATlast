@@ -794,6 +794,8 @@ prim ATH_off() {
     Push=0;
 }
 
+#ifdef SOCKET
+#pragma message ( "SOCKET included" )
 prim athConnect() {
     char           *hostName;
     int             len, port;
@@ -840,7 +842,6 @@ prim athConnect() {
         Push=sock1;
     }
     Push=exitStatus;
-
 }
 
 prim athClose() {
@@ -897,6 +898,7 @@ prim athRecv() {
     n = recv(sock2, msg, len, 0);
     Push = n;
 }
+#endif
 
 // 
 // Add \n to a string
@@ -5586,10 +5588,12 @@ static struct primfcn primt[] = {
 #endif /* EVALUATE */
 
 #ifdef ATH
-	{(char *)"0SOCKET-CONNECT",athConnect},
+#ifdef SOCKET
+	{(char *)"0SOCKET-CONNECT", athConnect},
 	{(char *)"0SOCKET-CLOSE",athClose},
 	{(char *)"0SOCKET-SEND",athSend},
 	{(char *)"0SOCKET-RECV",athRecv},
+#endif
 	{(char *)"0ADD-EOL",athAddEOL},
 	{(char *)"0CMD-GET",athCmdGet},
 	{(char *)"0CMD-SET",athCmdSet},
@@ -5717,7 +5721,7 @@ static struct primfcn primt[] = {
 	{(char *)"0GET-TASK-HANDLE", FR_getTaskHandle },
 	{(char *)"0GET-TASK-STATE", FR_getTaskState },
 
-#endif
+#endif // FreRTOS
 #ifdef PUBSUB
 	{(char *)"0MKDB",     FR_mkdb},
 	{(char *)"0ADD-RECORD",  FR_addRecord},
