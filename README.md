@@ -1,7 +1,7 @@
 ATLast
 ======
 
-This is a forrk of a fork.
+This is a fork of a fork.
 
 It is a fork of Michael Henderson's (aka quoha) of Atlast.
 
