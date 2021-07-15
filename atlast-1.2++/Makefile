@@ -10,7 +10,7 @@ CC=g++ -std=c++11 -g -I/usr/local/include
 # LIBRARIES = -L/usr/local/lib -lsmall -lstdc++ -lrt -lpthread
 # LIBRARIES = -L/usr/local/lib -lser
 
-ATLCONFIG += -DCUSTOM -DALIGNMENT -DEXPORT -DREADONLYSTRINGS # -DSOCKET
+ATLCONFIG += -DFILEIO -DATH -DCUSTOM -DALIGNMENT -DEXPORT -DREADONLYSTRINGS # -DSOCKET
 LDFLAGS +=-Wl,--no-as-needed
 
 # CFLAGS += $(ATLCONFIG) -Wfatal-errors -g -fPIC  -DLINUX -w -fpermissive # -Wwrite-strings

@@ -61,7 +61,7 @@
     #endif
 #endif
 
-#include <libser.h>
+// #include <libser.h>
 
 // #define MEMSTAT
 

@@ -1,4 +1,6 @@
-"struct.atl" include
+\ "struct.atl" include
+
+include "struct.atl"
 
 struct
     64 chars field topic
@@ -21,7 +23,9 @@ variable client
         then
         "TEST" msg mqtt-new 0= if
             client !
-            client @ "192.168.0.65" 1883 mqtt-client
+\            client @ "192.168.0.65" 1883 mqtt-client
+            client @ "192.168.10.124" 1883 mqtt-client
+\            client @ "127.0.0.1" 1883 mqtt-client
             0= if
                 "Init success"
             else
