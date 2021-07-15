@@ -1,6 +1,13 @@
 #include <stdio.h>
 #include <mosquitto.h>
 #include <string.h>
+#include <libgen.h>
+
+#include <list>
+#include <string>
+#include <iostream>
+
+using namespace std;
 
 #include "atldef.h"
 
@@ -18,8 +25,8 @@ void messageCallback(struct mosquitto *mosq, void *obj,const struct mosquitto_me
 
 
 //    printf("================\n");
-//    atl_eval(".s cr");
-//    Push=obj;
+    atl_eval(".s cr");
+    Push=obj;
     printf ("Rx topic  : %s\n", (char *)message->topic);
     printf ("Rx payload: %s\n", (char *)message->payload);
     strcpy( ((struct cbMqttMessage *)obj)->topic,(char *)message->topic);
@@ -29,6 +36,72 @@ void messageCallback(struct mosquitto *mosq, void *obj,const struct mosquitto_me
     firstTime=false;
     ((struct cbMqttMessage *)obj)->msgFlag++ ;
 }
+
+prim mkStringList() {
+    list<string> *fred = new list<string>;
+    Push=fred;
+}
+
+prim stringPushFront() {
+    Sl(2);
+    So(0);
+
+    list<string> *fred;
+
+    fred = (list<string> *)S1;
+    fred->push_front((char *)S0);
+
+    Pop2;
+
+}
+
+prim stringPopFront() {
+    Sl(2);
+    So(0);
+
+    char *ptr=(char *)S0;
+    char *from;
+
+    bool fail = true;
+
+    list<string> *fred = S1;
+    if(fred->size() > 0) {
+        from = (fred->front()).c_str();
+        strcpy(ptr, from);
+        fred->pop_front();
+        fail = false;
+    } else {
+        ptr[0] = 0;
+        fail = true;
+    }
+    Pop;
+    S0 = fail;
+}
+
+prim stringListDump() {
+    Sl(1);
+    So(0);
+
+    int counter=0;
+    list<string> *fred = (list<string> *)S0;
+    Pop;
+
+    for (list<string>::iterator it=fred->begin(); it!= fred->end(); ++it) {
+        cout << counter++ << ' ' << *it << endl;
+    }
+
+}
+
+prim stringListSize() {
+    Sl(1);
+    So(0);
+
+    list<string> *fred = (list<string> *)S0;
+
+    S0=fred->size();
+}
+
+
 
 prim mqttGetPayload() {
     Sl(1);
@@ -163,6 +236,15 @@ prim mqttClient() {
     }
 }
 
+prim mqttLoopBg() {
+    struct mosquitto *mosq ;
+    mosq=(struct mosquitto *)S0;
+
+    int rc = mosquitto_loop_start( mosq );
+
+    S0 = rc;
+}
+
 // id timeout
 prim mqttLoop() {
     int rc;
@@ -176,11 +258,11 @@ prim mqttLoop() {
 
     rc = mosquitto_loop(mosq,timeout,1);
 
+    Push=rc ;
     if( rc == MOSQ_ERR_SUCCESS) {
         Push=false;
     } else {
         Push=true;
-        perror("mqtt-loop");
     }
 
 }
@@ -197,15 +279,42 @@ prim ATH_strtok() {
     S0=(stackitem)ptr;
 }
 
+prim ATH_basename() {
+    Sl(1);
+    So(1);
+
+    char *ptr;
+
+    ptr = basename((char *)S0);
+    S0=(stackitem)ptr;
+}
+
+prim ATH_dirname() {
+    Sl(1);
+    So(1);
+
+    char *ptr;
+
+    ptr = dirname((char *)S0);
+    S0=(stackitem)ptr;
+}
 
 static struct primfcn mqtt[] = {
+    {"0STRING-LIST-SIZE", stringListSize},
+    {"0STRING-LIST-DUMP", stringListDump},
+    {"0STRING-PUSH-FRONT", stringPushFront},
+    {"0STRING-POP-FRONT", stringPopFront},
+    {"0MK-STRING-LIST", mkStringList},
     {"0STRTOK", ATH_strtok},
+    {"0BASENAME", ATH_basename},
+    {"0DIRNAME", ATH_dirname},
     {"0MQTT-INIT", mqttInit},
     {"0MQTT-NEW", mqttNew},
     {"0MQTT-CLIENT", mqttClient},
     {"0MQTT-PUB", mqttPublish},
     {"0MQTT-SUB", mqttSubscribe},
     {"0MQTT-LOOP", mqttLoop},
+    {"0MQTT-LOOP-BG", mqttLoopBg},
     {"0MQTT-TOPIC@", mqttGetTopic},
     {"0MQTT-PAYLOAD@", mqttGetPayload},
     {NULL, (codeptr) 0}

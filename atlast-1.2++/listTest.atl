@@ -1,0 +1,17 @@
+
+variable lst
+mk-string-list lst !
+
+32 string fred
+
+
+lst @ "There" string-push-front
+lst @ "Hello" string-push-front
+
+lst @ string-list-dump
+
+lst @ string-list-size . cr
+
+lst @ fred string-pop-front 
+
+lst @ string-list-size . cr

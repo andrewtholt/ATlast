@@ -1,4 +1,3 @@
-\ "struct.atl" include
 
 include "struct.atl"
 
@@ -41,18 +40,31 @@ variable client
 ;
 
 : stuff
-    clear client @ -1 mqtt-loop .s
+    clear client @ -1 mqtt-loop 
+;
+
+: run
+    begin
+        stuff if 
+            "Error " type . cr
+        else
+            .s
+        then
+        200 ms
+    again
 ;
 
 : test
     init
 
-    client @ "/home/office/ups/#" mqtt-sub if
+\    client @ "/home/office/ups/#" mqtt-sub if
+    client @ "/home/environment/#" mqtt-sub if
         "mqtt-sub failed" type cr
         abort
     then
 
-    client @ -1 mqtt-loop if
+\    client @ -1 mqtt-loop if
+    client @ mqtt-loop-bg if
         "mqtt-loop failed" type cr
         abort
     then
