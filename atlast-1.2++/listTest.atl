@@ -1,17 +1,39 @@
 
 variable lst
+\ 
+\ Create empty  list for strings
+\ 
+\ -- list
+\ 
 mk-string-list lst !
 
 32 string fred
 
-
+\ 
+\  Push a string to the front of the list
+\ list string --
+\ 
 lst @ "There" string-push-front
 lst @ "Hello" string-push-front
 
+\ 
+\ Show list content
+\ 
 lst @ string-list-dump
 
+\ 
+\ Get length of list 
+\ list -- len
+\ 
 lst @ string-list-size . cr
 
+\ 
+\ Get front and remove from list
+\ list buffer -- 
+\ String copied to buffer
+\ 
 lst @ fred string-pop-front 
-
+\ 
+\ Verify list shorter by 1
+\ 
 lst @ string-list-size . cr
