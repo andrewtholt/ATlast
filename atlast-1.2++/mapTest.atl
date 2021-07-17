@@ -1,0 +1,7 @@
+mk-string-map constant fred
+fred "Hello" "There" map-add
+
+"Map dump" type cr
+fred map-dump
+
+

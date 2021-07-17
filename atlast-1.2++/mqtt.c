@@ -1,22 +1,32 @@
 #include <stdio.h>
+#include <stdlib.h>
+
 #include <mosquitto.h>
 #include <string.h>
 #include <libgen.h>
 
+#include <typeinfo>
 #include <list>
 #include <string>
 #include <iostream>
+#include <fstream>
+
+#include <mutex>
+#include <nlohmann/json.hpp>
 
 using namespace std;
+using json = nlohmann::json;
+
 
 #include "atldef.h"
 
 struct cbMqttMessage {
     uint8_t msgFlag;
     char topic[64];
-    char payload[32];
+    char payload[1024];
 } ;
 
+std::mutex listLock;
 struct cbMqttMessage mqttMessage;
 
 void messageCallback(struct mosquitto *mosq, void *obj,const struct mosquitto_message *message) {
@@ -24,23 +34,160 @@ void messageCallback(struct mosquitto *mosq, void *obj,const struct mosquitto_me
     static bool firstTime=true;
 
 
-//    printf("================\n");
-    atl_eval(".s cr");
-    Push=obj;
-    printf ("Rx topic  : %s\n", (char *)message->topic);
-    printf ("Rx payload: %s\n", (char *)message->payload);
+    //    printf("================\n");
+    //    Push=obj;
+    printf ("Rx topic  :>%s<\n", (char *)message->topic);
+    printf ("Rx payload:>%s<\n", (char *)message->payload);
     strcpy( ((struct cbMqttMessage *)obj)->topic,(char *)message->topic);
     strcpy( ((struct cbMqttMessage *)obj)->payload,(char *)message->payload);
 
-//    Pop;
+    //    Pop;
     firstTime=false;
     ((struct cbMqttMessage *)obj)->msgFlag++ ;
+    atl_eval("\"cb\" . .s cr");
 }
 
+//   2   1   0
+// json key result-buffer ---
+prim jsonSearch() {
+    Sl(3);
+    So(0);
+    char *jsonIn = (char *)S2;
+
+    char *keyEntry = (char *)S1;
+    char *dest = (char *) S0;
+
+    json j = json::parse( jsonIn);
+
+    bool found = false;
+
+    for (const auto& item : j.items()) {        
+        if ( item.key() == keyEntry ) {    
+            std::cout << "Found" << std::endl;    
+            std::cout << "  " << item.key() << ": " << item.value() << "\n";        
+
+            std::cout << (item.value()).is_number() << std::endl;
+
+            string v;
+            if ( item.value().is_number() ) {
+                int x = item.value();
+
+                v = std::to_string(x);
+            } else {
+                v = item.value();
+            }
+            strcpy(dest, v.c_str());
+            break;    
+        }    
+
+        for (const auto& val : item.value().items()) {    
+
+            if (val.key() == keyEntry) {    
+                std::cout << "  " << val.key() << ": " << val.value() << "\n";    
+                string v = item.value();
+
+                if( v.at(0) != "\"" ) {
+                    v = "\"" + v + "\"";
+                }
+                strcpy(dest, v.c_str());
+                break;
+            }    
+        }     
+    }
+    Npop(3);;
+
+}
+
+prim mkStringMap() {
+    Sl(0);
+    So(1);
+
+    map<string, string> *fred = new map<string,string>;
+
+    Push = fred;
+}
+
+prim rmStringMap() {
+    Sl(1);
+    So(0);
+
+    map<string, string> *fred = (map<string, string> *)S0;
+
+    fred->clear();
+
+    delete fred;
+}
+// 
+// key value --
+//
+prim mapAdd() {
+    Sl(3);
+    So(0);
+
+    string key = (char *) S1;
+    string value = (char *) S0;
+
+    map<string, string> *fred = (map<string, string> *)S2;
+
+    fred->insert({key, value});
+
+    Npop(3);;
+}
+
+prim mapRm() {
+    Sl(2);
+    So(0);
+
+    string key = (char *)S0;
+    map<string, string> *fred = (map<string, string> *)S1;
+
+    fred->erase( key );
+
+    Pop2;
+}
+
+
+
+prim mapDump() {
+    Sl(1);
+    So(0);
+
+    map<string, string> *myMap = (map<string, string> *)S0;
+
+    for (const auto &kv : *myMap) {
+        std::cout << kv.first << " = " << kv.second << std::endl;
+    }
+    Pop;
+}
+
+
 prim mkStringList() {
+    Sl(0);
+    So(1);
+
     list<string> *fred = new list<string>;
     Push=fred;
 }
+
+prim rmStringList() {
+    Sl(1);
+    So(0);
+
+    list<string> *fred = (list<string> *)S0;
+
+    delete fred;
+    Pop;
+}
+
+prim stringListEmpty() {
+    Sl(1);
+    So(1);
+
+    list<string> *fred = (list<string> *)S0;
+
+    S0 = (int) (fred->size() == 0);
+}
+
 
 prim stringPushFront() {
     Sl(2);
@@ -49,10 +196,10 @@ prim stringPushFront() {
     list<string> *fred;
 
     fred = (list<string> *)S1;
+    const std::lock_guard<std::mutex> lock(listLock);
     fred->push_front((char *)S0);
 
     Pop2;
-
 }
 
 prim stringPopFront() {
@@ -68,7 +215,50 @@ prim stringPopFront() {
     if(fred->size() > 0) {
         from = (fred->front()).c_str();
         strcpy(ptr, from);
+
+        const std::lock_guard<std::mutex> lock(listLock);
         fred->pop_front();
+
+        fail = false;
+    } else {
+        ptr[0] = 0;
+        fail = true;
+    }
+    Pop;
+    S0 = fail;
+}
+
+prim stringPushBack() {
+    Sl(2);
+    So(0);
+
+    list<string> *fred;
+
+    fred = (list<string> *)S1;
+
+    const std::lock_guard<std::mutex> lock(listLock);
+    fred->push_back((char *)S0);
+
+    Pop2;
+
+}
+
+prim stringPopBack() {
+    Sl(2);
+    So(0);
+
+    char *ptr=(char *)S0;
+    char *from;
+
+    bool fail = true;
+
+    list<string> *fred = S1;
+    if(fred->size() > 0) {
+        from = (fred->front()).c_str();
+        strcpy(ptr, from);
+
+        const std::lock_guard<std::mutex> lock(listLock);
+        fred->pop_back();
         fail = false;
     } else {
         ptr[0] = 0;
@@ -86,6 +276,7 @@ prim stringListDump() {
     list<string> *fred = (list<string> *)S0;
     Pop;
 
+    const std::lock_guard<std::mutex> lock(listLock);
     for (list<string>::iterator it=fred->begin(); it!= fred->end(); ++it) {
         cout << counter++ << ' ' << *it << endl;
     }
@@ -96,6 +287,7 @@ prim stringListSize() {
     Sl(1);
     So(0);
 
+    const std::lock_guard<std::mutex> lock(listLock);
     list<string> *fred = (list<string> *)S0;
 
     S0=fred->size();
@@ -140,7 +332,7 @@ prim mqttInit() {
         rc=0;
     }
     Push=rc;
-//    Push=(void *)&mqttMessage ;
+    //    Push=(void *)&mqttMessage ;
 }
 // 
 // <client name> <message buffer address> -- <id> false | true
@@ -236,7 +428,7 @@ prim mqttClient() {
     }
 }
 
-prim mqttLoopBg() {
+prim mqttLoopStart() {
     struct mosquitto *mosq ;
     mosq=(struct mosquitto *)S0;
 
@@ -244,6 +436,16 @@ prim mqttLoopBg() {
 
     S0 = rc;
 }
+
+prim mqttLoopStop() {
+    struct mosquitto *mosq ;
+    mosq=(struct mosquitto *)S0;
+
+    int rc = mosquitto_loop_stop( mosq, true );
+
+    S0 = rc;
+}
+
 
 // id timeout
 prim mqttLoop() {
@@ -300,11 +502,26 @@ prim ATH_dirname() {
 }
 
 static struct primfcn mqtt[] = {
+    {"0MK-STRING-LIST", mkStringList},
+    {"0RM-STRING-LIST", rmStringList},
+
     {"0STRING-LIST-SIZE", stringListSize},
     {"0STRING-LIST-DUMP", stringListDump},
     {"0STRING-PUSH-FRONT", stringPushFront},
     {"0STRING-POP-FRONT", stringPopFront},
-    {"0MK-STRING-LIST", mkStringList},
+
+    {"0STRING-PUSH-BACK", stringPushBack},
+    {"0STRING-POP-BACK", stringPopBack},
+    {"0STRING-LIST-EMPTY?", stringListEmpty},
+
+    {"0MK-STRING-MAP", mkStringMap},
+    {"0RM-STRING-MAP", rmStringMap},
+    {"0MAP-DUMP", mapDump},
+    {"0MAP-ADD", mapAdd},
+    {"0MAP-RM", mapRm},
+
+    {"0JSON-SEARCH", jsonSearch},
+
     {"0STRTOK", ATH_strtok},
     {"0BASENAME", ATH_basename},
     {"0DIRNAME", ATH_dirname},
@@ -314,7 +531,8 @@ static struct primfcn mqtt[] = {
     {"0MQTT-PUB", mqttPublish},
     {"0MQTT-SUB", mqttSubscribe},
     {"0MQTT-LOOP", mqttLoop},
-    {"0MQTT-LOOP-BG", mqttLoopBg},
+    {"0MQTT-LOOP-START", mqttLoopStart},
+    {"0MQTT-LOOP-STOP", mqttLoopStop },
     {"0MQTT-TOPIC@", mqttGetTopic},
     {"0MQTT-PAYLOAD@", mqttGetPayload},
     {NULL, (codeptr) 0}

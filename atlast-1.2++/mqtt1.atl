@@ -3,14 +3,12 @@ include "struct.atl"
 
 struct
       1 chars field msg-flag
-    64 chars field topic
+     64 chars field topic
     1024 chars field payload
 endstruct /msg
 
 here /msg allot constant msg
 here /msg allot constant safe
-
-here 64 allot constant value 
 
 msg /msg erase
 safe /msg erase
@@ -28,7 +26,6 @@ variable client
         then
         "TEST" msg mqtt-new 0= if
             client !
-\            client @ "192.168.0.65" 1883 mqtt-client
             client @ "192.168.10.124" 1883 mqtt-client
 
             0= if
@@ -64,12 +61,12 @@ variable client
     init
 
 \    client @ "/home/environment/#" mqtt-sub if
-    client @ "/home/house/DRRight/STATE" mqtt-sub if
+    client @ "/home/house/DRRight/#" mqtt-sub if
         "mqtt-sub failed" type cr
         abort
     then
 
-    client @ "/home/house/DRLeft/STATE" mqtt-sub if
+    client @ "/home/house/DRLeft" mqtt-sub if
         "mqtt-sub failed" type cr
         abort
     then

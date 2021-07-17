@@ -9,6 +9,18 @@ mk-string-list lst !
 
 32 string fred
 
+: is-empty
+    lst @ string-list-empty? 
+    if 
+        "Empty " type
+    else
+        "Not Empty " type
+    then
+    cr
+;
+
+is-empty
+
 \ 
 \  Push a string to the front of the list
 \ list string --
@@ -37,3 +49,5 @@ lst @ fred string-pop-front
 \ Verify list shorter by 1
 \ 
 lst @ string-list-size . cr
+
+is-empty
