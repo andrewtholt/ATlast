@@ -28,8 +28,8 @@ linux.o:	linux.c
 extraFunc.o:	extraFunc.cpp extraFunc.h
 	g++  $(CFLAGS) -c extraFunc.cpp -o extraFunc.o
 
-mqtt.o:	mqtt.c
-	$(CC) $(CFLAGS) -c mqtt.c -o mqtt.o 
+mqtt.o:	mqtt.cpp
+	$(CC) $(CFLAGS) -c mqtt.cpp -o mqtt.o 
 
 atlast: $(ATLOBJ) # mqtt.o
 	$(CC) $(CFLAGS) $(INCLUDE) -Wl,--no-as-needed $(ATLOBJ) -o atlast $(LIBRARIES)

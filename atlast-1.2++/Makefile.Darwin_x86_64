@@ -23,8 +23,8 @@ all:	$(APPS)
 linux.o:	linux.c
 	$(CC) $(CFLAGS) -c linux.c -o linux.o $(INCLUDE)
 
-mqtt.o:	mqtt.c
-	$(CC) $(CFLAGS) -c mqtt.c -o mqtt.o 
+mqtt.o:	mqtt.cpp
+	$(CC) $(CFLAGS) -c mqtt.cpp -o mqtt.o 
 
 atlast: $(ATLOBJ) # mqtt.o
 	$(CC) $(CFLAGS) $(INCLUDE)  $(LD_FLAGS) $(ATLOBJ) -o atlast $(LIBRARIES)
