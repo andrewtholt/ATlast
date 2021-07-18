@@ -24,6 +24,7 @@
 #define atl_real double	      /* Real number type */
 #else
 typedef long atl_int;		      /* Stack integer type */
+// typedef double atl_int;		      /* Stack integer type */
 typedef double atl_real;	      /* Real number type */
 #endif
 

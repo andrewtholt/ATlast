@@ -497,7 +497,66 @@ prim ATH_dirname() {
     S0=(stackitem)ptr;
 }
 
+extern prim P_con();
+extern prim P_here();
+
+prim stringObj() {
+    Sl(0);
+
+    std::cout << "stackitem : " << sizeof(stackitem) << endl;
+
+    std::string *tmp = new std::string("EMPTY");
+    Push=tmp;
+    P_create();               /* Create dictionary item */
+    createword->wcode = P_con;        /* Set code to constant push */
+    Ho(1);
+    Hstore = S0;              /* Store constant value in body */
+    Pop; 
+}
+
+/*
+std::string myString;
+char* data = ...;
+int size = ...;
+myString.assign(data, size);
+*/
+
+prim stringStore() {
+    Sl(2) ;
+    So(0);
+
+    std::string *tmp = (std::string *)S0;
+    char *s = (char *)S1;
+
+    tmp->assign(s,strlen(s));
+
+    Pop2;
+
+}
+
+prim stringGet() {
+    Sl(1);
+    So(1);
+
+    void *bill = (void *)S0;
+    std::string *tmp = (std::string *)S0;
+
+    P_here();
+    char *dest = (char *)S0;
+    Pop;
+
+    strcpy(dest, (*tmp).c_str() );
+
+    std::cout << *tmp << std::endl;
+
+}
+
+
 static struct primfcn mqtt[] = {
+    {"0MK-STRING-OBJ", stringObj},
+    {"0S!", stringStore},
+    {"0S@", stringGet},
+
     {"0MK-STRING-LIST", mkStringList},
     {"0RM-STRING-LIST", rmStringList},
 
