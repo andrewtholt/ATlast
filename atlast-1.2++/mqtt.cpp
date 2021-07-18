@@ -52,10 +52,10 @@ void messageCallback(struct mosquitto *mosq, void *obj,const struct mosquitto_me
 prim jsonSearch() {
     Sl(3);
     So(0);
-    char *jsonIn = (char *)S2;
 
-    char *keyEntry = (char *)S1;
     char *dest = (char *) S0;
+    char *keyEntry = (char *)S1;
+    char *jsonIn = (char *)S2;
 
     json j = json::parse( jsonIn);
 
@@ -124,9 +124,8 @@ prim mapAdd() {
     Sl(3);
     So(0);
 
-    string key = (char *) S1;
     string value = (char *) S0;
-
+    string key = (char *) S1;
     map<string, string> *fred = (map<string, string> *)S2;
 
     fred->insert({key, value});
@@ -240,7 +239,6 @@ prim stringPushBack() {
     fred->push_back((char *)S0);
 
     Pop2;
-
 }
 
 prim stringPopBack() {
@@ -292,8 +290,6 @@ prim stringListSize() {
 
     S0=fred->size();
 }
-
-
 
 prim mqttGetPayload() {
     Sl(1);
