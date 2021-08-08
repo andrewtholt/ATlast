@@ -13,38 +13,53 @@
 
 #include <mutex>
 #include <nlohmann/json.hpp>
+#include "ringBuffer.h"
 
 using namespace std;
 using json = nlohmann::json;
 
-
 #include "atldef.h"
 
-struct cbMqttMessage {
-    uint8_t msgFlag;
-    char topic[64];
-    char payload[1024];
-} ;
 
+#define BUFFER_SIZE 16
 std::mutex listLock;
-struct cbMqttMessage mqttMessage;
+
+ringBuffer buffer(BUFFER_SIZE);
 
 void messageCallback(struct mosquitto *mosq, void *obj,const struct mosquitto_message *message) {
-    static char *buffer;
+//`   atl_eval("\"cb\" type cr");
+
+    static int count=0;
+
     static bool firstTime=true;
+    struct cbMqttMessage mqttMessage;
 
+    mqttMessage.topic = message->topic ;
+    mqttMessage.payload = (char *)message->payload ;
 
-    //    printf("================\n");
-    //    Push=obj;
+    std::cout << "Rx topic  :" <<  mqttMessage.topic << endl;
+    std::cout << "Rx payload  :" <<  mqttMessage.payload << endl;
+    std::cout << "Counter   :" << ++count << endl;
+
+    bool failFlag=true;
+
+    std::cout << "Buffer full " <<  buffer.full()  << endl;
+    if ( ! buffer.full() ) {
+        failFlag = buffer.put( mqttMessage );
+    }
+    /*
     printf ("Rx topic  :>%s<\n", (char *)message->topic);
     printf ("Rx payload:>%s<\n", (char *)message->payload);
+
     strcpy( ((struct cbMqttMessage *)obj)->topic,(char *)message->topic);
     strcpy( ((struct cbMqttMessage *)obj)->payload,(char *)message->payload);
 
-    //    Pop;
     firstTime=false;
     ((struct cbMqttMessage *)obj)->msgFlag++ ;
-    atl_eval("\"cb\" . .s cr");
+    */
+
+    std::cout << "Q depth : " << buffer.getSize() << endl;
+    atl_eval("\"cb\" type cr");
 }
 
 //   2   1   0
@@ -200,7 +215,9 @@ prim stringPushFront() {
 
     Pop2;
 }
-
+// 
+// string ptr --
+//
 prim stringPopFront() {
     Sl(2);
     So(0);
@@ -210,12 +227,14 @@ prim stringPopFront() {
 
     bool fail = true;
 
+    const std::lock_guard<std::mutex> lock(listLock);
+
     list<string> *fred = S1;
     if(fred->size() > 0) {
         from = (fred->front()).c_str();
-        strcpy(ptr, from);
+        int len = strlen(from)+1;
+        strncpy(ptr, from, len);
 
-        const std::lock_guard<std::mutex> lock(listLock);
         fred->pop_front();
 
         fail = false;
@@ -250,12 +269,14 @@ prim stringPopBack() {
 
     bool fail = true;
 
+    const std::lock_guard<std::mutex> lock(listLock);
+
     list<string> *fred = S1;
     if(fred->size() > 0) {
         from = (fred->front()).c_str();
-        strcpy(ptr, from);
+        int len = strlen(from)+1;
+        strncpy(ptr, from, len);
 
-        const std::lock_guard<std::mutex> lock(listLock);
         fred->pop_back();
         fail = false;
     } else {
@@ -290,27 +311,58 @@ prim stringListSize() {
 
     S0=fred->size();
 }
+// 
+// topic list -- 
+prim splitTopic() {
+    Sl(2);
+    So(0);
 
-prim mqttGetPayload() {
-    Sl(1);
-    So(1);
+    char *token;    
 
-    struct cbMqttMessage *msg;
+    list<string> *fred = (list<string> *)S0;
+    char *topicChars = (char *)S1;
+    char *rest = topicChars;    
 
-    msg=(struct cbMqttMessage *)S0;
-    S0=(stackitem)&(msg->payload);
-
+    while ((token = strtok_r(rest, "/", &rest))) {    
+//        printf("%s\n", token);    
+        fred->push_back( token );    
+    }  
+    Pop2;
 }
 
-prim mqttGetTopic() {
-    Sl(1);
+void mqttQgetSize() {
+    Sl(0);
     So(1);
 
-    struct cbMqttMessage *msg;
+    int s = buffer.getSize();
 
-    msg=(struct cbMqttMessage *)S0;
-    S0=(stackitem)&(msg->topic);
+    Push=s;
+}
 
+void mqttQempty() {
+    Sl(0);
+    So(1);
+
+    bool e = buffer.empty();
+
+    Push = e;
+}
+
+// 
+// string:topic string:payload--
+void mqttQget() {
+    Sl(2);
+    So(0);
+
+    std::string *t = (std::string *)S1;
+    std::string *m = (std::string *)S0;
+
+    struct cbMqttMessage msg = buffer.get();
+
+    m->assign(  msg.payload);
+    t->assign(  msg.topic);
+
+    Pop2;
 }
 
 prim mqttInit() {
@@ -322,13 +374,12 @@ prim mqttInit() {
 
     if (doneFlag == false) {
         rc=mosquitto_lib_init();
-        memset(&mqttMessage, 0, (size_t)sizeof(struct cbMqttMessage));
+//        memset(&mqttMessage, 0, (size_t)sizeof(struct cbMqttMessage));
         doneFlag=true;
     } else {
         rc=0;
     }
     Push=rc;
-    //    Push=(void *)&mqttMessage ;
 }
 // 
 // <client name> <message buffer address> -- <id> false | true
@@ -514,6 +565,27 @@ prim stringObj() {
     Pop; 
 }
 
+prim stringLength() {
+    Sl(1);
+    So(1);
+
+    std::string *tmp = (std::string *)S0;
+
+    S0 = tmp->length();
+}
+
+prim stringCout() {
+    Sl(1);
+    So(0);
+
+    std::string *tmp = (std::string *)S0;
+
+//    std::cout << tmp ;
+    std::cout << *tmp ;
+
+    Pop;
+}
+
 /*
 std::string myString;
 char* data = ...;
@@ -521,6 +593,9 @@ int size = ...;
 myString.assign(data, size);
 */
 
+//
+// ptr string --
+//
 prim stringStore() {
     Sl(2) ;
     So(0);
@@ -534,11 +609,13 @@ prim stringStore() {
 
 }
 
+// 
+// string -- <ptr here>
 prim stringGet() {
     Sl(1);
     So(1);
 
-    void *bill = (void *)S0;
+//    void *bill = (void *)S0;
     std::string *tmp = (std::string *)S0;
 
     P_here();
@@ -553,7 +630,9 @@ prim stringGet() {
 
 
 static struct primfcn mqtt[] = {
-    {"0MK-STRING-OBJ", stringObj},
+    {"0MK-STRING", stringObj},
+    {"0STRING-LENGTH", stringLength},
+    {"0COUT", stringCout},
     {"0S!", stringStore},
     {"0S@", stringGet},
 
@@ -576,10 +655,16 @@ static struct primfcn mqtt[] = {
     {"0MAP-RM", mapRm},
 
     {"0JSON-SEARCH", jsonSearch},
+    {"0SPLIT-TOPIC", splitTopic},
 
     {"0STRTOK", ATH_strtok},
     {"0BASENAME", ATH_basename},
     {"0DIRNAME", ATH_dirname},
+
+    {"0MQTT-Q-EMPTY", mqttQempty},
+    {"0MQTT-Q-SIZE", mqttQgetSize},
+    {"0MQTT-Q-GET", mqttQget},
+
     {"0MQTT-INIT", mqttInit},
     {"0MQTT-NEW", mqttNew},
     {"0MQTT-CLIENT", mqttClient},
@@ -588,8 +673,7 @@ static struct primfcn mqtt[] = {
     {"0MQTT-LOOP", mqttLoop},
     {"0MQTT-LOOP-START", mqttLoopStart},
     {"0MQTT-LOOP-STOP", mqttLoopStop },
-    {"0MQTT-TOPIC@", mqttGetTopic},
-    {"0MQTT-PAYLOAD@", mqttGetPayload},
+
     {NULL, (codeptr) 0}
 };
 

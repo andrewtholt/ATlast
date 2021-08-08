@@ -64,20 +64,21 @@ variable client
     init
 
 \    client @ "/home/environment/#" mqtt-sub if
-    client @ "/home/house/DRRight/STATE" mqtt-sub if
-        "mqtt-sub failed" type cr
-        abort
-    then
-
-    client @ "/home/house/DRLeft/STATE" mqtt-sub if
-        "mqtt-sub failed" type cr
-        abort
-    then
-
     client @ "/home/environment/TIME" mqtt-sub if
         "mqtt-sub failed" type cr
         abort
     then
+
+    client @ "/home/house/DRRight/#" mqtt-sub if
+        "mqtt-sub failed" type cr
+        abort
+    then
+
+    client @ "/home/house/DRLeft/#" mqtt-sub if
+        "mqtt-sub failed" type cr
+        abort
+    then
+
 
 \    client @ -1 mqtt-loop if
     client @ mqtt-loop-start if
@@ -91,4 +92,19 @@ variable client
     client @ "/home/office/proliant/testing" "ATLAST" mqtt-pub .s
 
 ;
+
+mk-string t
+mk-string p
+
+: mqtt-dump
+    mqtt-q-empty if
+        "Nothing to say" type cr
+    else
+        t p mqtt-q-get 
+        "Topic :" type t cout cr
+        "Msg   :" type p cout cr
+        "Depth :" type mqtt-q-size . cr
+    then
+;
+
 

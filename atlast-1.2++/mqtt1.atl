@@ -66,12 +66,17 @@ variable client
         abort
     then
 
-    client @ "/home/house/DRLeft" mqtt-sub if
+    client @ "/home/house/DRLeft/#" mqtt-sub if
         "mqtt-sub failed" type cr
         abort
     then
 
     client @ "/home/environment/TIME" mqtt-sub if
+        "mqtt-sub failed" type cr
+        abort
+    then
+
+    client @ "/home/office/WEMOS/#" mqtt-sub if
         "mqtt-sub failed" type cr
         abort
     then

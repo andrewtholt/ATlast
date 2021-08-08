@@ -1670,6 +1670,7 @@ prim FR_getMessage() {
 #endif
 
 #ifdef LINUX
+#warning Message
 	uint32_t timeout;
 	char *from;
 	struct mq_attr attr;

@@ -28,7 +28,10 @@ linux.o:	linux.c
 extraFunc.o:	extraFunc.cpp extraFunc.h
 	g++  $(CFLAGS) -c extraFunc.cpp -o extraFunc.o
 
-mqtt.o:	mqtt.cpp
+ringBuffer.o:	ringBuffer.cpp ringBuffer.h
+	$(CC) -c ringBuffer.cpp -o ringBuffer.o
+
+mqtt.o:	mqtt.cpp ringBuffer.o
 	$(CC) $(CFLAGS) -c mqtt.cpp -o mqtt.o 
 
 atlast: $(ATLOBJ) # mqtt.o
