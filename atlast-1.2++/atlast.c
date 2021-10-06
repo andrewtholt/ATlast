@@ -4812,6 +4812,9 @@ prim P_quit()			      /* Terminate execution */
 // Abort, clearing data stack 
 //
 prim P_abort() {
+    P_clear();
+    P_quit();
+    /*
     Sl(1);
     So(0);
 
@@ -4820,11 +4823,12 @@ prim P_abort() {
 
     if ( flag != 0 ) {
         printf("Aborting\n");
-        P_clear();			      /* Clear the data stack */
+        P_clear();			      // Clear the data stack
         pwalkback();
-        P_quit();			      /* Shut down execution */
+        P_quit();			      // Shut down execution
 
     }
+*/
 }
 
 prim P_abortq() 		      /* Abort, printing message */
