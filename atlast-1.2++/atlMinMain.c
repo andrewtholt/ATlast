@@ -22,7 +22,11 @@ int main() {
     bool runFlag=true;
 
     uint8_t lineBuffer[MAX_LINE];
-    dictword *var;
+
+    dictword *start;
+    dictword *stop;
+    dictword *motor;
+
     int *tst;
 
     atl_init();
@@ -33,7 +37,10 @@ int main() {
         atl_eval(lineBuffer);
     } while(len >= 0);
 
-    var = atl_vardef("TEST",4);
+    start = atl_vardef("START",1);
+    *((int *)atl_body(start))=0;
+    stop = atl_vardef("STOP",1);
+    stop = atl_vardef("MOTOR",1);
 
     /*
     if(var == NULL) {

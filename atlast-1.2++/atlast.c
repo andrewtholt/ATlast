@@ -3343,6 +3343,19 @@ prim P_strsep() {
     Push=(stackitem)res;
 }
 
+prim ATH_strtok() {
+    char *ptr;
+    // Note not re-entrent
+
+    Sl(2);
+    So(1);
+
+    ptr=strtok( (char *)S1, (char *)S0);
+    Pop;
+    S0=(stackitem)ptr;
+}
+
+
 prim P_strcpy() 		      /* Copy string to address on stack */
 {
     Sl(2);
@@ -5414,6 +5427,7 @@ static struct primfcn primt[] = {
     {"0STRFORM", P_strform},
     {"0MOVE", P_move},
     {"0STRSEP", P_strsep},
+    {"0STRTOK", ATH_strtok},
 #ifdef REAL
     {"0FSTRFORM", P_fstrform},
     {"0STRREAL", P_strreal},

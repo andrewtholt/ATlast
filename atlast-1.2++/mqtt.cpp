@@ -516,6 +516,7 @@ prim mqttLoop() {
 
 }
 
+/*
 prim ATH_strtok() {
     char *ptr;
     // Note not re-entrent
@@ -527,6 +528,7 @@ prim ATH_strtok() {
     Pop;
     S0=(stackitem)ptr;
 }
+*/
 
 prim ATH_basename() {
     Sl(1);
@@ -657,7 +659,7 @@ static struct primfcn mqtt[] = {
     {"0JSON-SEARCH", jsonSearch},
     {"0SPLIT-TOPIC", splitTopic},
 
-    {"0STRTOK", ATH_strtok},
+//    {"0STRTOK", ATH_strtok},
     {"0BASENAME", ATH_basename},
     {"0DIRNAME", ATH_dirname},
 
