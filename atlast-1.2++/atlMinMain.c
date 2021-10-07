@@ -26,10 +26,12 @@ int main() {
     dictword *start;
     dictword *stop;
     dictword *motor;
-
-    int *tst;
+    dictword *tst;
 
     atl_init();
+
+    FILE *fp = fopen((char *)"utils.atl","r");
+    int stat = atl_load(fp);
 
     do {
         memset(lineBuffer,0,MAX_LINE);
@@ -39,8 +41,11 @@ int main() {
 
     start = atl_vardef("START",1);
     *((int *)atl_body(start))=0;
+
     stop = atl_vardef("STOP",1);
-    stop = atl_vardef("MOTOR",1);
+    motor = atl_vardef("MOTOR",1);
+
+    tst = atl_lookup((char *)"START");
 
     /*
     if(var == NULL) {
