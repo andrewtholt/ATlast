@@ -958,6 +958,40 @@ prim athCmdSet() {
 
     Push = status;
 }
+// 
+// Stack: fd0 .... fdn n -- 
+prim athPoll() {
+    int nfds = (int) S0;
+    Pop;
+
+    struct pollfd fdset[nfds];
+
+    for(int i=0;i<nfds;i++) {
+        printf("i=%d:%d\n", i,S0);
+        fdset[i].fd = (int)S0;
+        Pop;
+
+        fdset[i].events  = POLLIN;
+        fdset[i].revents = 0;
+    }
+
+    int ret = poll(fdset, nfds, 5000);
+
+    int evCount = 0;
+    if( ret > 0 ) {
+        for(int i=0;i<nfds;i++) {
+            if ( fdset[i].revents != 0) {
+                Push=fdset[i].fd ;
+                evCount++;
+            }
+        }
+        Push=evCount ;
+    } else {
+        printf("Timedout\n");
+        Push=0 ;
+    } 
+}
+
 #endif
 // 
 // Add \n to a string
@@ -5616,6 +5650,7 @@ static struct primfcn primt[] = {
 	{(char *)"0SOCKET-CLOSE",athClose},
 	{(char *)"0SOCKET-SEND",athSend},
 	{(char *)"0SOCKET-RECV",athRecv},
+	{(char *)"0SOCKET-POLL", athPoll},
 
 	{(char *)"0CMD-GET",athCmdGet},
 	{(char *)"0CMD-SET",athCmdSet},
