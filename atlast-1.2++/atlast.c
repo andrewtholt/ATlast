@@ -53,6 +53,13 @@
 #endif
 #endif
 
+#ifdef DL
+#include <dlfcn.h>
+void athDlopen();
+void athDlclose();
+void athDlsym();
+#endif
+
 #ifdef FILEIO
     #ifdef FREERTOS
         #ifdef YAFFS
@@ -5697,6 +5704,12 @@ static struct primfcn primt[] = {
     {(char *)"0BANNER", ATH_banner},
 
 #endif
+
+#ifdef DL
+    {(char *)"0DLOPEN", athDlopen},
+    {(char *)"0DLCLOSE", athDlclose},
+    {(char *)"0DLSYM", athDlsym},
+#endif
     {(char *)"0.FEATURES", ATH_Features},
 
 #ifdef ANSI
@@ -6637,3 +6650,45 @@ int atl_eval(char *sp) {
     }
     return evalstat;
 }
+
+#ifdef DL
+void athDlopen() {
+    Sl(2);
+    So(1);
+
+    int flags = S0;
+    char *libname = (char *)S1;
+
+    Pop;
+
+    void *res = dlopen(libname, flags);
+
+    S0 = res;
+}
+
+void athDlclose() {
+    Sl(1);
+    So(0);
+
+    void *lib = (void *)S0;
+    Pop;
+    (void) dlclose(lib);
+}
+
+void athDlsym() {
+    Sl(2);
+    So(1);
+
+    void *funv=NULL;
+
+    void *handle = (void *)S0;
+    char *name = (void *)S1;
+
+    Pop;
+
+    void *func = dlsym(handle,name);
+
+    S0 = func;
+}
+
+#endif

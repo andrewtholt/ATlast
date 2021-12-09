@@ -17,7 +17,7 @@ LDFLAGS +=-Wl,--no-as-needed
 # CFLAGS += $(ATLCONFIG) -Wfatal-errors -g -fPIC  -DLINUX -w -fpermissive # -Wwrite-strings
 CFLAGS += $(ATLCONFIG) -Wl,--no-as-needed -Wfatal-errors -g -fPIC  -DLINUX -w -fpermissive # -Wwrite-strings
 
-ATLOBJ += atlast.o atlmain.o # extraFunc.o
+ATLOBJ += atlast.o atlmain.o extraFunc.o
 
 APPS = atlast atlsmall # primdeftest
 
