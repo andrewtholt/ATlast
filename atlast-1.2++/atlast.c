@@ -1059,6 +1059,11 @@ prim ATH_dec() {
     base = 10;
 }
 
+prim sys_exit() {
+#if defined(LINUX) || defined(DARWIN)
+	exit((int)S0);
+#endif
+}
 prim ATH_bye() {
 //    *((int *) atl_body(rf)) = 0;
 #ifdef FREETOS
@@ -5672,6 +5677,7 @@ static struct primfcn primt[] = {
 	{(char *)"0HEX",ATH_hex},
 	{(char *)"0DECIMAL",ATH_dec},
 	{(char *)"0BYE",ATH_bye},
+	{(char *)"0SYS-EXIT",sys_exit},
 	{(char *)"0?FILEIO",ATH_qfileio},
     {(char *)"0TIB", ATH_Instream},
 //    {(char *)"0TOKEN", ATH_Token},
