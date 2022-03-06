@@ -58,6 +58,7 @@
 void athDlopen();
 void athDlclose();
 void athDlsym();
+void athDlexec();
 #endif
 
 #ifdef FILEIO
@@ -5709,6 +5710,7 @@ static struct primfcn primt[] = {
     {(char *)"0DLOPEN", athDlopen},
     {(char *)"0DLCLOSE", athDlclose},
     {(char *)"0DLSYM", athDlsym},
+    {(char *)"0DLEXEC", athDlexec},
 #endif
     {(char *)"0.FEATURES", ATH_Features},
 
@@ -6689,6 +6691,43 @@ void athDlsym() {
     void *func = dlsym(handle,name);
 
     S0 = func;
+}
+
+#define MAX_ARGS 7
+
+void athDlexec() {
+
+    void *args[MAX_ARGS];
+
+    void *(*func)(void * ...);
+    void *(*func0)();
+
+    void *res;
+    void *tmp;
+
+    func =  ( void *(*)(void *,...))tmp;
+    func0 = ( void *(*)())tmp;
+
+    tmp = S0;
+    int argCount = S1;
+    Pop2;
+
+    for(int i = (argCount-1) ; i > -1;i--) {
+        printf("args[%d] = %d\n", i, S0);
+        args[i] = S0;
+        Pop;
+    }
+
+    switch(argCount) {
+        case 0:
+            res=(*func0)();
+            break;
+        case 1:
+            res=(*func)(args[0]);
+            break;
+
+    }
+
 }
 
 #endif
