@@ -12,6 +12,7 @@
 
 */
 #include <errno.h>
+#include "io.h"
 #ifdef FREERTOS
 #include "tim.h"
 #include "FreeRTOS.h"
@@ -3896,7 +3897,7 @@ prim ATH_sift() {
 
 /* List words */
 prim P_words() {
-//	char outBuffer[132];
+	char outBuffer[132];
 // extern char outBuffer[];
 #ifndef Keyhit
     int key = 0;
