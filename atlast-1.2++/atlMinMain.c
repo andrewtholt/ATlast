@@ -10,8 +10,10 @@
 
 // uint8_t nvramrc[] = ": tst \n10 0 do \ni . cr \nloop \n; \n \n";
 // uint8_t nvramrc[] = ": sifting\ntoken $sift\n;\n: [char] char ;";
-uint8_t nvramrc[] = "" ;
+// uint8_t nvramrc[] = "" ;
 //
+
+#include "nvramrc.h"
 
 char outBuffer[OUTBUFFER];
 
