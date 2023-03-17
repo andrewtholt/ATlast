@@ -80,8 +80,9 @@ variable client
     then
 
 
-\    client @ -1 mqtt-loop if
-    client @ mqtt-loop-start if
+    "Start loop" type cr
+
+
         "mqtt-loop failed" type cr
         abort
     then
