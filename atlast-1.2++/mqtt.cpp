@@ -626,7 +626,7 @@ prim stringGet() {
 
     strcpy(dest, (*tmp).c_str() );
 
-    std::cout << *tmp << std::endl;
+//    std::cout << *tmp << std::endl;
 
 }
 

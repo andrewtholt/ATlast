@@ -4,8 +4,8 @@
 #include <memory>
 
 #ifdef CPP_EXTRAS
-#include <boost/any.hpp>
-vector<boost::any> objectStack;
+// #include <boost/any.hpp>
+// vector<boost::any> objectStack;
 #endif
 
 #include <stdio.h>
@@ -157,7 +157,7 @@ prim P_typeString() {
 // Stack: string -- addr
 //
 prim P_stringToCstr() {
-    Sl(1);
+/*    Sl(1);
     Sl(0);
     char *out = (char *)S0;
     Pop;
@@ -168,11 +168,13 @@ prim P_stringToCstr() {
     objectStack.pop_back();
 
     strcpy(out, ptr->c_str());
+    */
 }
 // 
 // Stack : addr -- string
 //
 prim P_cstrToString() {
+    /*
     Sl(1);
     So(1);
 
@@ -180,6 +182,7 @@ prim P_cstrToString() {
     Pop;
 
     objectStack.push_back( (boost::any) ptr );
+    */
 }
 #endif
 // 
