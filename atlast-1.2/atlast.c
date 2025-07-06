@@ -175,6 +175,8 @@ static int token( char **);
 
 /*  Globals visible to calling programs  */
 
+char outBuffer[255];
+
 atl_int atl_stklen = 100;	      /* Evaluation stack length */
 atl_int atl_rstklen = 100;	      /* Return stack length */
 // atl_int atl_heaplen = 1000;	      /* Heap length */
@@ -3223,7 +3225,7 @@ prim P_strsep() {
     delim=(uint8_t) S0;
     buffer=(uint8_t *)S1;
 
-    res=strsep(&buffer, &delim);
+    res=strsep((char **)&buffer, &delim);
     Pop;
     S0=(stackitem)res;
 }

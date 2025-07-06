@@ -63,7 +63,7 @@ extern atl_int atl_errline;	      /* Line number where last atl_load()
 
 extern void atl_init(), atl_mark(), atl_unwind(), atl_break();
 extern int atl_eval();
-// extern int atl_load();
+extern int atl_load();
 extern void atl_memstat();
 
 #ifdef EMBEDDED

@@ -50,7 +50,7 @@
 // 
 
 
-char outBuffer[255];
+extern char outBuffer[255];
 
 #ifdef PUBSUB
 #ifdef PTHREAD
