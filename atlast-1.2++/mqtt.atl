@@ -2,8 +2,8 @@
 include "struct.atl"
 
 struct
-      1 chars field msg-flag
-    64 chars field topic
+       1 chars field msg-flag
+      64 chars field topic
     1024 chars field payload
 endstruct /msg
 
@@ -29,7 +29,8 @@ variable client
         "TEST" msg mqtt-new 0= if
             client !
 \            client @ "192.168.0.65" 1883 mqtt-client
-            client @ "192.168.10.124" 1883 mqtt-client
+\            client @ "192.168.10.124" 1883 mqtt-client
+            client @ "192.168.0.50" 1883 mqtt-client
 
             0= if
                 "Init success"
@@ -60,7 +61,8 @@ variable client
     again
 ;
 
-: test
+cr "here" type cr
+: tester
     init
 
 \    client @ "/home/environment/#" mqtt-sub if
@@ -80,12 +82,12 @@ variable client
     then
 
 
-    "Start loop" type cr
+\    "Start loop" type cr
 
 
-        "mqtt-loop failed" type cr
-        abort
-    then
+ \       "mqtt-loop failed" type cr
+ \       abort
+ \   then
 ;
 
 : publish
