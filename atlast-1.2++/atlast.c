@@ -274,6 +274,9 @@ static char *fopenmodes[] = {
 };
 
 #endif /* FILEIO */
+#ifdef LINUX
+prim ATH_popen();
+#endif
 
 static char tokbuf[128];	      /* Token buffer */
 static char *instream = NULL;	      /* Current input stream line */
@@ -338,6 +341,128 @@ prim ATH_Token() {
     V strcpy(strbuf[cstrbuf], tokbuf);
     Push = (stackitem) strbuf[cstrbuf];
 }
+
+#ifdef LINUX
+#define READ_CHUNK_SIZE 1024
+#include <sys/wait.h>
+
+int popen2_to_buffer(const char *command, char *buffer, size_t buffer_size, ssize_t *bytes_written) {
+    int pipefd[2];
+    pid_t pid;
+    int status;
+    ssize_t total_copied = 0;
+
+    if (pipe(pipefd) == -1) {
+        perror("pipe failed");
+        return -1;
+    }
+
+    pid = fork();
+    if (pid == -1) {
+        perror("fork failed");
+        close(pipefd[0]);
+        close(pipefd[1]);
+        return -1;
+    }
+
+    // --- CHILD PROCESS ---
+    if (pid == 0) {
+        // Close the read end of the pipe (parent reads from it)
+        close(pipefd[0]);
+
+        // Redirect child's stdout (1) to the write end of the pipe
+        if (dup2(pipefd[1], STDOUT_FILENO) == -1) {
+            perror("dup2 stdout failed in child");
+            exit(EXIT_FAILURE);
+        }
+
+        // Close the original write end after dup2
+        close(pipefd[1]);
+
+        // Execute the command
+        execlp("/bin/sh", "sh", "-c", command, (char *)NULL);
+
+        // If execlp returns, an error occurred
+        perror("execlp failed");
+        exit(EXIT_FAILURE);
+    } else {
+    // --- PARENT PROCESS ---
+        char chunk_buffer[READ_CHUNK_SIZE];
+        ssize_t bytes_read;
+        size_t available_space = buffer_size > 0 ? buffer_size - 1 : 0; // Reserve space for null terminator
+
+        // Close the write end of the pipe
+        close(pipefd[1]);
+
+        // 1. Read from the pipe and copy to the user buffer
+        while (available_space > 0 &&
+               (bytes_read = read(pipefd[0], chunk_buffer, READ_CHUNK_SIZE)) > 0)
+        {
+            size_t copy_size = (size_t)bytes_read;
+
+            // Check if copying the chunk would overflow the available space
+            if (copy_size > available_space) {
+                copy_size = available_space; // Copy only what fits
+            }
+
+            // Copy data to the user's buffer
+            memcpy(buffer + total_copied, chunk_buffer, copy_size);
+
+            total_copied += copy_size;
+            available_space -= copy_size;
+
+            // If we hit the buffer limit, break the read loop
+            if (copy_size < (size_t)bytes_read) {
+                // Optionally log that the output was truncated
+                fprintf(stderr, "Warning: Command output was truncated.\n");
+                break;
+            }
+        }
+
+        // Close the read end of the pipe
+        close(pipefd[0]);
+
+        // 2. Terminate the string (if space permits) and set return value
+        if ((size_t)total_copied < buffer_size) {
+            buffer[total_copied] = '\0'; // Null-terminate the string
+        }
+        *bytes_written = total_copied;
+
+        // 3. Wait for the child process
+        if (waitpid(pid, &status, 0) == -1) {
+            perror("waitpid failed");
+            return -1;
+        }
+
+        // 4. Return the child's exit status
+        if (WIFEXITED(status)) {
+            return WEXITSTATUS(status);
+        }
+    }
+    return 0;
+}
+/*
+ * Stack cmd buffer len 
+ */
+prim ATH_popen() {
+    char *cmd;
+    int len;
+    char *ptr;
+    int rc=0;
+    ssize_t actual_bytes=0;
+
+    len=S0;
+    Pop;
+    ptr=S0;
+    Pop;
+    cmd=S0;
+    Pop;
+    printf("= %s-%d\n",cmd,len);
+    rc = popen2_to_buffer(cmd,ptr,len,&actual_bytes);
+    printf("= %s-%d\n",ptr,actual_bytes);
+
+}
+#endif
 
 // #ifdef ATH
 void ATH_Features() {
@@ -5621,6 +5746,7 @@ static struct primfcn primt[] = {
     {"0FD-WRITE", P_fdWrite},
     {"0STRSTR", P_strstr},
     {"0STRCASESTR", P_strcasestr},
+    {"0POPEN",ATH_popen},
 #endif
 
 #ifdef LIBSER
