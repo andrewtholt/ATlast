@@ -451,16 +451,20 @@ prim ATH_popen() {
     int rc=0;
     ssize_t actual_bytes=0;
 
+    Sl(3);
+    So(2);
     len=S0;
     Pop;
     ptr=S0;
     Pop;
     cmd=S0;
     Pop;
-    printf("= %s-%d\n",cmd,len);
+//    printf("= %s-%d\n",cmd,len);
     rc = popen2_to_buffer(cmd,ptr,len,&actual_bytes);
-    printf("= %s-%d\n",ptr,actual_bytes);
+//    printf("= %s-%d\n",ptr,actual_bytes);
 
+    Push=actual_bytes ;
+    Push=rc ;
 }
 #endif
 
