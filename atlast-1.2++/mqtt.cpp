@@ -132,6 +132,18 @@ prim rmStringMap() {
 
     delete fred;
 }
+
+prim mapCount() {
+    Sl(1);
+    So(1);
+
+
+    map<string, string> *myMap = (map<string, string> *)S0;
+    Pop ;
+    size_t num = myMap->size();
+    Push=num ;
+}
+
 // 
 // key value --
 //
@@ -655,6 +667,7 @@ static struct primfcn mqtt[] = {
     {"0MAP-DUMP", mapDump},
     {"0MAP-ADD", mapAdd},
     {"0MAP-RM", mapRm},
+    {"0MAP-COUNT", mapCount},
 
     {"0JSON-SEARCH", jsonSearch},
     {"0SPLIT-TOPIC", splitTopic},
