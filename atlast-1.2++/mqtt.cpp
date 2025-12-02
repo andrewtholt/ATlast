@@ -185,6 +185,32 @@ prim mapDump() {
     }
     Pop;
 }
+//
+// map key dest -- flag
+// Returns a pointer to the value string, or NULL if not found.
+// WARNING: The returned pointer is to internal map data and is invalidated
+// if the map is modified. The pointer is read-only.
+//
+prim mapGet() {
+    Sl(3);
+    So(1);
+
+    map<string, string> *myMap = (map<string, string> *)S2;
+
+    char *key = (char *) S1;
+    char *dest = (char *)S0;
+
+    auto it = myMap->find(key);
+    Npop(3);
+
+    if (it != myMap->end()) {
+        char *x = strcpy(dest, it->second.c_str());
+        Push = (stackitem) -1;
+    } else {
+        Push = (stackitem)NULL;
+    }
+}
+
 
 
 prim mkStringList() {
@@ -668,6 +694,7 @@ static struct primfcn mqtt[] = {
     {"0MAP-ADD", mapAdd},
     {"0MAP-RM", mapRm},
     {"0MAP-COUNT", mapCount},
+    {"0MAP-GET", mapGet},
 
     {"0JSON-SEARCH", jsonSearch},
     {"0SPLIT-TOPIC", splitTopic},

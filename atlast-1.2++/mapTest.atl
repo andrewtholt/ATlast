@@ -1,7 +1,12 @@
+32 string out
 mk-string-map constant fred
 fred "Hello" "There" map-add
 
 "Map dump" type cr
 fred map-dump
 
+\ "Get key Hello" cr
+fred "Hello" out map-get
+
+out type cr
 
