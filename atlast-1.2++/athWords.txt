@@ -401,7 +401,8 @@ Stack:	cmd buffer len --- read-len rc
 Description:
     Executes a script whose name is given by cmd.  
     stdout text is cpied to the buffer.
-    The scripts stdout is interpreted as atlast commands. 
+    The scripts stdout can be interpreted as atlast commands. By running
+    evaluate.
 
 Name:	gdbm-open
 Stack:	filename len flags max_key_length - ptr db 0|-1
