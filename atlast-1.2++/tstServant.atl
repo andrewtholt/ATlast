@@ -1,8 +1,13 @@
 
 1024 string buffer
+variable fred
 
 "./tst.sh" buffer 1024 servant
 
 cr
 buffer 100 dump
+
+buffer evaluate
+
+fred @ . cr
 
