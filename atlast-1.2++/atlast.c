@@ -5252,7 +5252,8 @@ prim P_find()			      /* Look up word in dictionary */
         /* Push immediate flag */
         Push = (dw->wname[0] & IMMEDIATE) ? 1 : -1;
     } else {
-        Push = 0;
+        S0 = 0;
+//        Push = 0;
     }
 }
 
