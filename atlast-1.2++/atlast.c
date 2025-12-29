@@ -5751,6 +5751,7 @@ static struct primfcn primt[] = {
     {"0STRSTR", P_strstr},
     {"0STRCASESTR", P_strcasestr},
     {"0POPEN",ATH_popen},
+    {"0SERVANT",ATH_popen},
 #endif
 
 #ifdef LIBSER
