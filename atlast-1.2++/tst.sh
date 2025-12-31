@@ -1,5 +1,10 @@
 #!/usr/bin/bash
+set -x
 
-echo "123 fred !"
+if [ -z "$TEST" ]; then
+    echo "Empty"
+elif [ "$TEST" = "atlast" ]; then
+    echo "123 fred !"
+fi
 
 
