@@ -46,10 +46,12 @@ Description:
 	one.
 
 Name:	getenv
-Stack:	ptr addr len -- len
+Stack:	ptr env-name -- len
 Description:
 	Get the environment variable whose name is given by addr, len and place
 	the value at ptr, returning the length on the stack.
+
+    Ensur that the space pointed to by ptr is sufficient.
 
 Name:	errno
 Stack:	-- n
