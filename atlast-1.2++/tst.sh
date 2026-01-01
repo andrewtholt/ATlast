@@ -1,14 +1,15 @@
 #!/usr/bin/bash
-set -x
+# set -x
 
-#if [ -z "$TEST" ]; then
-#    echo "Empty"
-#elif [ "$TEST" = "atlast" ]; then
-#    echo "123 fred !"
+VARNAME="fred"
+VAR=$(ps -ef | tail -n +2 | wc -l)
+
 case $MASTER in
     "atlast")
-        echo "123 fred !";;
+        printf "%s %s !" $VAR $VARNAME;;
+    "python")
+        printf "%s = %d" $VARNAME $VAR;;
     *)
-        echo "Empty";;
+        echo "SET MASTER";;
 esac
 
