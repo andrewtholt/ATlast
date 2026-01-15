@@ -3523,14 +3523,11 @@ prim ATH_strtok() {
     char *ptr;
     // Note not re-entrent
 
-    char *saveptr;
     Sl(2);
     So(1);
 
-    /*
     ptr=strtok( (char *)S1, (char *)S0);
-    */
-    ptr=strtok_r(S1,S0,&saveptr);
+
     Pop;
 
     S0=(stackitem)ptr;
