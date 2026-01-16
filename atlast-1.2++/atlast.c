@@ -30,7 +30,7 @@
 #include <string.h>
 #include "atlcfig.h"
 #include "atlast.h"
-
+#include "showstack.h"
 // #include "atldef.h"
 
 #if defined(LINUX)
@@ -4064,6 +4064,16 @@ prim ATH_sifting() {
     ATH_sift();
 } 
 
+prim ATH_showstack() {
+    printf("showstack\n");
+    showstack=true;
+}
+
+prim ATH_noshowstack() {
+    printf("noshowstack\n");
+    showstack=false;
+}
+
 /* List words */
 prim P_words() {
 //	char outBuffer[132];
@@ -5748,6 +5758,8 @@ static struct primfcn primt[] = {
     {"0$SIFT", ATH_sift},
     {"1SIFTING", ATH_sifting},
 	{"0EMIT", P_emit},
+    {"0SHOWSTACK",ATH_showstack},
+    {"0-SHOWSTACK",ATH_noshowstack},
 #endif /* CONIO */
 #ifdef LINUX
     {"0FD-READ", P_fdRead},

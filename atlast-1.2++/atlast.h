@@ -29,7 +29,6 @@ typedef double atl_real;	      /* Real number type */
 #endif
 
 /*  External symbols accessible by the calling program.  */
-
 extern atl_int atl_stklen;	      /* Initial/current stack length */
 extern atl_int atl_rstklen;	      /* Initial/current return stack length */
 extern atl_int atl_heaplen;	      /* Initial/current heap length */

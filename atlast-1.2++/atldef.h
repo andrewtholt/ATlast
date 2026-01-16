@@ -307,6 +307,5 @@ typedef enum {False = 0, True = 1} Boolean;
 // ATH Additions
 #define MAX_LINE 80
 int8_t readLineFromArray(uint8_t *, uint8_t *) ;
-
 #endif
 

@@ -46,7 +46,6 @@
 #define V   (void)
 
 /*  Globals imported  */
-
 #ifdef PUBSUB
 #ifdef PTHREAD
 #warning "Define lock"
@@ -155,7 +154,7 @@ int main(int argc, char *argv[]) {
     int in = 0;
 
     int *tst;
-    int verbose=FALSE;
+    bool verbose=false;
 
 #define PR(x) (void) fprintf(stderr, x)
 
@@ -211,7 +210,7 @@ int main(int argc, char *argv[]) {
                 return 0;
             case 'v':
                 PR("\nVerbose True\n\n");
-                verbose=TRUE;
+                verbose=true ;
                 break;
         }
     }
@@ -281,7 +280,7 @@ FILE *fp;
 
     atlPath = getenv("ATL_PATH");
 
-    if(verbose !=0) {
+    if(verbose) {
         printf("ATL_PATH = %s\n",atlPath);
     }
 
@@ -314,7 +313,7 @@ FILE *fp;
         if (strchr(fn, '.') == NULL) {
             V strcat(fn, ".atl");
         }
-        if(verbose != 0) {
+        if(verbose ) {
             V printf("Loading ... %s\n",include[i]);
         }
         fp = fopen(fn, "r");
@@ -340,9 +339,13 @@ FILE *fp;
 
     /* Now that all the preliminaries are out of the way, fall into
        the main ATLAST execution loop. */
+    extern bool showstack;
     while (true) {
 
         if (!fname)
+            if(showstack) {
+                V atl_eval(".s");
+            }
             V printf(atl_comment ? "(  " :  /* Show pending comment */
                     /* Show compiling state */
                     (((heap != NULL) && state) ? ":> " : "-> "));
