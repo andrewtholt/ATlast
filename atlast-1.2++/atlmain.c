@@ -314,7 +314,9 @@ FILE *fp;
         if (strchr(fn, '.') == NULL) {
             V strcat(fn, ".atl");
         }
-        V printf("Loading ... %s\n",include[i]);
+        if(verbose != 0) {
+            V printf("Loading ... %s\n",include[i]);
+        }
         fp = fopen(fn, "r");
         /*
 #ifdef FBmode
