@@ -207,6 +207,7 @@ int main(int argc, char *argv[]) {
                 PR("           -S n      Stack length n\n");
                 PR("           -T        Set TRACE mode\n");
                 PR("           -U        Print this message\n");
+                PR("           -v        Print startup settings\n");
                 return 0;
             case 'v':
                 PR("\nVerbose True\n\n");
