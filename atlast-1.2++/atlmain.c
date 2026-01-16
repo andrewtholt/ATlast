@@ -155,6 +155,7 @@ int main(int argc, char *argv[]) {
     int in = 0;
 
     int *tst;
+    int verbose=FALSE;
 
 #define PR(x) (void) fprintf(stderr, x)
 
@@ -167,7 +168,7 @@ int main(int argc, char *argv[]) {
 
     int opt;
 
-    while((opt = getopt(argc,argv, "C:DH:I:R:S:T?Uh")) != -1) {
+    while((opt = getopt(argc,argv, "C:DH:I:R:S:T?Uhv")) != -1) {
         switch(opt) {
             case 'C':
                 chdir(optarg);
@@ -207,6 +208,10 @@ int main(int argc, char *argv[]) {
                 PR("           -T        Set TRACE mode\n");
                 PR("           -U        Print this message\n");
                 return 0;
+            case 'v':
+                PR("\nVerbose True\n\n");
+                verbose=TRUE;
+                break;
         }
     }
     // OK, so init the system
@@ -275,6 +280,10 @@ FILE *fp;
 
     atlPath = getenv("ATL_PATH");
 
+    if(verbose !=0) {
+        printf("ATL_PATH = %s\n",atlPath);
+    }
+
     if( atlPath != NULL ) {
     	bzero(startFile,0);
     	sprintf(startFile,"%s/start.atl",atlPath);
@@ -304,6 +313,7 @@ FILE *fp;
         if (strchr(fn, '.') == NULL) {
             V strcat(fn, ".atl");
         }
+        V printf("Loading ... %s\n",include[i]);
         fp = fopen(fn, "r");
         /*
 #ifdef FBmode
