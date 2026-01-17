@@ -883,6 +883,15 @@ prim ATH_qfreertos() {
 #endif
 }
 
+prim ATH_qmqtt() {
+#ifdef MQTT
+    Push=-1;
+#else
+    Push=0;
+#endif
+}
+
+
 prim ATH_qfileio() {
     So(1);
 
@@ -5838,6 +5847,7 @@ static struct primfcn primt[] = {
 //    {(char *)"0TOKEN", ATH_Token},
     {(char *)"0?LINUX", ATH_qlinux},
     {(char *)"0?FREERTOS", ATH_qfreertos},
+    {(char *)"0?MQTT", ATH_qmqtt},
     {(char *)"0MS", ATH_ms},
     {(char *)"0(PWD)", ATH_pwd},
     {(char *)"0CD", ATH_cd},

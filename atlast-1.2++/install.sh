@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+# set -x
 
 echo "Copy atlast .."
 sudo cp ./atlast /usr/local/bin
