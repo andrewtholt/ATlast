@@ -26,7 +26,8 @@ variable client
         then
         "TEST" msg mqtt-new 0= if
             client !
-            client @ "192.168.10.124" 1883 mqtt-client
+\            client @ "192.168.10.124" 1883 mqtt-client
+            client @ "192.168.0.50" 1883 mqtt-client
 
             0= if
                 "Init success"
@@ -46,6 +47,20 @@ variable client
     clear client @ -1 mqtt-loop 
 ;
 
+mk-string t
+mk-string p
+
+: mqtt-dump
+    mqtt-q-empty if
+        "Nothing to say" type cr
+    else
+        t p mqtt-q-get
+        "Topic :" type t cout cr
+        "Msg   :" type p cout cr
+        "Depth :" type mqtt-q-size . cr
+    then
+;
+
 : run
     begin
         stuff if 
@@ -53,7 +68,8 @@ variable client
         else
             .s
         then
-        200 ms
+        mqtt-dump
+        1000 ms
     again
 ;
 

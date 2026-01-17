@@ -5856,7 +5856,7 @@ static struct primfcn primt[] = {
     {(char *)"0TOUCH", RT_touch},
     {(char *)"0MKFILE", RT_mkfile},
     {(char *)"0CRCFILE", RT_crcfile},
-    {(char *)"0TEST", RT_test},
+    {(char *)"0YAFFS-TEST", RT_test},
     {(char *)"0ERRNO", ATH_errno},
     {(char *)"0HELP", ATH_help},
     {(char *)"0BANNER", ATH_banner},
@@ -5883,7 +5883,7 @@ static struct primfcn primt[] = {
     {(char *)"0TOUCH", RT_touch},
     {(char *)"0MKFILE", RT_mkfile},
     {(char *)"0CRCFILE", RT_crcfile},
-    {(char *)"0TEST", RT_test},
+    {(char *)"0YAFFS-TEST", RT_test},
 
     {(char *)"0PERROR", ATH_perror},
 	{(char *)"0MKSCMD", FR_mkScmd},
