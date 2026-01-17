@@ -407,11 +407,11 @@ prim mqttInit() {
     Sl(0);
     So(1);
 
-    int rc;
+    int rc=0;
     static bool doneFlag=false;
 
     if (doneFlag == false) {
-        rc=mosquitto_lib_init();
+        rc=mosquitto_lib_init();  // returns 0
 //        memset(&mqttMessage, 0, (size_t)sizeof(struct cbMqttMessage));
         doneFlag=true;
     } else {
