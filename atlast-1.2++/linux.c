@@ -203,12 +203,13 @@ prim ATH_mmap() {
 // msg -- 
 prim ATH_perror() {
     
-    Sl(1);
+//    Sl(1);
     So(0);
 
-    perror((char *)S0);
+//    perror((char *)S0);
+    perror((char *)NULL);
     errno=0;
-    Pop;
+//    Pop;
 }
     
 static struct primfcn extras[] = {
