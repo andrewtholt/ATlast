@@ -51,15 +51,25 @@ mk-string t
 mk-string p
 
 : mqtt-dump
+    "around .." type cr
     mqtt-q-empty if
         "Nothing to say" type cr
     else
-        t p mqtt-q-get
+        depth . cr
+        t p mqtt-q-get 
         "Topic :" type t cout cr
         "Msg   :" type p cout cr
         "Depth :" type mqtt-q-size . cr
     then
 ;
+:  fred
+    mqtt-q-empty 0= if
+        t p mqtt-q-get 
+        "Topic :" type t cout cr
+        "Msg   :" type p cout cr
+        "Depth :" type mqtt-q-size . cr
+    then
+; 
 
 : run
     begin

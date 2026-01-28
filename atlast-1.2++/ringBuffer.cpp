@@ -48,6 +48,7 @@ cbMqttMessage ringBuffer::get() {
 
     cbMqttMessage tmp;
     const std::lock_guard<std::mutex> lock(listLock);
+
     tmp = buffer.front();
     buffer.pop_front();
 
@@ -105,6 +106,18 @@ void ringBuffer::clear() {
     buffer.clear();
 }
 
+
+/***********************************************************************
+ *  Method: ringBuffer::dump(n)
+ *  Params: void
+ * Returns: int
+ * Effects: Denug display
+ ***********************************************************************/
+void ringBuffer::dump(cbMqttMessage n) {
+    const std::lock_guard<std::mutex> lock(listLock);
+    std::cout << "Topic  :" << n.topic << std::endl;
+    std::cout << "Payload:" << n.payload << std::endl;;
+}
 
 /***********************************************************************
  *  Method: ringBuffer::getMaxSize

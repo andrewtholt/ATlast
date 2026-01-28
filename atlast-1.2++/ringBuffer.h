@@ -2,6 +2,7 @@
 #include <string>
 #include <list>
 #include <mutex>
+#include <memory>
 
 class cbMqttMessage {    
     public:
@@ -35,6 +36,8 @@ class ringBuffer {
         int getSize();
         int getMaxSize();
         void setMaxSize(int n);
+
+        void dump(cbMqttMessage n);
 
         void clear();
 };

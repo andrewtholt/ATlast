@@ -403,6 +403,22 @@ void mqttQget() {
     Pop2;
 }
 
+void mqttQdump() {
+    Sl(2);
+    So(0);
+
+    std::string *t = (std::string *)S1;
+    std::string *m = (std::string *)S0;
+
+    struct cbMqttMessage msg = buffer.get();
+
+    m->assign(  msg.payload);
+    t->assign(  msg.topic);
+
+//    Pop2;
+
+}
+
 prim mqttInit() {
     Sl(0);
     So(1);
@@ -706,6 +722,7 @@ static struct primfcn mqtt[] = {
     {"0MQTT-Q-EMPTY", mqttQempty},
     {"0MQTT-Q-SIZE", mqttQgetSize},
     {"0MQTT-Q-GET", mqttQget},
+    {"0MQTT-Q-DUMP", mqttQdump},
 
     {"0MQTT-INIT", mqttInit},
     {"0MQTT-NEW", mqttNew},
