@@ -6,6 +6,7 @@
 #include <sys/mman.h>
 #include <errno.h>
 #include <string.h>
+#include <sys/utsname.h>
 
 
 #include <sys/mman.h>
@@ -50,6 +51,11 @@ void mkMsg(void *from, struct cmdMessage *msg, char *cmd, char *key, char *value
 
 }
 #endif
+struct utsname unameInfo;
+
+prim ATH_uname() {
+    int rc = uname(&unameInfo);
+}
 
 prim ATH_initRamBlocks() {
     int size;
@@ -161,6 +167,7 @@ static struct primfcn extras[] = {
 #endif
     {"0PERROR", ATH_perror},
 //    {"0TESTING", crap},
+    {"0UNAME",ATH_uname},
     {NULL, (codeptr) 0}
 };
 
