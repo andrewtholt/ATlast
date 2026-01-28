@@ -95,6 +95,21 @@ prim ATH_cpu() {
     Push=cpu;
 }
 
+prim ATH_hostname() {
+    Sl(2);
+    So(1);
+
+    int len=S0;
+    char *ptr=(char*)S1;
+
+    char  *ret=strncpy(ptr,unameInfo.nodename,len);
+
+    int l=strlen(S1);
+    Pop2;
+    Push=l;
+}
+
+
 
 prim ATH_initRamBlocks() {
     int size;
@@ -209,6 +224,7 @@ static struct primfcn extras[] = {
     {"0UNAME",ATH_uname},
     {"0OS",ATH_os},
     {"0CPU",ATH_cpu},
+    {"0HOSTNAME",ATH_hostname},
     {NULL, (codeptr) 0}
 };
 
