@@ -89,15 +89,12 @@ prim ATH_cpu() {
 
     if (ret == 0) {
         cpu = CPU_X86_64;
-    }else {
-        cpu = CPU_UNKNOWN;
     }
+
     ret = strcmp(unameInfo.machine,"aarch64");
 
     if(ret == 0) {
         cpu = CPU_AARCH64;
-    }else {
-        cpu = CPU_UNKNOWN;
     }
 
     Push=cpu;
