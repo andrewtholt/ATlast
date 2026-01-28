@@ -52,10 +52,49 @@ void mkMsg(void *from, struct cmdMessage *msg, char *cmd, char *key, char *value
 }
 #endif
 struct utsname unameInfo;
+#define OS_UNKNOWN 0
+#define OS_LINUX 1
+
+#define CPU_UNKNOWN 0
+#define CPU_X86_64 4
 
 prim ATH_uname() {
     int rc = uname(&unameInfo);
 }
+
+prim ATH_os() {
+    Sl(0);
+    So(1);
+
+    int os = OS_UNKNOWN;
+
+    int ret = strcmp(unameInfo.sysname,"Linux");
+
+    if( ret == 0) {
+        os = OS_LINUX;
+    } else {
+        os = OS_UNKNOWN;
+    }
+    Push=os ;
+}
+
+prim ATH_cpu() {
+    Sl(0);
+    So(1);
+
+    int cpu = CPU_UNKNOWN;
+
+    int ret = strcmp(unameInfo.machine,"x86_64");
+
+    if (ret == 0) {
+        cpu = CPU_X86_64;
+    }else {
+        cpu = CPU_UNKNOWN;
+    }
+
+    Push=cpu;
+}
+
 
 prim ATH_initRamBlocks() {
     int size;
@@ -168,6 +207,8 @@ static struct primfcn extras[] = {
     {"0PERROR", ATH_perror},
 //    {"0TESTING", crap},
     {"0UNAME",ATH_uname},
+    {"0OS",ATH_os},
+    {"0CPU",ATH_cpu},
     {NULL, (codeptr) 0}
 };
 
