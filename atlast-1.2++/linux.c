@@ -57,6 +57,7 @@ struct utsname unameInfo;
 
 #define CPU_UNKNOWN 0
 #define CPU_X86_64 4
+#define CPU_AARCH64 7
 
 prim ATH_uname() {
     int rc = uname(&unameInfo);
@@ -88,6 +89,13 @@ prim ATH_cpu() {
 
     if (ret == 0) {
         cpu = CPU_X86_64;
+    }else {
+        cpu = CPU_UNKNOWN;
+    }
+    ret = strcmp(unameInfo.machine,"aarch64");
+
+    if(ret == 0) {
+        cpu = CPU_AARCH64;
     }else {
         cpu = CPU_UNKNOWN;
     }
