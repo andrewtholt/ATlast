@@ -155,6 +155,7 @@ int main(int argc, char *argv[]) {
 
     int *tst;
     bool verbose=false;
+    extern bool showstack;
 
 #define PR(x) (void) fprintf(stderr, x)
 
@@ -211,6 +212,7 @@ int main(int argc, char *argv[]) {
             case 'v':
                 PR("\nVerbose True\n\n");
                 verbose=true ;
+                showstack=true;
                 break;
         }
     }
@@ -339,7 +341,7 @@ FILE *fp;
 
     /* Now that all the preliminaries are out of the way, fall into
        the main ATLAST execution loop. */
-    extern bool showstack;
+//    extern bool showstack;
     while (true) {
 
         if (!fname)
