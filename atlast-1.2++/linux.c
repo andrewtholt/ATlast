@@ -114,6 +114,15 @@ prim ATH_hostname() {
     Push=l;
 }
 
+prim ATH_dotuname() {
+    int rc = uname(&unameInfo);
+
+    printf("\n");
+    printf("OS:\t\t%s\n",unameInfo.sysname);
+    printf("CPU:\t\t%s\n",unameInfo.machine);
+    printf("Hostname:\t%s\n",unameInfo.nodename);
+}
+
 
 
 prim ATH_initRamBlocks() {
@@ -231,6 +240,7 @@ static struct primfcn extras[] = {
     {"0OS",ATH_os},
     {"0CPU",ATH_cpu},
     {"0HOSTNAME",ATH_hostname},
+    {"0.UNAME",ATH_dotuname},
     {NULL, (codeptr) 0}
 };
 
