@@ -6,4 +6,5 @@ sudo cp ./atlast /usr/local/bin
 echo ".. strip exexutable .."
 sudo strip /usr/local/bin/atlast
 echo ".. create lib"
-sudo mkdir -p /usr/local/lib/Small
+sudo mkdir -p /usr/local/lib/atlast
+
