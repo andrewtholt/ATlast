@@ -1,4 +1,4 @@
 
-"struct.atl" include
-"linuxMsg.atl" include
-"pubsub.atl" include
+include "struct.atl"
+include "linuxMsg.atl"
+include "pubsub.atl"
