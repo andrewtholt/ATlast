@@ -1,0 +1,15 @@
+
+To test servant
+
+run atlast
+
+forth -v -I init.atl
+
+Then load the test
+
+include tstServant.atl
+
+map map-dump 
+
+displays the results
+

@@ -1,13 +1,17 @@
+\ make sure stack is clear
+
+clear
+
+cr .s cr
 
 1024 string buffer
-variable fred
 
 "./tst.sh" buffer 1024 servant
 
 cr
 buffer 100 dump
 
+.s cr
 buffer evaluate
-
-fred @ . cr
+.s cr
 
