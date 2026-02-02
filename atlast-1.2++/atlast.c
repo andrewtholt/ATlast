@@ -4413,8 +4413,10 @@ prim P_dInclude() {
 #if defined(LINUX) || defined(DARWIN)
     FILE *fd;
 
+    char *fname ;
+    fname = S0;
 
-    fd = fopen((char *)S0, "r") ;
+    fd = fopen((char *)fname, "r") ;
 #endif
 #if defined(FREERTOS) && defined(YAFFS)
     char *fname = (char *)S0;

@@ -208,6 +208,9 @@ int main(int argc, char *argv[]) {
                 PR("           -T        Set TRACE mode\n");
                 PR("           -U        Print this message\n");
                 PR("           -v        Print startup settings\n");
+                PR("\n");
+                PR("To load a file use :\n");
+                PR("\tINCLUDE <filename>\n\n");
                 return 0;
             case 'v':
                 PR("\nVerbose True\n\n");
