@@ -1,0 +1,19 @@
+\ make sure stack is clear
+
+clear
+
+( cr .s cr )
+showstack 
+
+1024 string buffer
+-1 value fred
+
+"./tst1.sh" buffer 1024 servant nip 
+
+cr
+buffer 100 dump
+
+.s cr
+buffer evaluate
+.s cr
+
