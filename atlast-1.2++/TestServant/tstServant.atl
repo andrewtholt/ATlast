@@ -2,7 +2,8 @@
 
 clear
 
-cr .s cr
+( cr .s cr )
+showstack 
 
 1024 string buffer
 
