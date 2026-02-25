@@ -3487,8 +3487,8 @@ prim P_strlit() 		      /* Push address of string literal */
     Skipstring; 		      /* Advance IP past it */
 }
 
-prim P_string() 		      /* Create string buffer */
-{
+/* Create string buffer */
+prim P_string() {
     Sl(1);
     Ho((S0 + 1 + sizeof(stackitem)) / sizeof(stackitem));
     P_create(); 		      /* Create variable */
@@ -3512,6 +3512,7 @@ prim P_move() {
 // ATH find token
 //
 // Stack: addr char - addr
+//
 prim P_strsep() {
     uint8_t *buffer;
     uint8_t *res=NULL;
@@ -3643,6 +3644,51 @@ prim P_strform()		      /* Format integer using sprintf() */
     
     Npop(3);
 }
+
+void strip_brackets(char *str, char leading, char trailing) {
+    if (str == NULL || *str == '\0') return;
+
+    char *start = str;
+    char *end;
+
+    // 1. Move 'start' past leading characters
+    while (*start == leading && *start != '\0') {
+        start++;
+    }   
+
+    // 2. Find the end and work backward for trailing characters
+    size_t len = strlen(start);
+    if (len == 0) {
+        *str = '\0'; // Entire string was leading chars
+        return;
+    }   
+
+    end = start + len - 1;
+    while (end >= start && *end == trailing) {
+        *end = '\0';
+        end--;
+    }   
+
+    // 3. Shift the result back to the original address
+    if (start != str) {
+        memmove(str, start, strlen(start) + 1); 
+    }   
+}
+// 
+// stack: ptr lc rc -- ptr
+//
+prim P_strtrim() {
+    Sl(3);
+    char *trailing=S0;
+    char *leading=S1;
+    char *ptr=S2;
+
+    Npop(3);
+
+    strip_brackets(ptr, *leading,*trailing);
+//    printf("%s\n", ptr);
+}
+
 
 #ifdef REAL
 prim P_fstrform()		      /* Format real using sprintf() */
@@ -5626,6 +5672,7 @@ static struct primfcn primt[] = {
     {"0SUBSTR", P_substr},
     {"0COMPARE", P_strcmp},
     {"0STRFORM", P_strform},
+    {"0STRTRIM", P_strtrim},
     {"0MOVE", P_move},
     {"0STRSEP", P_strsep},
     {"0STRTOK", ATH_strtok},

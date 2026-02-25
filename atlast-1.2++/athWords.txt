@@ -1026,9 +1026,10 @@ Note:
     will exit.  This is due to it reading /dev/null and getting EOF.
 
 
-Name:	
-Stack:	
+Name:	strtrim
+Stack:	ptr lead trail -- 
 Description:
+    remove the leading and trailing characters, in place of the string.
 
 Name:	
 Stack:	
