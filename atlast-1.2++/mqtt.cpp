@@ -78,10 +78,11 @@ prim jsonSearch() {
 
     for (const auto& item : j.items()) {        
         if ( item.key() == keyEntry ) {    
-            std::cout << "Found" << std::endl;    
-            std::cout << "  " << item.key() << ": " << item.value() << "\n";        
+//            std::cout << "Found" << std::endl;    
+//            std::cout << "  " << item.key() << ": " << item.value() << "\n";
+//            std::cout << item.value() << std::endl;
 
-            std::cout << (item.value()).is_number() << std::endl;
+//            std::cout << (item.value()).is_number() << std::endl;
 
             string v;
             if ( item.value().is_number() ) {
