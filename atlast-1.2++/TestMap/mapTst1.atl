@@ -1,0 +1,11 @@
+
+"Map test" type cr
+
+0 value map
+
+mk-string-map to  map 
+
+map "Test" "One" map-add
+
+map map-dump
+
