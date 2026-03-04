@@ -26,8 +26,8 @@ variable client
         then
         "TEST" msg mqtt-new 0= if
             client !
-\            client @ "192.168.10.124" 1883 mqtt-client
-            client @ "192.168.0.50" 1883 mqtt-client
+            client @ "192.168.10.124" 1883 mqtt-client
+\            client @ "192.168.0.50" 1883 mqtt-client
 
             0= if
                 "Init success"
