@@ -466,6 +466,40 @@ prim ATH_popen() {
     Push=actual_bytes ;
     Push=rc ;
 }
+
+#include <stdio.h>
+#include <termios.h>
+#include <unistd.h>
+
+void ATH_key(void) {
+    struct termios oldattr, newattr;
+    int ch;
+
+    // 1. Get the current terminal attributes
+    if (tcgetattr(STDIN_FILENO, &oldattr) != 0) {
+        return -1;
+    }
+
+    // 2. Copy the attributes to modify them
+    newattr = oldattr;
+
+    // 3. Disable canonical mode (ICANON) and local echo (ECHO)
+    newattr.c_lflag &= ~(ICANON | ECHO);
+
+    // 4. Set the new attributes immediately
+    if (tcsetattr(STDIN_FILENO, TCSANOW, &newattr) != 0) {
+        return -1;
+    }
+
+    // 5. Read a single character
+    ch = getchar();
+
+    // 6. Restore the original terminal settings
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
+
+    Push=ch;
+//    return ch;
+}
 #endif
 
 // #ifdef ATH
@@ -5826,6 +5860,7 @@ static struct primfcn primt[] = {
     {"0STRCASESTR", P_strcasestr},
     {"0POPEN",ATH_popen},
     {"0SERVANT",ATH_popen},
+    {"0KEY",ATH_key},
 #endif
 
 #ifdef LIBSER
