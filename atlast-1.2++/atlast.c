@@ -471,7 +471,11 @@ prim ATH_popen() {
 #include <termios.h>
 #include <unistd.h>
 
-void ATH_key(void) {
+#include <stdio.h>
+#include <termios.h>
+#include <unistd.h>
+
+int getch(void) {
     struct termios oldattr, newattr;
     int ch;
 
@@ -497,9 +501,125 @@ void ATH_key(void) {
     // 6. Restore the original terminal settings
     tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
 
-    Push=ch;
+    return ch;
+}
+
+void ATH_key(void) {
+    struct termios oldattr, newattr;
+    int c = getch();;
+
+    Push=c;
 //    return ch;
 }
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <termios.h>
+#include <unistd.h>
+#include <sys/select.h>
+
+#include <stdio.h>
+#include <stdbool.h>
+void ATH_qkey(void) {
+    struct termios oldattr, newattr;
+    struct timeval tv;
+    fd_set rfds;
+    bool retval = false;
+
+    // 1. Disable canonical mode and echo so inputs are registered instantly
+    if (tcgetattr(STDIN_FILENO, &oldattr) != 0) {
+        return false;
+    }
+    newattr = oldattr;
+    newattr.c_lflag &= ~(ICANON | ECHO);
+    if (tcsetattr(STDIN_FILENO, TCSANOW, &newattr) != 0) {
+        return false;
+    }
+
+    // 2. Set up the file descriptor set to monitor stdin (file descriptor 0)
+    FD_ZERO(&rfds);
+    FD_SET(STDIN_FILENO, &rfds);
+
+    // 3. Set a zero timeout so select() returns instantly (polling mode)
+    tv.tv_sec = 0;
+    tv.tv_usec = 0;
+
+    // 4. Check if stdin has data waiting
+    int result = select(STDIN_FILENO + 1, &rfds, NULL, NULL, &tv);
+
+    if (result > 0) {
+        retval = true;
+    }
+
+    // 5. Restore original terminal settings
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
+
+    Push=retval;
+}
+
+// Assumes your previously defined getch() is available
+// int getch(void);
+
+void ATH_expect() {
+
+    char *buffer;
+    int len;
+
+    buffer=S1;
+    len=S0;
+    Pop2;
+
+    // Basic safety checks
+    if (buffer == NULL || len <= 1) {
+        return 0;
+    }
+
+    int idx = 0;
+    
+    // Read characters until we hit the capacity limit (leaving 1 slot for '\0')
+    while (idx < len - 1) {
+        int c = getch();
+
+        // Handle error or EOF from getch
+        if (c == -1) {
+            break;
+        }
+
+        // Handle End of Line (Newline)
+        if (c == '\n' || c == '\r') {
+            putchar('\n');
+            break;
+        }
+
+        // Handle Backspace (Linux standard is 127, '\b' is 8)
+        if (c == 127 || c == '\b') {
+            if (idx > 0) {
+                idx--;
+                // Visual erase sequence: back up, overwrite with space, back up again
+                printf("\b \b");
+                fflush(stdout);
+            }
+            continue; 
+        }
+
+        // Ignore other non-printable control characters
+        if (c < 32) {
+            continue;
+        }
+
+        // Store the character and manually echo it back to the screen
+        buffer[idx++] = (char)c;
+        putchar(c);
+        fflush(stdout); 
+    }
+
+    // Null-terminate the string safely
+    buffer[idx] = '\0';
+    
+    // Return the actual number of characters stored
+    Push= idx;
+}
+
 #endif
 
 // #ifdef ATH
@@ -5861,6 +5981,8 @@ static struct primfcn primt[] = {
     {"0POPEN",ATH_popen},
     {"0SERVANT",ATH_popen},
     {"0KEY",ATH_key},
+    {"0?KEY",ATH_qkey},
+    {"0EXPECT", ATH_expect},
 #endif
 
 #ifdef LIBSER
