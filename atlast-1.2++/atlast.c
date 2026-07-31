@@ -2811,7 +2811,6 @@ prim ATH_wouldBlock() {
     S0 = ret;
 }
 
-
 prim ATH_openSerialPort() {
     Sl(2);
     So(1);

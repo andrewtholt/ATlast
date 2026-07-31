@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-void crap();
+// void crap();
 
 static struct primfcn extras[] = {
     {"0TESTING", crap},

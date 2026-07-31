@@ -7,6 +7,7 @@
 // #include <boost/any.hpp>
 // vector<boost::any> objectStack;
 #endif
+#include <hiredis/hiredis.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -437,6 +438,62 @@ prim P_destroyString() {
     delete str;
 }
 
+prim P_redis_connect() {
+    char *addr;
+    int port=0;
+
+    Sl(2);
+    So(1);
+
+    addr=S1;
+    port=S0;
+
+    Pop2;
+
+    redisContext *c = redisConnect(addr, port);
+    Push=c;
+    if (c == NULL || c->err ) {
+        redisFree(c);
+    }
+
+
+}
+
+
+char redisBuffer[255];
+
+prim P_redis_command() {
+    Sl(2);
+    So(1);
+
+    redisContext *c= S1;
+    char *cmd = (char *)S0;
+    Pop2;
+
+    redisReply *reply=(redisReply *)redisCommand(c,cmd);
+
+//    printf("Reply :%s:\n", reply->str);
+
+    if(reply == NULL) {
+        S0=NULL;
+    } else {
+        strcpy(redisBuffer, reply->str);
+        Push=&redisBuffer;
+//        Push=reply->str;
+    }
+    freeReplyObject(reply);
+}
+
+prim P_redis_disconnect() {
+    Sl(1);
+    So(0);
+
+    redisContext *c= S0;
+    Pop;
+
+    redisFree(c);
+}
+
 
 static struct primfcn cpp_extras [] = {
     {"0TESTING", crap},
@@ -460,6 +517,10 @@ static struct primfcn cpp_extras [] = {
     {"0STRING-RIGHT-TRIM",P_trimStringRight},
     {"0STRING-TRIM",P_trimString},
     {"0STRING-DESTROY",P_destroyString},
+
+    {"0REDIS-CONNECT", P_redis_connect},
+    {"0REDIS-COMMAND", P_redis_command},
+    {"0REDIS-DISCONNECT", P_redis_disconnect},
 
 #ifdef CPP_EXTRAS
     {"0STOC",P_stringToCstr},
