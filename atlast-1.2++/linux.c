@@ -164,7 +164,7 @@ prim ATH_getenv() {
         Push=-1;
     } else {
         strcpy(ptr, tmp);
-        Push=(stackitem)ptr;
+//        Push=(stackitem)ptr;
         Push=0;
     }
 }
@@ -231,7 +231,9 @@ static struct primfcn extras[] = {
     {"0INIT-RAM", ATH_initRamBlocks},
     {"0GETENV", ATH_getenv},
     {"0MMAP", ATH_mmap},
+#warning("--- HERE")
 #ifdef SYSVIPC
+#warning("System V IPC")
     {"0SHM-SIZE", ATH_shmSize},
     {"0SHM-OPEN", ATH_shmOpen},
 #endif

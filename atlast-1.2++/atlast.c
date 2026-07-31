@@ -727,6 +727,12 @@ void ATH_Features() {
     printf("NOT SYSTEM\r\n");
 #endif
 
+#ifdef SYSVIPC
+    printf("    SYSVIPC\r\n");
+#else
+    printf("    SYSVIPC\r\n");
+#endif
+
 #ifdef TRACE
     printf("    TRACE\r\n");
 #else
