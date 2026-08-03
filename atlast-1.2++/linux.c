@@ -150,22 +150,25 @@ prim crap() {
 
 // <ptr> name -- ptr
 prim ATH_getenv() {
-    Sl(2); // On entry will use this many.
+    extern dictword *pad;
+
+    Sl(1); // On entry will use this many.
     So(1); // on exit will leave this many.
 
     char *name=(char *)S0;
-    char *ptr=(char *)S1;
     char *tmp;
 
-    Pop2;
+//    Pop2;
 
+    char *ptr;
+
+    ptr = (char *) atl_body(pad);
     tmp = getenv(name);
     if(!tmp) {
-        Push=-1;
+        S0=-1;
     } else {
         strcpy(ptr, tmp);
-//        Push=(stackitem)ptr;
-        Push=0;
+        S0=0;
     }
 }
 

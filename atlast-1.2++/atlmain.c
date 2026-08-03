@@ -146,6 +146,7 @@ void *doSmall(void *arg) {
 /*  MAIN  --  Main program.  */
 char outBuffer[OUTBUFFER];
 
+dictword *pad;
 int main(int argc, char *argv[]) {
     int i;
     int fname = FALSE, defmode = FALSE;
@@ -222,6 +223,14 @@ int main(int argc, char *argv[]) {
     // OK, so init the system
     //
     atl_init();
+//    dictword *pad;
+
+    pad=atl_vardef("PAD",255);
+
+    if (pad == NULL) {
+        printf("Can't atl_vardef PAD.\n");
+    } else {
+    }
 #ifdef LINUX
 #warning "Linux"
 #ifdef EXTRAS

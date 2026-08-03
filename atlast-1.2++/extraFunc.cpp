@@ -451,9 +451,11 @@ prim P_redis_connect() {
     Pop2;
 
     redisContext *c = redisConnect(addr, port);
-    Push=c;
     if (c == NULL || c->err ) {
         redisFree(c);
+        Push=0;
+    } else {
+        Push=c;
     }
 
 
