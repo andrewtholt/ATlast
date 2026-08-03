@@ -9,7 +9,7 @@ CC=g++ -std=c++11 -g -I/usr/local/include
 # LIBRARIES += -lrt -lpthread
 # LIBRARIES = -L/usr/local/lib -lsmall -lstdc++ -lrt -lpthread
 # LIBRARIES = -L/usr/local/lib -lser
-LIBRARIES = -lhiredis
+LIBRARIES = -lhiredis -lrt
 # ATLCONFIG += -DFILEIO -DATH -DCUSTOM -DALIGNMENT -DEXPORT -DREADONLYSTRINGS # -DSOCKET
 ATLCONFIG += -DALIGNMENT -DEXPORT -DREADONLYSTRINGS # -DSOCKET
 LDFLAGS +=-Wl,--no-as-needed
