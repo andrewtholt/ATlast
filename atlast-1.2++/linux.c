@@ -150,8 +150,6 @@ prim crap() {
 
 // <ptr> name -- ptr
 prim ATH_getenv() {
-    extern dictword *pad;
-
     Sl(1); // On entry will use this many.
     So(1); // on exit will leave this many.
 
@@ -235,7 +233,6 @@ extern int user_argn;
 prim ATH_argn() {
     int i = S0;
     int len =0;
-    extern dictword *pad;
     char *ptr;
 
     Sl(1);

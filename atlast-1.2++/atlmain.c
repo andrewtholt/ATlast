@@ -149,7 +149,7 @@ char *user_args[10];
 int user_argn=0;
 
 
-dictword *pad;
+
 int main(int argc, char *argv[]) {
     int i;
     int fname = FALSE, defmode = FALSE;

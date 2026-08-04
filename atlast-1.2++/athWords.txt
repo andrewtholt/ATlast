@@ -1031,17 +1031,21 @@ Stack:	ptr lead trail --
 Description:
     remove the leading and trailing characters, in place of the string.
 
-Name:	
-Stack:	
+Name:	expect
+Stack:	max-len -- len
 Description:
+    Take, up to, max-len chars and place them at pad.  Return number of chars.
 
-Name:	
-Stack:	
+Name:	argc
+Stack:	n
 Description:
+    If started with -p "first second third" returns the number of tokens (in this case 3) in the 
+    optional parameter list.
 
-Name:	
-Stack:	
+Name:	argn
+Stack:	n --
 Description:
+    Get the nth token in the optional parameter list to pad.
 
 Name:	
 Stack:	

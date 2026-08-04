@@ -125,7 +125,7 @@ extern atl_real rbuf0, rbuf1, rbuf2;  /* Real temporaries for alignment */
 extern stackitem *stack, *stk, *stackbot, *stacktop, *heap, *hptr,
 		 *heapbot, *heaptop;
 extern dictword ***rstack, ***rstk, ***rstackbot, ***rstacktop;
-extern dictword *dict, *dictprot, *curword, *createword;
+extern dictword *dict, *dictprot, *curword, *createword, *pad;
 extern dictword **ip;
 extern char **strbuf;
 extern int cstrbuf;

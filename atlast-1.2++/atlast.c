@@ -297,6 +297,7 @@ static Boolean tickpend = False;      /* Take address of next word */
 static Boolean ctickpend = False;     /* Compile-time tick ['] pending */
 static Boolean cbrackpend = False;    /* [COMPILE] pending */
 Exported dictword *createword = NULL; /* Address of word pending creation */
+Exported dictword *pad = NULL;        /* Global PAD word */
 static Boolean stringlit = False;     /* String literal anticipated */
 #ifdef BREAK
 static Boolean broken = False;	      /* Asynchronous break received */
@@ -561,13 +562,21 @@ void ATH_qkey(void) {
 // int getch(void);
 
 void ATH_expect() {
+    Sl(1);
+    So(1);
 
     char *buffer;
     int len;
 
+
+    /*
     buffer=S1;
     len=S0;
     Pop2;
+    */
+    buffer=(char *)atl_body(pad);
+    len=S0;
+    Pop;
 
     // Basic safety checks
     if (buffer == NULL || len <= 1) {
