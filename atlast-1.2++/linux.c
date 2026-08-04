@@ -229,7 +229,33 @@ prim ATH_perror() {
     errno=0;
 //    Pop;
 }
-    
+
+extern char *user_args[];
+extern int user_argn;
+prim ATH_argn() {
+    int i = S0;
+    int len =0;
+    extern dictword *pad;
+    char *ptr;
+
+    Sl(1);
+    So(0);
+    Pop;
+
+    ptr=(char *)atl_body(pad);
+
+    len=strlen(user_args[i]);
+
+    (void)strcpy((char *)ptr, user_args[i]);
+}
+
+prim ATH_argc() {
+    Sl(0);
+    So(1);
+
+    Push=user_argn ;
+}
+
 static struct primfcn extras[] = {
     {"0INIT-RAM", ATH_initRamBlocks},
     {"0GETENV", ATH_getenv},
@@ -247,6 +273,8 @@ static struct primfcn extras[] = {
     {"0CPU",ATH_cpu},
     {"0HOSTNAME",ATH_hostname},
     {"0.UNAME",ATH_dotuname},
+    {"0ARGN",ATH_argn},
+    {"0ARGC",ATH_argc},
     {NULL, (codeptr) 0}
 };
 

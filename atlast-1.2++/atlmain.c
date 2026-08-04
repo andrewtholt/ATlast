@@ -145,6 +145,9 @@ void *doSmall(void *arg) {
 
 /*  MAIN  --  Main program.  */
 char outBuffer[OUTBUFFER];
+char *user_args[10];
+int user_argn=0;
+
 
 dictword *pad;
 int main(int argc, char *argv[]) {
@@ -169,7 +172,7 @@ int main(int argc, char *argv[]) {
 
     int opt;
 
-    while((opt = getopt(argc,argv, "C:DH:I:R:S:T?Uhv")) != -1) {
+    while((opt = getopt(argc,argv, "C:DH:I:p:R:S:T?Uhv")) != -1) {
         switch(opt) {
             case 'C':
                 chdir(optarg);
@@ -184,10 +187,23 @@ int main(int argc, char *argv[]) {
                 include[in]=(char *)malloc(strlen(optarg)+1);
                 strncpy(include[in++], optarg, strlen(optarg));
                 break;
+            case 'p':
+                { 
+                    int i=0;
+
+                    char *t = strtok(optarg," ");;
+
+                    while( t != NULL) {
+                        user_args[i] = t;
+                        t = strtok(NULL," ");
+                        i++;
+                    }
+                    user_argn=i;
+                }
+                break;
             case 'R':
                 atl_rstklen = atol(optarg);
                 break;
-
             case 'S':
                 atl_stklen = atol(optarg);
                 break;

@@ -6441,8 +6441,7 @@ void exword( dictword *wp) {
     ensure that the length allocated agrees with the lengths
     given by the atl_... cells.  */
 
-void atl_init()
-{
+void atl_init() {
     if (dict == NULL) {
         atl_primdef(primt);	      /* Define primitive words */
         dictprot = dict;	      /* Set protected mark in dictionary */
