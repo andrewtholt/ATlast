@@ -457,13 +457,13 @@ prim P_redis_connect() {
     } else {
         Push=c;
     }
-
-
 }
 
 
 char redisBuffer[255];
-
+//
+// Stack: redis-context "cmd" -- false|addr
+//
 prim P_redis_command() {
     Sl(2);
     So(1);
@@ -483,6 +483,19 @@ prim P_redis_command() {
         Push=&redisBuffer;
 //        Push=reply->str;
     }
+    freeReplyObject(reply);
+}
+
+prim P_redis_ping() {
+    Sl(1);
+    So(1);
+
+    redisContext *c = S0;
+    redisReply *reply;
+
+    reply = (redisReply *)redisCommand(c,"PING");
+
+    S0 = (int) strcmp(reply->str,"PONG");
     freeReplyObject(reply);
 }
 
@@ -522,6 +535,7 @@ static struct primfcn cpp_extras [] = {
 
     {"0REDIS-CONNECT", P_redis_connect},
     {"0REDIS-COMMAND", P_redis_command},
+    {"0REDIS-PING", P_redis_ping},
     {"0REDIS-DISCONNECT", P_redis_disconnect},
 
 #ifdef CPP_EXTRAS

@@ -580,10 +580,10 @@ Description:
     description of the last error.
 
 Name:	redis-connect
-Stack:	addr len port time -- connect flag
+Stack:	addr len port  -- connect 
 Description:
-    Connect to redis on the addres give by the string <addr len> on the given
-    port, and time out after <time> seconds.
+    Connect to redis on the address give by the string <addr len> on the given
+    port. If the connection failes return false(0), otherwise a redis context.
 
 Name:	redis-ping
 Stack:	connect -- flag
