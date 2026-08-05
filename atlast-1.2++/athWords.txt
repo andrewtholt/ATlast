@@ -596,6 +596,8 @@ Description:
     On success return the address of a redis reply structure and a false flag.
     On success return true flag.
 
+--------- HERE ---------
+
 Name:	redis-get-string
 Stack:	reply -- addr len
 Description:

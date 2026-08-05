@@ -534,7 +534,7 @@ static struct primfcn cpp_extras [] = {
     {"0STRING-DESTROY",P_destroyString},
 
     {"0REDIS-CONNECT", P_redis_connect},
-    {"0REDIS-COMMAND", P_redis_command},
+    {"0REDIS-CMD", P_redis_command},
     {"0REDIS-PING", P_redis_ping},
     {"0REDIS-DISCONNECT", P_redis_disconnect},
 
