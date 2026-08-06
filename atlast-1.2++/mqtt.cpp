@@ -132,6 +132,7 @@ prim rmStringMap() {
     fred->clear();
 
     delete fred;
+    Pop;
 }
 
 prim mapCount() {
