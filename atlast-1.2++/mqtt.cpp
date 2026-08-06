@@ -195,18 +195,19 @@ prim mapDump() {
 // Stack: "key" "dest" map --
 //
 prim mapGet() {
-    Sl(3);
+    Sl(2);
     So(1);
 
     extern dictword* pad;
+    char *dest = (char *) atl_body(pad);
 
-    map<string, string> *myMap = (map<string, string> *)S2;
+    map<string, string> *myMap = (map<string, string> *)S1;
 
-    char *key = (char *) S1;
-    char *dest = (char *)S0;
+    char *key = (char *) S0;
+//    char *dest = (char *)S0;
 
     auto it = myMap->find(key);
-    Npop(3);
+    Npop(2);
 
     if (it != myMap->end()) {
         char *x = strcpy(dest, it->second.c_str());

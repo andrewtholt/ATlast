@@ -1049,17 +1049,20 @@ Stack:	n --
 Description:
     Get the nth token in the optional parameter list to pad.
 
-Name:	
-Stack:	
+Name:	mk-string-map
+Stack:	-- map
 Description:
+    Creaye a C++ map of a key(string) to a value(string).
 
-Name:	
-Stack:	
+Name:	map-add
+Stack:	map "key" "value" --
 Description:
+    Create a map entry with the key and value.
 
-Name:	
-Stack:	
+Name:	map-dump
+Stack:	map --
 Description:
+    Display the map entries.
 
 Name:	
 Stack:	
