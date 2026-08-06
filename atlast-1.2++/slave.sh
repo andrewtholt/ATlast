@@ -8,10 +8,7 @@ if [ $? -ne 0 ] ; then
     exit 0
 fi
 
-
-exit
-
 ./build.sh clean && ./build.sh
 
-./build.sh
+./build.sh install
 
