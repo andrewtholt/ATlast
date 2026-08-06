@@ -1064,9 +1064,10 @@ Stack:	map --
 Description:
     Display the map entries.
 
-Name:	
-Stack:	
+Name:	map-get
+Stack:	map "key" -- -1|0
 Description:
+    Copy the value returned by key to pad.
 
 Name:	
 Stack:	
