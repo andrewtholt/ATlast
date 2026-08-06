@@ -191,10 +191,14 @@ prim mapDump() {
 // Returns a pointer to the value string, or NULL if not found.
 // WARNING: The returned pointer is to internal map data and is invalidated
 // if the map is modified. The pointer is read-only.
+// 
+// Stack: "key" "dest" map --
 //
 prim mapGet() {
     Sl(3);
     So(1);
+
+    extern dictword* pad;
 
     map<string, string> *myMap = (map<string, string> *)S2;
 
