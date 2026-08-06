@@ -1,0 +1,6 @@
+0 value redis
+
+mk-string-map to redis
+
+redis "REDIS-IP" "192.168.10.124" map-add
+redis "REDIS-PORT" "6379" map-add
