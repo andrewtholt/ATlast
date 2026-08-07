@@ -32,7 +32,21 @@ include ./test.atl
     then
 ;
 
+: redis-test
+    redis-context "GET test" redis-cmd
+    0= if
+        "Query Success.\n" type
+    else
+        "Query FAIL" type
+        abort
+    then
+
+    pad 10 dump
+    pad strlen "Key is " type . " bytes\n" type
+;
+
 init-redis to redis-context
 
 init-redis-check
+redis-test
 
