@@ -1,0 +1,34 @@
+include ./test.atl
+
+variable redis-context
+
+: init
+    0 redis-context !
+
+    redis "PORT" map-get 
+    0<> if
+        pad strint nip
+    else
+        "Get PORT Failed" type cr
+        abort 
+    then
+
+    redis "IP" map-get
+    0= if
+        "Get IP Failed" type cr
+        abort 
+    then
+
+    pad swap redis-connect redis-context !
+
+    redis-context @ redis-ping
+    0= if
+        "Redis connection OK" type cr
+    else
+        "Redis connect fail." type cr
+        abort
+    then
+;
+
+init
+
