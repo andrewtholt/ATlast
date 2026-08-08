@@ -13,6 +13,7 @@
 
 #include <mutex>
 #include <nlohmann/json.hpp>
+using json = nlohmann::json;
 #include "ringBuffer.h"
 
 using namespace std;

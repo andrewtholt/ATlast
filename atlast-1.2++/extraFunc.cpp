@@ -437,7 +437,9 @@ prim P_destroyString() {
 
     delete str;
 }
-
+// 
+// "address" port -- 0|redis-context
+//
 prim P_redis_connect() {
     char *addr;
     int port=0;
@@ -468,20 +470,28 @@ prim P_redis_command() {
     Sl(2);
     So(1);
 
+    extern dictword *pad;
+
+    char *buffer;
+
+    buffer=(char *)atl_body(pad);
     redisContext *c= S1;
     char *cmd = (char *)S0;
-    Pop2;
+    Pop;
 
     redisReply *reply=(redisReply *)redisCommand(c,cmd);
 
 //    printf("Reply :%s:\n", reply->str);
 
     if(reply == NULL) {
-        S0=NULL;
+        S0=-1;
     } else {
-        strcpy(redisBuffer, reply->str);
-        Push=&redisBuffer;
+        strcpy(buffer, reply->str);
+//        strcpy(redisBuffer, reply->str);
+//        Push=&redisBuffer;
 //        Push=reply->str;
+//
+        S0=0;
     }
     freeReplyObject(reply);
 }
