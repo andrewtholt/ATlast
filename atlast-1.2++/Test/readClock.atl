@@ -17,6 +17,7 @@ file clock
     pad swap dump
 
     clock fclose
+    "File closed.\n" type
 ;
 
 test
