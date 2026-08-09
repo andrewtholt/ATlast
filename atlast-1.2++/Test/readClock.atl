@@ -12,9 +12,9 @@ file clock
         abort
     then
 
-    buffer 10 clock fread
+    pad 10 clock fread
 
-    buffer swap dump
+    pad swap dump
 
     clock fclose
 ;
