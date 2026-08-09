@@ -3696,7 +3696,9 @@ prim P_strsep() {
     Pop2;
     Push=(stackitem)res;
 }
-
+// 
+// Stack: string sep -- tok_ptr len
+//
 prim ATH_strtok() {
     char *ptr;
     // Note not re-entrent
