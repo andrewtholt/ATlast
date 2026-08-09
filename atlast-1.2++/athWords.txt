@@ -591,10 +591,16 @@ Description:
     Return  true on failure flag for an attempt to contact redis.
 
 Name:	redis-cmd
-Stack:	connect addr len -- reply flag
+Stack:	connect addr len --  flag
 Description:
-    On success return the address of a redis reply structure and a false flag.
-    On success return true flag.
+    On success return place the returned string in pad, with FALSE at TOS.
+    On false return true flag.
+
+/ Name:	redis-cmd
+/ Stack:	connect addr len -- reply flag
+/ Description:
+/    On success return the address of a redis reply structure and a false flag.
+/    On success return true flag.
 
 --------- HERE ---------
 

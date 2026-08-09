@@ -1,0 +1,18 @@
+
+argc . cr
+
+: test
+    argc 0 do
+        i . cr
+        i argn pad type cr
+    loop
+;
+
+: test1
+    argc 0 do
+        i argn pad type cr
+    loop
+;
+
+test
+
