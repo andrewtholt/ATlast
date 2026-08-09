@@ -220,6 +220,7 @@ int main(int argc, char *argv[]) {
                 PR("           -D        Treat file as definitions\n");
                 PR("           -Hn       Heap length n\n");
                 PR("           -I <file> Include named definition file\n");
+                PR("           -p \"arg0 ... argn\" Pass an arg list\n");
                 PR("           -R n      Return stack length n\n");
                 PR("           -S n      Stack length n\n");
                 PR("           -T        Set TRACE mode\n");
