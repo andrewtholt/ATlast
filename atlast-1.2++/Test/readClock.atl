@@ -1,0 +1,24 @@
+
+10 string buffer
+
+file clock
+
+: test
+    "/dev/shm/clock.txt" 1 clock fopen
+    if
+        "File open success.\n" type 
+    else
+        "FAILED to open file.\n" type
+        abort
+    then
+
+    buffer 10 clock fread
+
+    buffer swap dump
+
+    clock fclose
+;
+
+test
+
+
