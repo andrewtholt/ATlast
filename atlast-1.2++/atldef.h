@@ -126,6 +126,7 @@ extern stackitem *stack, *stk, *stackbot, *stacktop, *heap, *hptr,
 		 *heapbot, *heaptop;
 extern dictword ***rstack, ***rstk, ***rstackbot, ***rstacktop;
 extern dictword *dict, *dictprot, *curword, *createword, *pad;
+#define PAD_SIZE 255
 extern dictword **ip;
 extern char **strbuf;
 extern int cstrbuf;

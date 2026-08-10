@@ -4712,6 +4712,11 @@ prim P_evaluate()
 }
 #endif /* EVALUATE */
 
+prim P_pad_size() {
+    So(1);
+    Push = PAD_SIZE;
+}
+
 /*  Stack mechanics  */
 
 prim P_depth()			      /* Push stack depth */
@@ -5755,7 +5760,6 @@ prim P_fwdresolve()		      /* Emit forward jump offset */
 }
 
 #endif /* COMPILERW */
-
 /*  Table of primitive words  */
 
 static struct primfcn primt[] = {
@@ -5784,6 +5788,7 @@ static struct primfcn primt[] = {
     {"0NOT", P_not},
     {"0SHIFT", P_shift},
 
+    {"0#PAD",P_pad_size},
     {"0DEPTH", P_depth},
     {"0CLEAR", P_clear},
     {"0DUP", P_dup},

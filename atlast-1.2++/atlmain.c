@@ -242,7 +242,8 @@ int main(int argc, char *argv[]) {
     atl_init();
 //    dictword *pad;
 
-    pad=atl_vardef("PAD",255);
+//    pad=atl_vardef("PAD",255);
+    pad=atl_vardef("PAD",PAD_SIZE);
 
     if (pad == NULL) {
         printf("Can't atl_vardef PAD.\n");
