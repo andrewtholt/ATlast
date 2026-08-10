@@ -3734,6 +3734,22 @@ prim P_strcpy() 		      /* Copy string to address on stack */
     V strcpy((char *) S0, (char *) S1);
     Pop2;
 }
+// 
+// stack: src dest len --
+prim P_strncpy() 		      /* Copy string to address on stack */
+{
+    Sl(3);
+//    So(1);
+    // Hpc checks that the pointer is an address inside the heap.
+    if( ath_safe_memory == Truth) {
+        Hpc(S1);
+        Hpc(S2);  // may need to delete this to allow for out of heap copy
+    }
+    V strncpy((char *) S1, (char *) S2, (int)S0);
+    Pop2;
+    Pop;
+}
+
 
 prim P_strcat() 		      /* Append string to address on stack */
 {
@@ -5834,6 +5850,7 @@ static struct primfcn primt[] = {
     {"0STRING", P_string},
     {"0STRCPY", P_strcpy},
     {"0S!", P_strcpy},
+    {"0STRNCPY", P_strncpy},
     {"0STRCAT", P_strcat},
     {"0S+", P_strcat},
     {"0STRLEN", P_strlen},
