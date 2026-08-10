@@ -18,9 +18,9 @@ if [ "$FORTH" = "ficl" ]; then
         export FICL_PATH="/usr/local/lib/ficl:."
     fi
     if [ "$#" -eq 0 ]; then
-        rlwrap -n ficl++
+        rlwrap -n ficl
     else
-        rlwrap -n ficl++  $*
+        rlwrap -n ficl  $*
     fi
     exit 0
 fi

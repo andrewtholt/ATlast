@@ -7,4 +7,6 @@ echo ".. strip exexutable .."
 sudo strip /usr/local/bin/atlast
 echo ".. create lib"
 sudo mkdir -p /usr/local/lib/atlast
+echo ".. copy script"
+cp ./forth $HOME//bin
 
