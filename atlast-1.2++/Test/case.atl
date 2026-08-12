@@ -7,3 +7,12 @@ case
 endcase
 ;
 
+: print-digit
+case 
+    1 of "One\n" type endof
+    2 of "Two\n" type endof
+    3 of "Three"  type endof
+    "Unknown digit\n" type dup .
+endcase
+;
+

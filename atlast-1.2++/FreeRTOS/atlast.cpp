@@ -380,7 +380,7 @@ char copyright[] = "ATLAST: This program is in the public domain.";
 
 static stackitem s_exit, s_lit, s_strlit, s_dotparen,
                  s_qbranch, s_branch, s_xdo, s_xqdo, s_xloop,
-                 s_pxloop, s_abortq, s_drop, s_xof;
+                 s_pxloop, s_abortq, s_drop, s_xof, s_xto;
 #ifdef REAL
 static stackitem s_flit;
 #endif
@@ -4431,6 +4431,59 @@ prim P_constant()		      /* Declare constant */
     Pop;
 }
 
+prim P_value()			      /* Declare value */
+{
+    Sl(1);
+    P_create(); 		      /* Create dictionary item */
+    createword->wcode = P_con;	      /* Set code to value push (same as constant) */
+    Ho(1);
+    Hstore = S0;		      /* Store initial value in body */
+    Pop;
+}
+
+prim P_xto()			      /* Execute TO at runtime */
+{
+    stackitem *body;
+    Sl(1);
+    body = (stackitem *) *ip;	      /* Fetch body address from in-line code */
+    *body = S0;			      /* Store top of stack into body */
+    Pop;
+    ip++;			      /* Skip body pointer cell */
+}
+
+prim P_to()			      /* Set value of a VALUE word */
+{
+    int i;
+
+    i = token(&instream);	      /* Scan for target word name */
+    if (i != TokNull) {
+        if (i == TokWord) {
+            dictword *di;
+
+            ucase(tokbuf);
+            if ((di = lookup(tokbuf)) != NULL) {
+                stackitem *body = atl_body(di);
+
+                if (state) {	      /* Compiling */
+                    Compconst(s_xto);
+                    Compconst((stackitem) body);
+                } else {	      /* Interpreting */
+                    Sl(1);
+                    *body = S0;
+                    Pop;
+                }
+            } else {
+                printf(" '%s' undefined ", tokbuf);
+                trouble("Word undefined");
+            }
+        } else {
+            trouble("Word not specified when expected");
+        }
+    } else {
+        trouble("Word requested by TO not on same input line");
+    }
+}
+
 /*  Array primitives  */
 
 #ifdef ARRAY
@@ -6868,6 +6921,9 @@ static const struct primfcn primt[] = {
 
     {"0VARIABLE", P_variable},
     {"0CONSTANT", P_constant},
+    {"0VALUE", P_value},
+    {"1TO", P_to},
+    {"0(TO)", P_xto},
     {"0!", P_bang},
     {"0@", P_at},
     {"0+!", P_plusbang},
@@ -7621,6 +7677,7 @@ void atl_init()
         Cconst(s_abortq, "ABORT\"");
         Cconst(s_drop, "DROP");
         Cconst(s_xof, "(XOF)");
+        Cconst(s_xto, "(TO)");
 #undef Cconst
 #pragma GCC diagnostic pop
 

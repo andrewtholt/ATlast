@@ -6,7 +6,3 @@
 \ ;
 
 : [char] char ; immediate
-
-: value create , does> @ ;
-
-: to ' >body ! ;
