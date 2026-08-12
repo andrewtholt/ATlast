@@ -380,7 +380,7 @@ char copyright[] = "ATLAST: This program is in the public domain.";
 
 static stackitem s_exit, s_lit, s_strlit, s_dotparen,
                  s_qbranch, s_branch, s_xdo, s_xqdo, s_xloop,
-                 s_pxloop, s_abortq;
+                 s_pxloop, s_abortq, s_drop, s_xof;
 #ifdef REAL
 static stackitem s_flit;
 #endif
@@ -6013,6 +6013,63 @@ prim P_then()			      /* Compile THEN word */
     Pop;
 }
 
+prim P_xof()			      /* Runtime for OF */
+{
+    Sl(2);
+    if (S1 == S0) {		      /* If selector == test value */
+        stk -= 2;		      /* Pop selector and test value */
+        ip++;			      /* Skip jump offset, execute clause */
+    } else {
+        Pop;			      /* Pop test value, keep selector */
+        ip += (stackitem) *ip;	      /* Jump past clause (IP-relative) */
+    }
+}
+
+prim P_case()			      /* Compile CASE word */
+{
+    Compiling;
+    So(1);
+    Push = 0;			      /* Save 0 sentinel on stack */
+}
+
+prim P_of()			      /* Compile OF word */
+{
+    Compiling;
+    Compconst(s_xof);		      /* Compile (XOF) */
+    So(1);
+    Push = (stackitem) hptr;	      /* Save backpatch address on stack */
+    Compconst(0);		      /* Compile place-holder address cell */
+}
+
+prim P_endof()			      /* Compile ENDOF word */
+{
+    stackitem *bp;
+
+    Compiling;
+    Sl(1);
+    Compconst(s_branch);	      /* Compile branch around rest of CASE */
+    Compconst(0);		      /* Compile place-holder address cell */
+    Hpc(S0);
+    bp = (stackitem *) S0;	      /* Get OF backpatch address */
+    *bp = hptr - bp;		      /* Resolve OF false branch to here */
+    S0 = (stackitem) (hptr - 1);      /* Update backpatch address for ENDCASE */
+}
+
+prim P_endcase()		      /* Compile ENDCASE word */
+{
+    Compiling;
+    Compconst(s_drop);		      /* Compile DROP for unmatched selector */
+    Sl(1);
+    while (S0 != 0) {		      /* Loop until sentinel 0 is reached */
+        stackitem *bp;
+        Hpc(S0);
+        bp = (stackitem *) S0;	      /* Get ENDOF backpatch address */
+        *bp = hptr - bp;	      /* Resolve branch to after DROP */
+        Pop;
+    }
+    Pop;			      /* Pop the sentinel 0 */
+}
+
 prim P_qdup()			      /* Duplicate if nonzero */
 {
     Sl(1);
@@ -6891,6 +6948,11 @@ static const struct primfcn primt[] = {
     {"1ELSE", P_else},
     {"1THEN", P_then},
     {"0?DUP", P_qdup},
+    {"1CASE", P_case},
+    {"1OF", P_of},
+    {"1ENDOF", P_endof},
+    {"1ENDCASE", P_endcase},
+    {"0(XOF)", P_xof},
     {"1BEGIN", P_begin},
     {"1UNTIL", P_until},
     {"1AGAIN", P_again},
@@ -7557,6 +7619,8 @@ void atl_init()
         Cconst(s_xloop, "(XLOOP)");
         Cconst(s_pxloop, "(+XLOOP)");
         Cconst(s_abortq, "ABORT\"");
+        Cconst(s_drop, "DROP");
+        Cconst(s_xof, "(XOF)");
 #undef Cconst
 #pragma GCC diagnostic pop
 
