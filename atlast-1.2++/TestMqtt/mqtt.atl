@@ -10,27 +10,27 @@ endstruct /msg
 here /msg allot constant msg
 here /msg allot constant safe
 
-here 64 allot constant value 
-
 msg /msg erase
 safe /msg erase
 
-variable init-run
-variable client
+"Here\n" type
+0 value init-run
+0 value client
 
-0 init-run !
+0 to init-run
+
 
 : init
-    init-run @ 0= if
+    init-run 0= if
         mqtt-init if
             "mqtt-init failed" type cr
             abort
         then
         "TEST" msg mqtt-new 0= if
-            client !
+            to client
 \            client @ "192.168.0.65" 1883 mqtt-client
 \            client @ "192.168.10.124" 1883 mqtt-client
-            client @ "192.168.0.50" 1883 mqtt-client
+            client "192.168.0.50" 1883 mqtt-client
 
             0= if
                 "Init success"
@@ -42,12 +42,12 @@ variable client
             "mqtt-new failed" type cr
             abort
         then
-        -1 init-run !
+        -1 to init-run
     then
 ;
 
 : stuff
-    clear client @ -1 mqtt-loop 
+    clear client -1 mqtt-loop 
 ;
 
 : run
@@ -66,17 +66,17 @@ cr "here" type cr
     init
 
 \    client @ "/home/environment/#" mqtt-sub if
-    client @ "/home/environment/TIME" mqtt-sub if
+    client "/home/environment/TIME" mqtt-sub if
         "mqtt-sub failed" type cr
         abort
     then
 
-    client @ "/home/house/DRRight/#" mqtt-sub if
+    client "/home/house/DRRight/#" mqtt-sub if
         "mqtt-sub failed" type cr
         abort
     then
 
-    client @ "/home/house/DRLeft/#" mqtt-sub if
+    client "/home/house/DRLeft/#" mqtt-sub if
         "mqtt-sub failed" type cr
         abort
     then
@@ -92,7 +92,7 @@ cr "here" type cr
 
 : publish
     init
-    client @ "/home/office/proliant/testing" "ATLAST" mqtt-pub .s
+    client "/home/office/proliant/testing" "ATLAST" mqtt-pub .s
 
 ;
 

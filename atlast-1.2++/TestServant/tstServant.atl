@@ -2,9 +2,6 @@
 
 clear
 
-( cr .s cr )
-showstack 
-
 1024 string buffer
 
 "./tst.sh" buffer 1024 servant
