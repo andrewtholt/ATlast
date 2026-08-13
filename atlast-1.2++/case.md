@@ -155,11 +155,12 @@
 
     : print-digit ( n -- )
         case
-            1 of ." One"   endof
-            2 of ." Two"   endof
-            3 of ." Three" endof
-            ." Unknown digit: " dup .
+            1 of "One\n"   type   endof
+            2 of "Two\n"   type  endof
+            3 of "Three\n" type endof
+            "Unknown digit: " type dup . cr
         endcase
+        cr
     ;
 
     1 print-digit \ Outputs: One
