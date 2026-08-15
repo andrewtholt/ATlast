@@ -3,6 +3,12 @@
 
 file clock
 
+: to-minutes ( "hh:mm:ss" -- minutes )
+    buffer ":" strtok
+    drop pad strint nip 60 *
+    0 ":" strtok drop pad strint nip +
+;
+
 : test
     "/dev/shm/clock.txt" 1 clock fopen
     if
@@ -12,14 +18,14 @@ file clock
         abort
     then
 
-    pad 10 clock fread
+    buffer 10 clock fread
 
-    pad swap dump
+    buffer swap dump
 
     clock fclose
     "File closed.\n" type
 ;
 
-test
+test to-minutes
 
 
