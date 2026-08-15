@@ -3754,17 +3754,24 @@ prim P_strsep() {
 //
 prim ATH_strtok() {
     char *ptr;
+    int len=0;
     // Note not re-entrent
 
     Sl(2);
     So(1);
+    char *dst=(char *)atl_body(pad);
 
     ptr=strtok( (char *)S1, (char *)S0);
+    Pop2;
 
-    Pop;
+    if(ptr !=0) {
+        len=strlen(ptr);
+        strncpy(dst,ptr,len);
+        Push=len;
+    } else {
+        Push=0;
+    }
 
-    S0=(stackitem)ptr;
-    Push=strlen(ptr);
 }
 
 

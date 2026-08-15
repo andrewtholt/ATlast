@@ -1085,9 +1085,14 @@ Stack:	map "key" -- -1|0
 Description:
     Copy the value returned by key to pad.
 
-Name:	
-Stack:	
+Name:	strtok
+Stack:	"string" "sep" -- 
+        0 "sep" ---
 Description:
+    Split the string by sep, copy the token into pad and return the length of the extracted token.
+    Subsequent tokens are extracted by passing 0 followed bye the sep.
+    A read beyond the last token returns 0.
+
 
 Name:	
 Stack:	
