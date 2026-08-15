@@ -163,10 +163,12 @@ int main(int argc, char *argv[]) {
 
 #define PR(x) (void) fprintf(stderr, x)
 
+    /*
 #ifdef BANNER
     PR("ATLAST 1.2++ (2007-10-07) This program is in the public domain.\n");
     printf("Compiled: %s %s\n",__DATE__,__TIME__);
 #endif
+*/
 
     ifp = stdin;
 
@@ -237,6 +239,12 @@ int main(int argc, char *argv[]) {
                 break;
         }
     }
+#ifdef BANNER
+    if(verbose ) {
+        PR("ATLAST 1.2++ (2007-10-07) This program is in the public domain.\n");
+        printf("Compiled: %s %s\n",__DATE__,__TIME__);
+    }
+#endif
     // OK, so init the system
     //
     atl_init();
