@@ -45,6 +45,12 @@ Description:
 	Set the errno to 0.  This prevents an old error being taken for a new
 	one.
 
+Name:   putenv
+Stack:  "name" "value" -- -1|flag
+Description:
+    Create or modify the environment variable identified by name, to hold value.
+    Returns  -1 on success.
+
 Name:	getenv
 Stack:	ptr env-name -- len
 Description:

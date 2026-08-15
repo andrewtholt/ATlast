@@ -256,9 +256,36 @@ prim ATH_argc() {
     Push=user_argn ;
 }
 
+prim ATH_putenv() {
+    char *env_string;
+    char *env;
+    char *val;
+
+    Sl(2);
+    So(1);
+
+    env=(char *)S1;
+    val=(char *)S0;
+    Pop;
+
+    if(asprintf(&env_string,"%s=%s",env,val) == -1) {
+        S0 =-1;
+    } else {
+        if( putenv(env_string) !=0) {
+            free(env_string);
+            S0=0;
+        } else {
+            S0=-1;
+        }
+    }
+}
+
+
+
 static struct primfcn extras[] = {
     {"0INIT-RAM", ATH_initRamBlocks},
     {"0GETENV", ATH_getenv},
+    {"0PUTENV", ATH_putenv},
     {"0MMAP", ATH_mmap},
 #warning("--- HERE")
 #ifdef SYSVIPC
