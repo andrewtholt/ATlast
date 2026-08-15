@@ -241,9 +241,12 @@ prim ATH_argn() {
 
     ptr=(char *)atl_body(pad);
 
-    len=strlen(user_args[i]);
-
-    (void)strcpy((char *)ptr, user_args[i]);
+    if( user_args[i] != 0) {
+        len=strlen(user_args[i]);
+        (void)strcpy((char *)ptr, user_args[i]);
+    } else {
+        *ptr=NULL;
+    }
 }
 
 prim ATH_argc() {

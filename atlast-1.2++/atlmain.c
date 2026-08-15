@@ -192,6 +192,7 @@ int main(int argc, char *argv[]) {
             case 'p':
                 { 
                     int i=0;
+                    memset(user_args,0,sizeof(user_args));
 
                     char *t = strtok(optarg," ");;
 
