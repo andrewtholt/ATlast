@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-set -x
+# set -x
 
 git status . | grep "nothing to commit, working tree clean"
 if [ $? -ne 0 ] ; then
