@@ -872,8 +872,8 @@ prim ATH_banner() {
 		printf("%s",msgBuffer);
 #endif
 
-		strcpy((char *)msgBuffer, (char *)"\rThe original version of this program is in the public domain.\n");
 #ifdef FREERTOS
+		strcpy((char *)msgBuffer, (char *)"\rThe original version of this program is in the public domain.\n");
 		atlastTxBuffer(NULL,msgBuffer);
 		vTaskDelay(1);
 #endif
@@ -882,8 +882,8 @@ prim ATH_banner() {
 		printf("%s",msgBuffer);
 #endif
 
-		strcpy((char *)msgBuffer, (char *)"\rModifications for FreeRTOS are the property of Elcometer Ltd.\r\n");
 #ifdef FREERTOS
+		strcpy((char *)msgBuffer, (char *)"\rModifications for FreeRTOS are the property of Elcometer Ltd.\r\n");
 		atlastTxBuffer(NULL, (char *)msgBuffer);
 		vTaskDelay(1);
 #endif
