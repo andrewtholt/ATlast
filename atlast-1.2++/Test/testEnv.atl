@@ -4,7 +4,8 @@
 \
 \ Then when atlast is running
 
-"FRED" getenv
+"REDIS_IP" getenv
 pad type cr
+bye
 
 
