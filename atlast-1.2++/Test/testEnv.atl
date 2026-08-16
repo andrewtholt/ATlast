@@ -4,8 +4,22 @@
 \
 \ Then when atlast is running
 
-"REDIS_IP" getenv
-pad type cr
-bye
+: test
+	"REDIS_IP" getenv
+	0= if
+		pad type cr
+	else
+		"getenv failed\n" type
+	then
+
+	"REDIS_PORT" getenv
+	0= if
+		pad strint nip . cr
+	else 
+		"ip getenv failed\n" type
+	then
+;
+
+test
 
 
