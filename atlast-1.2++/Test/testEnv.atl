@@ -101,9 +101,11 @@
 1380 constant night-off \ 23:00
 
 : ?daylight
-    time-secs sunrise-secs sun-offset - >=
-    time-secs sunset-secs sun-offset + <
-    and
+    sunrise-secs sun-offset - sunset-secs sun-offset + time-secs between
+
+\    time-secs sunrise-secs sun-offset - >=
+\    time-secs sunset-secs sun-offset + <
+\    and
 ;
 
 : ?night
@@ -124,6 +126,7 @@
     read-env
     redis-init
     redis-test
+
     redis-get-time
     hhmmss-secs to time-secs
 
@@ -132,9 +135,23 @@
 
     redis-get-sunset
     hhmmss-secs to sunset-secs
+
+    ?lights 
+    "Lights " type
+    0= if 
+        "Off\n" type
+    else
+        "On\n" type
+    then
+
+    ?daylight 0<> if
+        "Daylight\n" type
+    else
+        "Night\n" type
+    then
 ;
 
 test
-
+bye
 
 
