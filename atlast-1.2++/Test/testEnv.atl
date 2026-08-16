@@ -85,13 +85,53 @@
     then
 ;
 
+: hhmmss-secs
+    pad ":" strtok drop pad strint nip 60 *
+    0 ":" strtok drop pad strint nip +
+
+;
+
+ 0 value time-secs
+ 0 value sunrise-secs
+ 0 value sunset-secs
+1800 constant sun-offset \ 30 Minutes
+360 constant morning-on  \ 06:00
+570 constant morning-off \ 09:30
+990 constant night-on \ 16:30
+1380 constant night-off \ 23:00
+
+: ?daylight
+    time-secs sunrise-secs sun-offset - >=
+    time-secs sunset-secs sun-offset + <
+    and
+;
+
+: ?night
+    ?daylight not 
+;
+
+\ If true then switch lights on
+\ otherwise off
+\ 
+: ?lights
+    morning-on morning-off time-secs between
+    night-on night-off time-secs between
+    or
+    ?night and
+;
+
 : test
     read-env
     redis-init
     redis-test
     redis-get-time
+    hhmmss-secs to time-secs
+
     redis-get-sunrise
+    hhmmss-secs to sunrise-secs
+
     redis-get-sunset
+    hhmmss-secs to sunset-secs
 ;
 
 test
