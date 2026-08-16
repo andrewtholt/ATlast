@@ -65,11 +65,33 @@
     then
 ;
 
+: redis-get-sunrise
+    redis-context "hget ENVIRONMENT:1001 SUNRISE" redis-cmd
+    0= if
+        "SUNRISE " type
+        pad type cr
+    else
+        "Read time failed\n" type
+    then
+;
+
+: redis-get-sunset
+    redis-context "hget ENVIRONMENT:1001 SUNSET" redis-cmd
+    0= if
+        "SUNSET  " type
+        pad type cr
+    else
+        "Read time failed\n" type
+    then
+;
+
 : test
     read-env
     redis-init
     redis-test
     redis-get-time
+    redis-get-sunrise
+    redis-get-sunset
 ;
 
 test
