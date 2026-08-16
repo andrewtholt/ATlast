@@ -55,15 +55,24 @@
 
 ;
 
+: redis-get-time
+    redis-context "hget ENVIRONMENT:1001 TIME" redis-cmd
+    0= if
+        "TIME " type
+        pad type cr
+    else
+        "Read time failed\n" type
+    then
+;
+
 : test
     read-env
     redis-init
     redis-test
+    redis-get-time
 ;
 
-
 test
-bye
 
 
 
