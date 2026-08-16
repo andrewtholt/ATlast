@@ -4,22 +4,66 @@
 \
 \ Then when atlast is running
 
-: test
+16 string ip
+0 value port
+0 value redis-context
+
+: read-env
+	"REDIS_PORT" getenv
+	0= if
+		pad strint nip dup to port
+        . cr
+	else 
+		"ip getenv failed\n" type
+	then
+
 	"REDIS_IP" getenv
 	0= if
+        pad ip strcpy
 		pad type cr
 	else
 		"getenv failed\n" type
 	then
 
-	"REDIS_PORT" getenv
-	0= if
-		pad strint nip . cr
-	else 
-		"ip getenv failed\n" type
-	then
 ;
 
+: redis-test
+    pad 20 erase
+    redis-context "GET test" redis-cmd
+    0= if
+        "Query success.\n" type
+    else
+        "Query FAIL.\n" type
+        abort
+    then
+
+    pad 10 dump
+    "Key    :" type
+    pad type cr
+    pad strlen "Key len: " type . " bytes\n" type
+;
+
+: redis-init
+    ip port redis-connect dup 
+    to redis-context
+    redis-ping 0= if
+        "Redis connect and query sucess.\n" type
+    else
+        "Redis init failed.\n" type
+        abort
+    then
+
+;
+
+: test
+    read-env
+    redis-init
+    redis-test
+;
+
+
 test
+bye
+
 
 
