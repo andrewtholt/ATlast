@@ -154,7 +154,6 @@
 ;
 
 test
-1000 ms
-0 sys-exit
+bye
 
 
