@@ -21,7 +21,6 @@
 	0= if
         pad ip strcpy
 		pad type cr
-        "Hello" err-type
 	else
 		"getenv failed\n" type
 	then
@@ -124,7 +123,6 @@
 ;
 
 : test
-    "Send to error\n" err-type
     read-env
     redis-init
     redis-test
@@ -139,12 +137,13 @@
     hhmmss-secs to sunset-secs
 
     ?lights 
-    "Lights--------\n" type
+    "Lights \n" type
     0= if 
         "Off\n" type
-    "Send to error\n" err-type
+        "Off\n" err-type
     else
         "On\n" type
+        "On\n" err-type
     then
 
     ?daylight 0<> if
