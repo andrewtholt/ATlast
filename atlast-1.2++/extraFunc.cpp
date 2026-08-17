@@ -452,7 +452,10 @@ prim P_redis_connect() {
 
     Pop2;
 
-    redisContext *c = redisConnect(addr, port);
+    struct timeval timeout = { 1, 500000 }; //1.5 Seconds
+                                           
+    redisContext *c = redisConnectWithTimeout(addr, port, timeout);
+//    redisContext *c = redisConnect(addr, port);
     if (c == NULL || c->err ) {
         redisFree(c);
         Push=0;
