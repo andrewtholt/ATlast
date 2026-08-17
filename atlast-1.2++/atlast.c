@@ -4338,6 +4338,17 @@ prim P_type() {
     Pop;
 }
 
+prim ATH_err_type() {
+    Sl(1);
+    
+    if( ath_safe_memory == Truth) {
+    	Hpc(S0);
+    }
+
+    fprintf(stderr,"%s", (char *) S0); // EMBEDDED
+
+    Pop;
+}
 prim ATH_sift() {
 //	char outBuffer[132];
 //	extern char *outBuffer;
@@ -6129,6 +6140,7 @@ static struct primfcn primt[] = {
     {"1.\"", P_dotquote},
     {"1.(", P_dotparen},
     {"0TYPE", P_type},
+    {"0ERR-TYPE", ATH_err_type},
     {"0WORDS", P_words},
     {"0$SIFT", ATH_sift},
     {"1SIFTING", ATH_sifting},

@@ -618,6 +618,11 @@ Stack: --- len
 Description:
     Returns the length of the pad area.
 
+Name:   between
+Stack:  min max value
+Description:
+    Returns a true flag if min <= value < max false otherwise
+
 --------- HERE ---------
 
 Name:	redis-get-string
