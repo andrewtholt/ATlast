@@ -623,6 +623,11 @@ Stack:  min max value
 Description:
     Returns a true flag if min <= value < max false otherwise
 
+Name:   err-type
+Stack:  "string" -- 
+Description:
+    As type but sends output to stderr.
+
 --------- HERE ---------
 
 Name:	redis-get-string
