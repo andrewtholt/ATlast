@@ -158,9 +158,9 @@
     ?lights 
 \    "Lights \n" type
     0= if 
-        "Off\n" type
+        "OFF" type
     else
-        "On\n" type
+        "ON" type
     then
 
     verbose @ 0<> if
