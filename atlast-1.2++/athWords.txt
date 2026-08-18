@@ -628,6 +628,13 @@ Stack:  "string" --
 Description:
     As type but sends output to stderr.
 
+Name:   verbose
+Stack:  -- addr
+Description:
+    Returns the address of a variable that holds the state of the -v command line argument
+Usage:
+    verbose @
+
 --------- HERE ---------
 
 Name:	redis-get-string

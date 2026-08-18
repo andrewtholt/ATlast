@@ -258,6 +258,14 @@ int main(int argc, char *argv[]) {
         printf("Can't atl_vardef PAD.\n");
     } else {
     }
+    dictword *v; // Verbose flag
+    
+    v=atl_vardef("VERBOSE", sizeof(int));
+    if ( v == NULL) {
+        printf("Can't atl_vardef VERBOSE.\n");
+    } else {
+        *((int *) atl_body(v)) = (int) verbose;
+    }
 #ifdef LINUX
 #warning "Linux"
 #ifdef EXTRAS
