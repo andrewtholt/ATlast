@@ -11,8 +11,10 @@
 : read-env
 	"REDIS_PORT" getenv
 	0= if
-		pad strint nip dup to port
-        . cr
+		pad strint nip to port
+        verbose @ 0<> if
+            port . cr
+        then
 	else 
 		"ip getenv failed\n" type
 	then
@@ -20,7 +22,9 @@
 	"REDIS_IP" getenv
 	0= if
         pad ip strcpy
-		pad type cr
+        verbose @ 0<> if
+    		pad type cr
+        then
 	else
 		"getenv failed\n" type
 	then
@@ -31,7 +35,9 @@
     pad 20 erase
     redis-context "GET test" redis-cmd
     0= if
-        "Query success.\n" type
+        verbose @ 0<> if 
+            "Query success.\n" type
+        then
     else
         "Query FAIL.\n" type
         abort
@@ -44,10 +50,17 @@
 ;
 
 : redis-init
-    ip port redis-connect dup 
-    to redis-context
-    redis-ping 0= if
-        "Redis connect and query sucess.\n" type
+    ip port redis-connect ?dup 0= if
+        "Failed to connect to Redis.\n" type
+        abort
+    else
+        to redis-context
+    then
+
+    redis-context redis-ping 0= if
+        verbose @ 0<> if
+            "Redis connect and query sucess.\n" type
+        then
     else
         "Redis init failed.\n" type
         abort
@@ -58,8 +71,10 @@
 : redis-get-time
     redis-context "hget ENVIRONMENT:1001 TIME" redis-cmd
     0= if
-        "TIME " type
-        pad type cr
+        verbose @ 0<> if
+            "TIME " type
+            pad type cr
+        then
     else
         "Read time failed\n" type
     then
@@ -68,8 +83,10 @@
 : redis-get-sunrise
     redis-context "hget ENVIRONMENT:1001 SUNRISE" redis-cmd
     0= if
-        "SUNRISE " type
-        pad type cr
+        verbose @ 0<> if
+            "SUNRISE " type
+            pad type cr
+        then
     else
         "Read time failed\n" type
     then
@@ -78,8 +95,10 @@
 : redis-get-sunset
     redis-context "hget ENVIRONMENT:1001 SUNSET" redis-cmd
     0= if
-        "SUNSET  " type
-        pad type cr
+        verbose @ 0<> if
+            "SUNSET  " type
+            pad type cr
+        then
     else
         "Read time failed\n" type
     then
@@ -125,7 +144,7 @@
 : test
     read-env
     redis-init
-    redis-test
+\    redis-test
 
     redis-get-time
     hhmmss-secs to time-secs
@@ -137,19 +156,19 @@
     hhmmss-secs to sunset-secs
 
     ?lights 
-    "Lights \n" type
+\    "Lights \n" type
     0= if 
         "Off\n" type
-        "Off\n" err-type
     else
         "On\n" type
-        "On\n" err-type
     then
 
-    ?daylight 0<> if
-        "Daylight\n" type
-    else
-        "Night\n" type
+    verbose @ 0<> if
+        ?daylight 0<> if
+            "Daylight\n" type
+        else
+            "Night\n" type
+     then
     then
 ;
 

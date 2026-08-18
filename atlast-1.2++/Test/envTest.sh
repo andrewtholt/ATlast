@@ -5,5 +5,5 @@ set -x REDIS_PORT 6379
 
 # echo $REDIS_IP
 
-atlast  -I testEnv.atl
+atlast -I testEnv.atl
 
