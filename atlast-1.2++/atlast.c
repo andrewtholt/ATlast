@@ -233,6 +233,13 @@ Exported stackitem *heaptop;	      /* Top of heap */
 Exported dictword *dict = NULL;       /* Dictionary chain head */
 Exported dictword *dictprot = NULL;   /* First protected item in dictionary */
 
+/* Vocabularies and Search Order */
+Exported atl_vocab *forth_vocab = NULL;
+Exported atl_vocab **context_order = NULL;
+Exported int context_depth = 0;
+Exported atl_vocab **current_vocab_ptr = NULL;
+Exported atl_vocab *vocabs = NULL;
+
 /* The temporary string buffers */
 
 Exported char **strbuf = NULL;	      /* Table of pointers to temp strings */
@@ -2734,24 +2741,98 @@ static int token( char **cp) {
     }
 }
 
-/*  LOOKUP  --	Look up token in the dictionary.  */
+/*  FORGET_WORDS_ABOVE -- Unchain words and vocabularies defined at or above limit */
+
+static void forget_words_above(stackitem *limit) {
+    atl_vocab *v, *prev_v = NULL;
+    int i;
+
+    /* 1. Walk all vocabularies and unchain all words allocated at or above limit */
+    for (v = vocabs; v != NULL; v = v->v_next) {
+        while (v->v_head != NULL && (stackitem *)(v->v_head) >= limit) {
+            dictword *dw = v->v_head;
+            if (dw->wname != NULL) {
+                free(dw->wname);
+                dw->wname = NULL;
+            }
+            v->v_head = dw->wnext;
+        }
+    }
+
+    /* 2. Unchain any vocabularies allocated at or above limit */
+    v = vocabs;
+    while (v != NULL) {
+        if ((stackitem *)v >= limit && v != forth_vocab) {
+            /* Remove this vocabulary from vocabs list */
+            if (prev_v != NULL) {
+                prev_v->v_next = v->v_next;
+            } else {
+                vocabs = v->v_next;
+            }
+            /* Reset from search order if present */
+            if (context_order != NULL) {
+                for (i = 0; i < context_depth; i++) {
+                    if (context_order[i] == v) {
+                        context_order[i] = forth_vocab;
+                    }
+                }
+            }
+            if (current_vocab_ptr != NULL && *current_vocab_ptr == v) {
+                *current_vocab_ptr = forth_vocab;
+            }
+            v = (prev_v != NULL) ? prev_v->v_next : vocabs;
+        } else {
+            prev_v = v;
+            v = v->v_next;
+        }
+    }
+
+    /* 3. Also update dict to first word below limit */
+    while (dict != NULL && (stackitem *)dict >= limit && dict != dictprot) {
+        dict = dict->wnext;
+    }
+}
+
+/*  LOOKUP  --	Look up token in the dictionary across active search order.  */
 
 static dictword *lookup( char *tkname)
 {
-    dictword *dw = dict;
+    dictword *dw = NULL;
+    int v;
 
     ucase(tkname);		      /* Force name to upper case */
-    while (dw != NULL) {
-        if (!(dw->wname[0] & WORDHIDDEN) &&
+
+    if (context_depth <= 0 || context_order == NULL) {
+        /* Fallback if vocabularies not yet initialised */
+        dw = dict;
+        while (dw != NULL) {
+            if (!(dw->wname[0] & WORDHIDDEN) &&
                 (strcmp(dw->wname + 1, tkname) == 0)) {
 #ifdef WORDSUSED
-            *(dw->wname) |= WORDUSED; /* Mark this word used */
+                *(dw->wname) |= WORDUSED; /* Mark this word used */
 #endif
-            break;
+                return dw;
+            }
+            dw = dw->wnext;
         }
-        dw = dw->wnext;
+        return NULL;
     }
-    return dw;
+
+    for (v = 0; v < context_depth; v++) {
+        if (context_order[v] == NULL) continue;
+        dw = context_order[v]->v_head;
+        while (dw != NULL) {
+            if (!(dw->wname[0] & WORDHIDDEN) &&
+                (strcmp(dw->wname + 1, tkname) == 0)) {
+#ifdef WORDSUSED
+                *(dw->wname) |= WORDUSED; /* Mark this word used */
+#endif
+                return dw;
+            }
+            dw = dw->wnext;
+        }
+    }
+    return NULL;
 }
 
 #ifdef LINUX
@@ -3014,7 +3095,12 @@ static void enter( char *tkname) {
     createword->wname = alloc(((unsigned int) strlen(tkname) + 2));
     createword->wname[0] = 0;	      /* Clear flags */
     V strcpy(createword->wname + 1, tkname); /* Copy token to name buffer */
-    createword->wnext = dict;	      /* Chain rest of dictionary to word */
+    if (current_vocab != NULL) {
+        createword->wnext = current_vocab->v_head; /* Chain rest of vocabulary to word */
+        current_vocab->v_head = createword;	   /* Put word at head of current vocabulary */
+    } else {
+        createword->wnext = dict;	      /* Chain rest of dictionary to word */
+    }
     dict = createword;		      /* Put word at head of dictionary */
 }
 
@@ -3609,6 +3695,190 @@ prim P_to()			      /* Set value of a VALUE word */
     } else {
         trouble("Word requested by TO not on same input line");
     }
+}
+
+/*  Vocabulary and Search Order primitives  */
+
+prim P_do_vocab() {
+    atl_vocab *v = (atl_vocab *) (((stackitem *) curword) + Dictwordl);
+    if (context_order != NULL) {
+        if (context_depth > 0) {
+            context_order[0] = v;
+        } else {
+            context_order[0] = v;
+            context_depth = 1;
+        }
+    }
+}
+
+prim P_vocabulary() {
+    int vsize = (sizeof(atl_vocab) + sizeof(stackitem) - 1) / sizeof(stackitem);
+    Ho(vsize + Dictwordl);
+    P_create();
+    createword->wcode = P_do_vocab;
+    atl_vocab *v = (atl_vocab *) hptr;
+    hptr += vsize;
+    memset(v, 0, sizeof(atl_vocab));
+    v->v_head = NULL;
+    v->v_word = createword;
+    v->v_next = vocabs;
+    vocabs = v;
+}
+
+prim P_forth() {
+    if (context_order != NULL && forth_vocab != NULL) {
+        if (context_depth > 0) {
+            context_order[0] = forth_vocab;
+        } else {
+            context_order[0] = forth_vocab;
+            context_depth = 1;
+        }
+    }
+}
+
+prim P_context() {
+    So(1);
+    Push = (stackitem) context_order;
+}
+
+prim P_current() {
+    So(1);
+    Push = (stackitem) current_vocab_ptr;
+}
+
+prim P_definitions() {
+    if (context_order != NULL && current_vocab_ptr != NULL && context_depth > 0 && context_order[0] != NULL) {
+        *current_vocab_ptr = context_order[0];
+    }
+}
+
+prim P_also() {
+    if (context_order != NULL && context_depth < MAX_SEARCH_ORDER) {
+        int i;
+        for (i = context_depth; i > 0; i--) {
+            context_order[i] = context_order[i - 1];
+        }
+        context_depth++;
+    } else {
+        printf("\nSearch order overflow\n");
+    }
+}
+
+prim P_previous() {
+    if (context_order != NULL) {
+        if (context_depth > 1) {
+            int i;
+            for (i = 0; i < context_depth - 1; i++) {
+                context_order[i] = context_order[i + 1];
+            }
+            context_depth--;
+        } else if (forth_vocab != NULL) {
+            context_order[0] = forth_vocab;
+            context_depth = 1;
+        }
+    }
+}
+
+prim P_only() {
+    if (context_order != NULL && forth_vocab != NULL) {
+        context_depth = 1;
+        context_order[0] = forth_vocab;
+    }
+}
+
+prim P_order() {
+    int i;
+    printf("\nContext: ");
+    if (context_order != NULL) {
+        for (i = 0; i < context_depth; i++) {
+            if (context_order[i] != NULL) {
+                printf("%s ", context_order[i]->v_name);
+            }
+        }
+    }
+    printf("\nCurrent: ");
+    if (current_vocab_ptr != NULL && *current_vocab_ptr != NULL) {
+        printf("%s", (*current_vocab_ptr)->v_name);
+    }
+    printf("\n");
+}
+
+prim P_vocs() {
+    atl_vocab *v = vocabs;
+    printf("\nVocabularies:\n");
+    while (v != NULL) {
+        printf("  %s\n", v->v_name);
+        v = v->v_next;
+    }
+}
+
+prim P_seal() {
+    if (context_depth > 1) {
+        context_depth = 1;
+    }
+}
+
+prim P_get_order() {
+    int i;
+    if (context_order == NULL) {
+        So(1);
+        Push = 0;
+        return;
+    }
+    So(context_depth + 1);
+    for (i = context_depth - 1; i >= 0; i--) {
+        Push = (stackitem) context_order[i];
+    }
+    Push = context_depth;
+}
+
+prim P_set_order() {
+    Sl(1);
+    stackitem n = S0;
+    Pop;
+    if (context_order == NULL || forth_vocab == NULL) return;
+    if (n == -1) {
+        context_depth = 1;
+        context_order[0] = forth_vocab;
+    } else if (n >= 0 && n <= MAX_SEARCH_ORDER) {
+        int i;
+        Sl(n);
+        context_depth = n;
+        for (i = 0; i < n; i++) {
+            context_order[i] = (atl_vocab *) S0;
+            Pop;
+        }
+    } else {
+        printf("\nInvalid search order count\n");
+    }
+}
+
+prim P_get_current() {
+    So(1);
+    Push = (stackitem) (current_vocab_ptr != NULL ? *current_vocab_ptr : NULL);
+}
+
+prim P_set_current() {
+    Sl(1);
+    if (current_vocab_ptr != NULL) {
+        *current_vocab_ptr = (atl_vocab *) S0;
+    }
+    Pop;
+}
+
+prim P_wordlist() {
+    int vsize = (sizeof(atl_vocab) + sizeof(stackitem) - 1) / sizeof(stackitem);
+    Ho(vsize);
+    So(1);
+    atl_vocab *v = (atl_vocab *) hptr;
+    hptr += vsize;
+    memset(v, 0, sizeof(atl_vocab));
+    v->v_head = NULL;
+    v->v_word = NULL;
+    v->v_next = vocabs;
+    vocabs = v;
+    strcpy(v->v_name, "ANON");
+    Push = (stackitem) v;
 }
 
 /*  Array primitives  */
@@ -4350,25 +4620,37 @@ prim ATH_err_type() {
     Pop;
 }
 prim ATH_sift() {
-//	char outBuffer[132];
-//	extern char *outBuffer;
-    char *res=NULL;
+    char *res = NULL;
 
     Sl(1);
     So(0);
 
-    char *name = (char *)S0;
+    char *name = (char *) S0;
 
     Pop;
-    dictword *dw = dict;
-    while (dw != NULL) {
-        res=strcasestr( dw->wname+1, name);
-        if( res != NULL) {
-            printf("%s\n", dw->wname+1);
+    int v;
+    if (context_depth > 0) {
+        for (v = 0; v < context_depth; v++) {
+            if (context_order[v] == NULL) continue;
+            dictword *dw = context_order[v]->v_head;
+            while (dw != NULL) {
+                res = strcasestr(dw->wname + 1, name);
+                if (res != NULL) {
+                    printf("%s\n", dw->wname + 1);
+                }
+                dw = dw->wnext;
+            }
         }
-        dw = dw->wnext;
+    } else {
+        dictword *dw = dict;
+        while (dw != NULL) {
+            res = strcasestr(dw->wname + 1, name);
+            if (res != NULL) {
+                printf("%s\n", dw->wname + 1);
+            }
+            dw = dw->wnext;
+        }
     }
-
 }
 
 prim ATH_sifting() {
@@ -4386,22 +4668,17 @@ prim ATH_noshowstack() {
     showstack=false;
 }
 
-/* List words */
+/* List words in current context vocabulary */
 prim P_words() {
-//	char outBuffer[132];
-// extern char outBuffer[];
 #ifndef Keyhit
     int key = 0;
 #endif
-    dictword *dw = dict;
+    dictword *dw = (context_depth > 0 && context_order[0] != NULL) ? context_order[0]->v_head : dict;
 
     while (dw != NULL) {
     	strcpy(outBuffer,"\r\n");
     	strcat(outBuffer,dw->wname+1);
-//    	strcat(outBuffer,"\r\n");
-
-//        sprintf(outBuffer,"\r\n%s", dw->wname + 1); // EMBEDDED
-    printf("%s",outBuffer);
+        printf("%s",outBuffer);
         
         dw = dw->wnext;
 #ifdef Keyhit
@@ -4410,13 +4687,13 @@ prim P_words() {
         }
 #else
         /* If this system can't trap keystrokes, just stop the WORDS
-     NOT       listing after 20 words. */
+           listing after 200 words. */
         if (++key >= 200)
             break;
 #endif
     }
     sprintf(outBuffer,"\n"); // EMBEDDED
-     printf("%s",outBuffer);
+    printf("%s",outBuffer);
 }
 #endif /* CONIO */
 
@@ -5433,7 +5710,11 @@ prim P_abortq() 		      /* Abort, printing message */
 
 prim P_immediate()		      /* Mark most recent word immediate */
 {
-    dict->wname[0] |= IMMEDIATE;
+    if (current_vocab != NULL && current_vocab->v_head != NULL) {
+        current_vocab->v_head->wname[0] |= IMMEDIATE;
+    } else if (dict != NULL) {
+        dict->wname[0] |= IMMEDIATE;
+    }
 }
 
 prim P_lbrack() 		      /* Set interpret state */
@@ -6108,6 +6389,22 @@ static struct primfcn primt[] = {
     {"0>BODY", P_body},
     {"0STATE", P_state},
     {"0CHAR", ATH_char},
+    {"0VOCABULARY", P_vocabulary},
+    {"0FORTH", P_forth},
+    {"0CONTEXT", P_context},
+    {"0CURRENT", P_current},
+    {"0DEFINITIONS", P_definitions},
+    {"0ALSO", P_also},
+    {"0PREVIOUS", P_previous},
+    {"0ONLY", P_only},
+    {"0ORDER", P_order},
+    {"0VOCS", P_vocs},
+    {"0SEAL", P_seal},
+    {"0GET-ORDER", P_get_order},
+    {"0SET-ORDER", P_set_order},
+    {"0GET-CURRENT", P_get_current},
+    {"0SET-CURRENT", P_set_current},
+    {"0WORDLIST", P_wordlist},
 
 #ifdef DEFFIELDS
     {"0FIND", P_find},
@@ -6614,30 +6911,6 @@ void exword( dictword *wp) {
 void atl_init() {
     if (dict == NULL) {
         atl_primdef(primt);	      /* Define primitive words */
-        dictprot = dict;	      /* Set protected mark in dictionary */
-
-        /* Look up compiler-referenced words in the new dictionary and
-           save their compile addresses in static variables. */
-
-#define Cconst(cell, name)  cell = (stackitem) lookup(name); if(cell==0)abort()
-        Cconst(s_exit, "EXIT");
-        Cconst(s_lit, "(LIT)");
-#ifdef REAL
-        Cconst(s_flit, "(FLIT)");
-#endif
-        Cconst(s_strlit, "(STRLIT)");
-        Cconst(s_dotparen, ".(");
-        Cconst(s_qbranch, "?BRANCH");
-        Cconst(s_branch, "BRANCH");
-        Cconst(s_xdo, "(XDO)");
-        Cconst(s_xqdo, "(X?DO)");
-        Cconst(s_xloop, "(XLOOP)");
-        Cconst(s_pxloop, "(+XLOOP)");
-        Cconst(s_abortq, "ABORT\"");
-        Cconst(s_drop, "DROP");
-        Cconst(s_xof, "(XOF)");
-        Cconst(s_xto, "(TO)");
-#undef Cconst
 
         if (stack == NULL) {	      /* Allocate stack if needed */
             stack = (stackitem *)
@@ -6681,7 +6954,6 @@ void atl_init() {
             atl_ltempstr += sizeof(stackitem) -
                 (atl_ltempstr % sizeof(stackitem));
 
-//            cp = alloc((((unsigned int) atl_heaplen) * sizeof(stackitem)) + ((unsigned int) (atl_ntempstr * atl_ltempstr)));
             int heapSize=((((unsigned int) atl_heaplen) * sizeof(stackitem)) + ((unsigned int) (atl_ntempstr * atl_ltempstr)));
             cp = alloc( heapSize );
 
@@ -6706,6 +6978,55 @@ void atl_init() {
         heapmax = hptr;
 #endif
         heaptop = heap + atl_heaplen;
+
+        /* Allocate and initialise FORTH vocabulary and search order on heap */
+        int vsize = (sizeof(atl_vocab) + sizeof(stackitem) - 1) / sizeof(stackitem);
+        forth_vocab = (atl_vocab *) hptr;
+        hptr += vsize;
+        memset(forth_vocab, 0, sizeof(atl_vocab));
+        forth_vocab->v_head = dict;
+        forth_vocab->v_next = NULL;
+        strncpy(forth_vocab->v_name, "FORTH", sizeof(forth_vocab->v_name) - 1);
+        forth_vocab->v_name[sizeof(forth_vocab->v_name) - 1] = '\0';
+        vocabs = forth_vocab;
+
+        context_order = (atl_vocab **) hptr;
+        hptr += MAX_SEARCH_ORDER;
+        memset(context_order, 0, MAX_SEARCH_ORDER * sizeof(atl_vocab *));
+        context_order[0] = forth_vocab;
+        context_depth = 1;
+
+        current_vocab_ptr = (atl_vocab **) hptr;
+        hptr += 1;
+        *current_vocab_ptr = forth_vocab;
+
+        /* Look up compiler-referenced words in the new dictionary and
+           save their compile addresses in static variables. */
+
+#define Cconst(cell, name)  cell = (stackitem) lookup(name); if(cell==0)abort()
+        Cconst(s_exit, "EXIT");
+        Cconst(s_lit, "(LIT)");
+#ifdef REAL
+        Cconst(s_flit, "(FLIT)");
+#endif
+        Cconst(s_strlit, "(STRLIT)");
+        Cconst(s_dotparen, ".(");
+        Cconst(s_qbranch, "?BRANCH");
+        Cconst(s_branch, "BRANCH");
+        Cconst(s_xdo, "(XDO)");
+        Cconst(s_xqdo, "(X?DO)");
+        Cconst(s_xloop, "(XLOOP)");
+        Cconst(s_pxloop, "(+XLOOP)");
+        Cconst(s_abortq, "ABORT\"");
+        Cconst(s_drop, "DROP");
+        Cconst(s_xof, "(XOF)");
+        Cconst(s_xto, "(TO)");
+#undef Cconst
+
+        forth_vocab->v_word = lookup("FORTH");
+        if (forth_vocab->v_word != NULL) {
+            forth_vocab->v_word->wname[0] |= VOCABULARY;
+        }
 
         /* Now that dynamic memory is up and running, allocate constants
            and variables built into the system.  */
@@ -6854,18 +7175,10 @@ void atl_unwind( atl_statemark *mp) {
         return; 		      /* Yes.  Cannot unwind past init */
 
     stk = mp->mstack;		      /* Roll back stack allocation */
-    hptr = mp->mheap;		      /* Reset heap state */
     rstk = mp->mrstack; 	      /* Reset the return stack */
 
-    /* To unwind the dictionary, we can't just reset the pointer,
-       we must walk back through the chain and release all the name
-       buffers attached to the items allocated after the mark was
-       made. */
-
-    while (dict != NULL && dict != dictprot && dict != mp->mdict) {
-        free(dict->wname);	      /* Release name string for item */
-        dict = dict->wnext;	      /* Link to previous item */
-    }
+    forget_words_above(mp->mheap);
+    hptr = mp->mheap;		      /* Reset heap state */
 }
 
 #ifdef BREAK
@@ -7020,27 +7333,15 @@ int atl_eval(char *sp) {
                            dictionary list. */
 
                         if (di != NULL) {
-                            do {
-                                dw = dict;
-                                if (dw->wname != NULL)
-                                    free(dw->wname);
-                                dict = dw->wnext;
-                            } while (dw != di);
-                            /* Finally, back the heap allocation pointer
-                               up to the start of the last item forgotten. */
-                            hptr = (stackitem *) di;
-                            /* Uhhhh, just one more thing.  If this word
-                               was defined with DOES>, there's a link to
-                               the method address hidden before its
-                               wnext field.  See if it's a DOES> by testing
-                               the wcode field for P_dodoes and, if so,
-                               back up the heap one more item. */
+                            stackitem *target_hptr = (stackitem *) di;
                             if (di->wcode == (codeptr) P_dodoes) {
 #ifdef FORGETDEBUG
                                 printf(" Forgetting DOES> word. "); //  EMBEDDED
 #endif
-                                hptr--;
+                                target_hptr--;
                             }
+                            forget_words_above(target_hptr);
+                            hptr = target_hptr;
                         }
                     } else {
 #ifdef MEMMESSAGE
@@ -7073,6 +7374,13 @@ int atl_eval(char *sp) {
                     }
 
                     enter(tokbuf);
+                    if (createword != NULL && createword->wcode == (codeptr) P_do_vocab) {
+                        createword->wname[0] |= VOCABULARY;
+                        atl_vocab *v = (atl_vocab *) (((stackitem *) createword) + Dictwordl);
+                        strncpy(v->v_name, tokbuf, sizeof(v->v_name) - 1);
+                        v->v_name[sizeof(v->v_name) - 1] = '\0';
+                        v->v_word = createword;
+                    }
                 } else {
                     di = lookup(tokbuf);
                     if (di != NULL) {

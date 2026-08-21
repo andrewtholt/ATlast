@@ -65,6 +65,17 @@ struct primfcn {
     codeptr pcode;
 };
 
+/*  Vocabulary / Word List Structure  */
+
+typedef struct atl_vocab_struct {
+    dictword *v_head;                 /* Head of word list in this vocabulary */
+    struct atl_vocab_struct *v_next;  /* Next vocabulary in master linked list */
+    dictword *v_word;                 /* dictword representing the vocabulary word */
+    char v_name[32];                  /* Name of the vocabulary */
+} atl_vocab;
+
+#define MAX_SEARCH_ORDER 16
+
 /*  Internal state marker item	*/
 
 typedef struct {
@@ -96,6 +107,11 @@ typedef struct {
 #define ip	    atl__ip
 #define curword     atl__cw
 #define createword  atl__wd
+#define context_order atl__co
+#define context_depth atl__cd
+#define current_vocab_ptr atl__cvp
+#define vocabs        atl__vl
+#define forth_vocab   atl__fv
 #endif /* NOMANGLE */
 
 #ifdef MEMSTAT
@@ -130,6 +146,12 @@ extern dictword *dict, *dictprot, *curword, *createword, *pad;
 extern dictword **ip;
 extern char **strbuf;
 extern int cstrbuf;
+extern atl_vocab **context_order;
+extern int context_depth;
+extern atl_vocab **current_vocab_ptr;
+#define current_vocab (*current_vocab_ptr)
+extern atl_vocab *vocabs;
+extern atl_vocab *forth_vocab;
 
 #ifndef NOMANGLE
 #define P_create    atl__Pcr

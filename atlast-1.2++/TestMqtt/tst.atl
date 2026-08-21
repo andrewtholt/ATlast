@@ -1,0 +1,45 @@
+include struct.atl
+
+
+struct
+    64 chars field topic
+    32 chars field msg
+     1 chars field msg-type
+endstruct /mqtt
+
+0 value jacuzzi
+
+: init
+    here /mqtt allot to jacuzzi
+;
+
+init
+
+"Topic" jacuzzi topic strcpy
+"Msg"   jacuzzi msg strcpy
+
+: set-topic   \ "topic" *struct -- 
+    topic strcpy
+;
+
+: set-msg
+    msg strcpy
+;
+
+: set-type \ "B|S|N" --
+    msg-type c!
+;
+
+
+: display \ *struct --
+    dup "Topic:\t" type topic type cr
+    dup "Msg  :\t" type msg type cr
+        "Type :\t" type msg-type c@ emit cr
+;
+
+"/home/Jacuzzi/LWT" jacuzzi set-topic
+"Offline" jacuzzi set-msg
+char B  jacuzzi set-type
+
+jacuzzi display
+
