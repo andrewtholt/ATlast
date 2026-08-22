@@ -22,12 +22,55 @@ init
     topic strcpy
 ;
 
+: get-topic \ field-addr -- PAD: content
+    topic pad strcpy
+;
+            
 : set-msg
     msg strcpy
 ;
 
 : set-type \ "B|S|N" --
     msg-type c!
+;
+
+: get-type \ struct-addr --- "B|S|N"
+    msg-type c@
+;
+
+: msg->flag \ "On"|"Online" -- TRUE
+            \ "Off"|"Offline" -- FALSE
+            dup "On" strcmp swap
+            "Online" strcmp and 0=
+;
+
+: get-msg \ struct-addr --
+    dup get-type
+    case
+        66 of \ B
+            "Boolean\n" type
+            msg pad strcpy
+            pad msg->flag
+        endof 
+        83 of \ S
+            "String\n" type 
+            msg pad strcpy
+        endof
+        78 of \ N
+            "Number\n" type 
+            msg pad strcpy
+            pad strint nip
+        endof
+    endcase
+
+;
+
+: test-switch ( n -- )
+    case
+        66 of 1000 endof
+        83 of 2000 endof
+        78 of 3000 endof
+    endcase
 ;
 
 
@@ -38,6 +81,12 @@ init
 ;
 
 "/home/Jacuzzi/LWT" jacuzzi set-topic
+\ "Offline" jacuzzi set-msg
+\ char B  jacuzzi set-type
+
+\ "54321" jacuzzi set-msg
+\ char N  jacuzzi set-type
+
 "Offline" jacuzzi set-msg
 char B  jacuzzi set-type
 
