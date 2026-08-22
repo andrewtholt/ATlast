@@ -1423,24 +1423,32 @@ int8_t readLineFromArray(uint8_t *src, uint8_t *dest) {
 #ifdef ANSI
 prim ANSI_cell() {
     So(1);
-    Push = sizeof(int);
+    Push = sizeof(stackitem);
 }
 
 prim ANSI_cells() {
     Sl(1);
-    S0 = S0 * sizeof(int);
+    S0 = S0 * sizeof(stackitem);
 }
 
 prim ANSI_cellplus() {
     Sl(1);
-    S0 = S0 + sizeof(int);
+    S0 = S0 + sizeof(stackitem);
+}
+
+prim ANSI_cellminus() {
+    Sl(1);
+    S0 = S0 - sizeof(stackitem);
+}
+
+prim ANSI_charplus() {
+    Sl(1);
+    S0 = S0 + sizeof(char);
 }
 
 prim ANSI_chars() {
 	Sl(1);
-
 	S0 = sizeof(uint8_t) * S0;
-
 }
 
 prim ANSI_allocate() {
@@ -6553,6 +6561,8 @@ static struct primfcn primt[] = {
     {(char *)"0CELL", ANSI_cell},
     {(char *)"0CELLS", ANSI_cells},
     {(char *)"0CELL+", ANSI_cellplus},
+    {(char *)"0CELL-", ANSI_cellminus},
+    {(char *)"0CHAR+", ANSI_charplus},
     {(char *)"0CHARS", ANSI_chars},
     {(char *)"0ALLOCATE", ANSI_allocate},
     {(char *)"0FREE", ANSI_free},
