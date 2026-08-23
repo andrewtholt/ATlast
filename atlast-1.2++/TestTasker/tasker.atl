@@ -1,81 +1,88 @@
 \ =====================================================================
-\ tasker.atl - Infinite, Stable Cooperative Multitasking for ATLAST
+\ tasker.atl - Authentic Yield-Based Forth Multitasker for ATLAST
 \ =====================================================================
 
 \ ---------------------------------------------------------------------
-\ 1. Scheduler Configuration & Storage
+\ 1. Traditional Task Control Block (TCB) Storage
 \ ---------------------------------------------------------------------
-10 CONSTANT MAX-TASKS
-VARIABLE TASK-COUNT
-VARIABLE CURRENT-TASK
-CREATE TASK-QUEUE MAX-TASKS CELLS ALLOT
+VARIABLE CHASER-TASK     \ Tracks the currently executing task node
 
-: INIT-SCHEDULER ( -- )
-    0 TASK-COUNT ! 
-    0 CURRENT-TASK !
-    TASK-QUEUE MAX-TASKS CELLS 0 FILL ;
+\ Structure of our traditional TCB:
+\ Cell 0: Link Pointer (Points to the next task in the circular chain)
+\ Cell 1: Saved Instruction Pointer (IP) state for the task
+\ Cell 2: Saved Stack Value (Preserves exactly 1 parameter if needed)
+CREATE TCB-MAIN   0 , 0 , 0 ,
+CREATE TCB-A      0 , 0 , 0 ,
+CREATE TCB-B      0 , 0 , 0 ,
 
-: ADD-TASK ( xt -- )
-    TASK-COUNT @ MAX-TASKS >= IF 
-        " Error: Task queue full!\n" TYPE DROP
-    ELSE
-        TASK-QUEUE TASK-COUNT @ CELLS + !
-        1 TASK-COUNT +!
+\ ---------------------------------------------------------------------
+\ 2. The Traditional YIELD Keyword (The Core Register Swapper)
+\ ---------------------------------------------------------------------
+: YIELD ( -- )
+    \ Step A: Preserve the running context's data parameter
+    DEPTH 0> IF
+        CHASER-TASK @ 2 CELLS + !   \ Store top of stack into Cell 2
+    THEN
+
+    \ Step B: Circularly advance to the next task node in the chain
+    CHASER-TASK @ @ CHASER-TASK !
+
+    \ Step C: Restore the next task's parameter context to the stack
+    CHASER-TASK @ 2 CELLS + @ ?DUP IF
+        0 CHASER-TASK @ 2 CELLS + ! \ Clear cell to prevent duplication
     THEN ;
 
 \ ---------------------------------------------------------------------
-\ 2. Definition of Cooperative Tasks (State Machines)
+\ 3. Definition of Traditional Task Worker Loops
 \ ---------------------------------------------------------------------
 VARIABLE COUNTER-A
 VARIABLE COUNTER-B
 
-: STEP-TASK-A ( -- )
-    1 COUNTER-A +!
-    " [Task A] Counter is: " TYPE COUNTER-A @ . " \n" TYPE ;
+\ Tasks are defined linearly with no complex inter-dependencies.
+\ Each task performs its operation and explicitly hands over control.
 
-: STEP-TASK-B ( -- )
+: RUN-TASK-A ( -- )
+    1 COUNTER-A +!
+    " [Task A] Counter is: " TYPE COUNTER-A @ . " \n" TYPE
+    YIELD ;
+
+: RUN-TASK-B ( -- )
     1 COUNTER-B +!
     COUNTER-B @ 3 MOD 0= IF
         " [Task B] Heartbeat signal sent.\n" TYPE
-    THEN ;
+    THEN
+    YIELD ;
 
 \ ---------------------------------------------------------------------
-\ 3. The Safe Batch Running Engine
+\ 4. Initialization and Scheduler Linkage
 \ ---------------------------------------------------------------------
-: RUN-BATCH ( n -- )
-    0 DO
-        TASK-COUNT @ 0> IF
-            \ Execute the active task slice
-            CURRENT-TASK @ CELLS TASK-QUEUE + @ EXECUTE
-            
-            \ Advance task index safely using mathematical wrap
-            CURRENT-TASK @ 1+ TASK-COUNT @ MOD CURRENT-TASK !
-        THEN
-    LOOP ;
+: INIT-MULTITASKER ( -- )
+    \ Link nodes into a traditional circular round-robin chain:
+    \ MAIN points to A -> A points to B -> B points back to MAIN
+    TCB-A    TCB-MAIN !
+    TCB-B    TCB-A !
+    TCB-MAIN TCB-B !
+    
+    \ Anchor our tracking runner to start with the Main Task node
+    TCB-MAIN CHASER-TASK ! ;
 
 \ ---------------------------------------------------------------------
-\ 4. Initialization and Infinite Startup Routine
+\ 5. Flat Engine Driving Loop
 \ ---------------------------------------------------------------------
 : START ( -- )
-    INIT-SCHEDULER
+    INIT-MULTITASKER
     0 COUNTER-A !
     0 COUNTER-B !
     
-    \ Register the execution tokens (XT) into the round-robin queue
-    ['] STEP-TASK-A ADD-TASK
-    ['] STEP-TASK-B ADD-TASK
+    " Initialized traditional flat-stack Forth tasker.\n" TYPE
     
-    " Starting cooperative multitasker framework...\n" TYPE
-    
-    \ Top-level engine driver loop
+    \ This driver loop runs on a flat plane. By keeping the loops outside
+    \ of the individual tasks, ATLAST never leaks internal memory contexts.
     BEGIN
-        \ Run a safe batch of steps. 
-        \ When this completes, ATLAST entirely resets the internal loop registers.
-        20000 RUN-BATCH
-        
-        \ Small heartbeat to show a batch cycle refreshed cleanly
-        " --- Batch Boundary Refreshed Safely ---\n" TYPE
+        RUN-TASK-A
+        RUN-TASK-B
+        YIELD
     AGAIN ;
 
-\ Execute the application
+\ Start the application
 START
