@@ -5,6 +5,7 @@ struct
     64 chars field topic
     32 chars field msg
      1 chars field msg-type
+     8 chars field truth
 endstruct /mqtt
 
 0 value jacuzzi
@@ -34,6 +35,11 @@ init
     msg-type c!
 ;
 
+: set-truth \ "string" --
+    truth strcpy
+;
+    
+
 : get-type \ struct-addr --- "B|S|N"
     msg-type c@
 ;
@@ -42,6 +48,16 @@ init
             \ "Off"|"Offline" -- FALSE
             dup "On" strcmp swap
             "Online" strcmp and 0=
+;
+
+: get-truth 
+    truth pad strcpy
+;
+
+: is-msg-true \ struct-addr -- f
+    dup msg 
+    swap
+    truth strcasecmp 0=
 ;
 
 : get-msg \ struct-addr --
@@ -77,7 +93,8 @@ init
 : display \ *struct --
     dup "Topic:\t" type topic type cr
     dup "Msg  :\t" type msg type cr
-        "Type :\t" type msg-type c@ emit cr
+    dup "Type :\t" type msg-type c@ emit cr
+        "Truth:\t" type truth type cr
 ;
 
 "/home/Jacuzzi/LWT" jacuzzi set-topic
@@ -88,6 +105,7 @@ init
 \ char N  jacuzzi set-type
 
 "Offline" jacuzzi set-msg
+"Online" jacuzzi set-truth
 char B  jacuzzi set-type
 
 jacuzzi display
