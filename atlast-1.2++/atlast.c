@@ -4123,6 +4123,20 @@ prim P_strcmp() 		      /* Compare top two strings on stack */
     Pop;
 }
 
+prim P_strcasecmp() 		      /* Compare top two strings on stack */
+{
+    int i;
+
+    Sl(2);
+    if( ath_safe_memory == Truth) {
+        Hpc(S0);
+        Hpc(S1);
+    }
+    i = strcasecmp((char *) S1, (char *) S0);
+    S1 = (i == 0) ? 0L : ((i > 0) ? 1L : -1L);
+    Pop;
+}
+
 prim P_strchar()		      /* Find character in string */
 {
     Sl(2);
@@ -6280,6 +6294,7 @@ static struct primfcn primt[] = {
     {"0S+", P_strcat},
     {"0STRLEN", P_strlen},
     {"0STRCMP", P_strcmp},
+    {"0STRCASECMP", P_strcasecmp},
     {"0STRCHAR", P_strchar},
     {"0SUBSTR", P_substr},
     {"0COMPARE", P_strcmp},

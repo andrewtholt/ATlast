@@ -1,0 +1,81 @@
+\ =====================================================================
+\ tasker.atl - Infinite, Stable Cooperative Multitasking for ATLAST
+\ =====================================================================
+
+\ ---------------------------------------------------------------------
+\ 1. Scheduler Configuration & Storage
+\ ---------------------------------------------------------------------
+10 CONSTANT MAX-TASKS
+VARIABLE TASK-COUNT
+VARIABLE CURRENT-TASK
+CREATE TASK-QUEUE MAX-TASKS CELLS ALLOT
+
+: INIT-SCHEDULER ( -- )
+    0 TASK-COUNT ! 
+    0 CURRENT-TASK !
+    TASK-QUEUE MAX-TASKS CELLS 0 FILL ;
+
+: ADD-TASK ( xt -- )
+    TASK-COUNT @ MAX-TASKS >= IF 
+        " Error: Task queue full!\n" TYPE DROP
+    ELSE
+        TASK-QUEUE TASK-COUNT @ CELLS + !
+        1 TASK-COUNT +!
+    THEN ;
+
+\ ---------------------------------------------------------------------
+\ 2. Definition of Cooperative Tasks (State Machines)
+\ ---------------------------------------------------------------------
+VARIABLE COUNTER-A
+VARIABLE COUNTER-B
+
+: STEP-TASK-A ( -- )
+    1 COUNTER-A +!
+    " [Task A] Counter is: " TYPE COUNTER-A @ . " \n" TYPE ;
+
+: STEP-TASK-B ( -- )
+    1 COUNTER-B +!
+    COUNTER-B @ 3 MOD 0= IF
+        " [Task B] Heartbeat signal sent.\n" TYPE
+    THEN ;
+
+\ ---------------------------------------------------------------------
+\ 3. The Safe Batch Running Engine
+\ ---------------------------------------------------------------------
+: RUN-BATCH ( n -- )
+    0 DO
+        TASK-COUNT @ 0> IF
+            \ Execute the active task slice
+            CURRENT-TASK @ CELLS TASK-QUEUE + @ EXECUTE
+            
+            \ Advance task index safely using mathematical wrap
+            CURRENT-TASK @ 1+ TASK-COUNT @ MOD CURRENT-TASK !
+        THEN
+    LOOP ;
+
+\ ---------------------------------------------------------------------
+\ 4. Initialization and Infinite Startup Routine
+\ ---------------------------------------------------------------------
+: START ( -- )
+    INIT-SCHEDULER
+    0 COUNTER-A !
+    0 COUNTER-B !
+    
+    \ Register the execution tokens (XT) into the round-robin queue
+    ['] STEP-TASK-A ADD-TASK
+    ['] STEP-TASK-B ADD-TASK
+    
+    " Starting cooperative multitasker framework...\n" TYPE
+    
+    \ Top-level engine driver loop
+    BEGIN
+        \ Run a safe batch of steps. 
+        \ When this completes, ATLAST entirely resets the internal loop registers.
+        20000 RUN-BATCH
+        
+        \ Small heartbeat to show a batch cycle refreshed cleanly
+        " --- Batch Boundary Refreshed Safely ---\n" TYPE
+    AGAIN ;
+
+\ Execute the application
+START
