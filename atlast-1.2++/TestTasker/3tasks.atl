@@ -1,0 +1,58 @@
+\ =====================================================================
+\ three_tasks.atl - Three-Task Cooperative Model
+\ =====================================================================
+
+\ 1. Define 4 task nodes for our circular ring
+CREATE TCB-MAIN 0 ,
+CREATE TCB-A    0 ,
+CREATE TCB-B    0 ,
+CREATE TCB-C    0 , \ <--- New Task Node Memory Allocation
+
+VARIABLE CHASER-TASK
+
+\ The Core Switcher Word
+: YIELD ( -- )
+    CHASER-TASK @ @ CHASER-TASK ! ;
+
+\ ---------------------------------------------------------------------
+\ 2. The Worker Tasks (Flat, No Internal Infinite Loops)
+\ ---------------------------------------------------------------------
+: RUN-TASK-A ( -- )
+    " [Task A] Hello World!\n" TYPE
+    500 ms
+    YIELD ;
+
+: RUN-TASK-B ( -- )
+    " [Task B] Running second action...\n" TYPE
+    500 ms
+    YIELD ;
+
+: RUN-TASK-C ( -- ) \ <--- New Task Definition
+    " [Task C] Third process executing...\n" TYPE
+    500 ms
+    YIELD ;
+
+\ ---------------------------------------------------------------------
+\ 3. Setup and Runtime Execution
+\ ---------------------------------------------------------------------
+: START ( -- )
+    \ Link the tasks into an infinite circle:
+    \ MAIN -> A -> B -> C -> MAIN
+    TCB-A    TCB-MAIN !
+    TCB-B    TCB-A !
+    TCB-C    TCB-B !    \ <--- B now links to C instead of MAIN
+    TCB-MAIN TCB-C !    \ <--- C loops back to the supervisor MAIN
+    
+    TCB-MAIN CHASER-TASK ! \ Set starting point
+
+    " Multitasker with 3 tasks started. Press Ctrl+C to stop.\n" TYPE
+    
+    \ The master loop executes all three tasks sequentially
+    BEGIN
+        RUN-TASK-A
+        RUN-TASK-B
+        RUN-TASK-C      \ <--- Fired sequentially in the loop
+        YIELD
+    AGAIN ;
+
+START
