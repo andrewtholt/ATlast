@@ -635,6 +635,12 @@ Description:
 Usage:
     verbose @
 
+Name:   strcasecmp
+Stack:  "s1" "s2" -- flag
+Description:
+    Compare the two strings, irrespective of case and return 0 if they match,nson-zero
+    if they dont.
+
 --------- HERE ---------
 
 Name:	redis-get-string
