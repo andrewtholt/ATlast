@@ -51,18 +51,23 @@ void mkMsg(void *from, struct cmdMessage *msg, char *cmd, char *key, char *value
 
 }
 #endif
-struct utsname unameInfo;
+// struct utsname unameInfo;
+/*
 #define OS_UNKNOWN 0
 #define OS_LINUX 1
 
 #define CPU_UNKNOWN 0
 #define CPU_X86_64 4
 #define CPU_AARCH64 7
+*/
 
+/*
 prim ATH_uname() {
     int rc = uname(&unameInfo);
 }
+*/
 
+/*
 prim ATH_os() {
     Sl(0);
     So(1);
@@ -123,7 +128,7 @@ prim ATH_dotuname() {
     printf("CPU:\t\t%s\n",unameInfo.machine);
     printf("Hostname:\t%s\n",unameInfo.nodename);
 }
-
+*/
 
 
 prim ATH_initRamBlocks() {
@@ -173,6 +178,7 @@ prim ATH_getenv() {
 */
 
 #ifdef SYSVIPC
+/*
 // name -- fd
 prim ATH_shmOpen() {
     int shmFd;
@@ -199,14 +205,15 @@ prim ATH_shmSize() {
     length = (off_t) S0;
     shmFd = (int)S1;
     
-    /* configure the size of the shared memory segment */
+    // configure the size of the shared memory segment
 	ftruncate(shmFd,length);
     Pop2;
 }
+*/
 #endif
 
 // fd size -- ptr
-
+/*
 prim ATH_mmap() {
     void *ptr;
     Sl(2);
@@ -217,7 +224,9 @@ prim ATH_mmap() {
     Pop;
     S0=(stackitem)ptr;
 }
+*/
 
+/*
 // msg -- 
 prim ATH_perror() {
     
@@ -229,6 +238,7 @@ prim ATH_perror() {
     errno=0;
 //    Pop;
 }
+*/
 
 extern char *user_args[];
 extern int user_argn;
@@ -290,20 +300,19 @@ static struct primfcn extras[] = {
     {"0INIT-RAM", ATH_initRamBlocks},
 //    {"0GETENV", ATH_getenv},
 //    {"0PUTENV", ATH_putenv},
-    {"0MMAP", ATH_mmap},
-#warning("--- HERE")
+//    {"0MMAP", ATH_mmap},
 #ifdef SYSVIPC
 #warning("System V IPC")
-    {"0SHM-SIZE", ATH_shmSize},
-    {"0SHM-OPEN", ATH_shmOpen},
+//    {"0SHM-SIZE", ATH_shmSize},
+//    {"0SHM-OPEN", ATH_shmOpen},
 #endif
-    {"0PERROR", ATH_perror},
+//    {"0PERROR", ATH_perror},
 //    {"0TESTING", crap},
-    {"0UNAME",ATH_uname},
-    {"0OS",ATH_os},
-    {"0CPU",ATH_cpu},
-    {"0HOSTNAME",ATH_hostname},
-    {"0.UNAME",ATH_dotuname},
+//    {"0UNAME",ATH_uname},
+//    {"0OS",ATH_os},
+//    {"0CPU",ATH_cpu},
+//    {"0HOSTNAME",ATH_hostname},
+//    {"0.UNAME",ATH_dotuname},
     {"0ARGN",ATH_argn},
     {"0ARGC",ATH_argc},
     {NULL, (codeptr) 0}

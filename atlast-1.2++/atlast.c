@@ -35,6 +35,8 @@
 
 #if defined(LINUX)
 #include <mqueue.h>
+#include <sys/mman.h>
+ #include <sys/utsname.h>
 #endif
 #if defined(LINUX) || defined(DARWIN)
 #include <unistd.h>
@@ -92,7 +94,6 @@ void athDlexec();
 #include "elco.h"
 
 // extern osPoolId mpool_id;
-
 // extern UART_HandleTypeDef *console;
 #endif
 extern char outBuffer[];
@@ -681,6 +682,135 @@ prim ATH_putenv() {
         }
     }   
 }
+
+// msg --
+prim ATH_perror() {
+
+//    Sl(1);
+    So(0);
+
+//    perror((char *)S0);
+    perror((char *)NULL);
+    errno=0;
+//    Pop;
+}
+// fd size -- ptr
+
+prim ATH_mmap() {
+    void *ptr;
+    Sl(2);
+    So(1);
+
+
+    ptr = mmap(0,S0, PROT_READ | PROT_WRITE, MAP_SHARED, S1, 0);
+    Pop;
+    S0=(stackitem)ptr;
+}
+
+struct utsname unameInfo;
+#define OS_UNKNOWN 0
+#define OS_LINUX 1
+
+#define CPU_UNKNOWN 0
+#define CPU_X86_64 4
+#define CPU_AARCH64 7
+
+prim ATH_uname() {
+    int rc = uname(&unameInfo);
+}
+
+prim ATH_os() {
+    Sl(0);
+    So(1);
+
+    int os = OS_UNKNOWN;
+
+    int ret = strcmp(unameInfo.sysname,"Linux");
+
+    if( ret == 0) {
+        os = OS_LINUX;
+    } else {
+        os = OS_UNKNOWN;
+    }
+    Push=os ;
+}
+
+
+prim ATH_cpu() {
+    Sl(0);
+    So(1);
+
+    int cpu = CPU_UNKNOWN;
+
+    int ret = strcmp(unameInfo.machine,"x86_64");
+
+    if (ret == 0) {
+        cpu = CPU_X86_64;
+    }
+
+    ret = strcmp(unameInfo.machine,"aarch64");
+
+    if(ret == 0) {
+        cpu = CPU_AARCH64;
+    }
+
+    Push=cpu;
+}
+
+prim ATH_hostname() {
+    Sl(0);
+    So(0);
+
+    char *ptr;
+
+    ptr=(char *)atl_body(pad);
+
+    char  *ret=strcpy(ptr,unameInfo.nodename);
+
+}
+
+prim ATH_dotuname() {
+    int rc = uname(&unameInfo);
+
+    printf("\n");
+    printf("OS:\t\t%s\n",unameInfo.sysname);
+    printf("CPU:\t\t%s\n",unameInfo.machine);
+    printf("Hostname:\t%s\n",unameInfo.nodename);
+}
+#ifdef SYSVIPC
+// name -- fd
+prim ATH_shmOpen() {
+    int shmFd;
+    Sl(1);
+    So(2);
+
+    shmFd=shm_open( (char *)S0, O_CREAT | O_RDWR, 0600 );  // only the owners processes can access
+
+    if(shmFd < 0) {
+        S0 = true;
+    } else {
+        S0 = shmFd;
+        Push=false ;
+    }
+}
+
+// file_descriptor size ---
+prim ATH_shmSize() {
+    off_t length;
+    int shmFd;
+
+    Sl(2);
+
+    length = (off_t) S0;
+    shmFd = (int)S1;
+
+    /* configure the size of the shared memory segment */
+    ftruncate(shmFd,length);
+    Pop2;
+}
+
+#endif
+
 
 #endif // LINUX
 
@@ -6526,6 +6656,17 @@ static struct primfcn primt[] = {
     {"0EXPECT", ATH_expect},
     {"0GETENV", ATH_getenv},
     {"0PUTENV", ATH_putenv},
+    {"0PERROR", ATH_perror},
+    {"0MMAP", ATH_mmap},
+    {"0UNAME",ATH_uname},
+    {"0OS",ATH_os},
+    {"0CPU",ATH_cpu},
+    {"0HOSTNAME",ATH_hostname},
+    {"0.UNAME",ATH_dotuname},
+#ifdef SYSVIPC
+    {"0SHM-SIZE", ATH_shmSize},
+    {"0SHM-OPEN", ATH_shmOpen},
+#endif
 #endif
 
 #ifdef LIBSER

@@ -270,9 +270,8 @@ int main(int argc, char *argv[]) {
 #warning "Linux"
 #ifdef EXTRAS
 #warning "Extras"
-    extern void extrasLoad();
-
-    extrasLoad();
+//    extern void extrasLoad();
+//    extrasLoad();
 #endif
 
 #ifdef CPP_EXTRAS
