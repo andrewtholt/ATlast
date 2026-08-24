@@ -5,6 +5,7 @@ struct
     64 chars field topic
     32 chars field msg
      1 chars field msg-type
+     1 chars field dirty
      8 chars field truth
 endstruct /mqtt
 
@@ -19,6 +20,10 @@ init
 "Topic" jacuzzi topic strcpy
 "Msg"   jacuzzi msg strcpy
 
+: set-dirty \ flag struct-ptr --
+    dirty c!
+;
+
 : set-topic   \ "topic" *struct -- 
     topic strcpy
 ;
@@ -27,8 +32,11 @@ init
     topic pad strcpy
 ;
             
-: set-msg
+: set-msg  \ "string" struct-ptr ---
+    dup >r
     msg strcpy
+    -1 r> set-dirty
+
 ;
 
 : set-type \ "B|S|N" --
@@ -38,7 +46,11 @@ init
 : set-truth \ "string" --
     truth strcpy
 ;
-    
+   
+: get-dirty \ struct-ptr -- f
+    dirty c@
+;
+
 
 : get-type \ struct-addr --- "B|S|N"
     msg-type c@
@@ -94,7 +106,8 @@ init
     dup "Topic:\t" type topic type cr
     dup "Msg  :\t" type msg type cr
     dup "Type :\t" type msg-type c@ emit cr
-        "Truth:\t" type truth type cr
+    dup "Truth:\t" type truth type cr
+        "Dirty:\t" type dirty c@ . cr
 ;
 
 "/home/Jacuzzi/LWT" jacuzzi set-topic

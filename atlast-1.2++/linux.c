@@ -148,6 +148,7 @@ prim crap() {
 }
 */
 
+/*
 // <ptr> name -- ptr
 prim ATH_getenv() {
     Sl(1); // On entry will use this many.
@@ -169,6 +170,7 @@ prim ATH_getenv() {
         S0=0;
     }
 }
+*/
 
 #ifdef SYSVIPC
 // name -- fd
@@ -256,6 +258,7 @@ prim ATH_argc() {
     Push=user_argn ;
 }
 
+/*
 prim ATH_putenv() {
     char *env_string;
     char *env;
@@ -279,13 +282,14 @@ prim ATH_putenv() {
         }
     }
 }
+*/
 
 
 
 static struct primfcn extras[] = {
     {"0INIT-RAM", ATH_initRamBlocks},
-    {"0GETENV", ATH_getenv},
-    {"0PUTENV", ATH_putenv},
+//    {"0GETENV", ATH_getenv},
+//    {"0PUTENV", ATH_putenv},
     {"0MMAP", ATH_mmap},
 #warning("--- HERE")
 #ifdef SYSVIPC

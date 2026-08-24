@@ -636,7 +636,53 @@ void ATH_expect() {
     Push= idx;
 }
 
-#endif
+// <ptr> name -- ptr
+prim ATH_getenv() {
+    Sl(1); // On entry will use this many.
+    So(1); // on exit will leave this many.
+
+    char *name=(char *)S0;
+    char *tmp;
+
+//    Pop2;
+
+    char *ptr;
+
+    ptr = (char *) atl_body(pad);
+    tmp = getenv(name);
+    if(!tmp) {
+        S0=-1;
+    } else {
+        strcpy(ptr, tmp);
+        S0=0;
+    }
+}
+
+prim ATH_putenv() {
+    char *env_string;
+    char *env;
+    char *val;
+
+    Sl(2);
+    So(1);
+
+    env=(char *)S1;
+    val=(char *)S0;
+    Pop;
+
+    if(asprintf(&env_string,"%s=%s",env,val) == -1) {
+        S0 =-1;
+    } else {
+        if( putenv(env_string) !=0) {
+            free(env_string);
+            S0=0;
+        } else {
+            S0=-1;
+        }
+    }   
+}
+
+#endif // LINUX
 
 // #ifdef ATH
 void ATH_Features() {
@@ -6478,6 +6524,8 @@ static struct primfcn primt[] = {
     {"0KEY",ATH_key},
     {"0?KEY",ATH_qkey},
     {"0EXPECT", ATH_expect},
+    {"0GETENV", ATH_getenv},
+    {"0PUTENV", ATH_putenv},
 #endif
 
 #ifdef LIBSER
