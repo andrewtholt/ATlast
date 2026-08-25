@@ -9,16 +9,16 @@ struct
      8 chars field truth
 endstruct /mqtt
 
-0 value jacuzzi
+\ 0 value jacuzzi
+\ 
+\ : init
+\     here /mqtt allot to jacuzzi
+\ ;
+\ 
+\ init
 
-: init
-    here /mqtt allot to jacuzzi
-;
-
-init
-
-"Topic" jacuzzi topic strcpy
-"Msg"   jacuzzi msg strcpy
+\ "Topic" jacuzzi topic strcpy
+\ "Msg"   jacuzzi msg strcpy
 
 : set-dirty \ flag struct-ptr --
     dirty c!
@@ -110,6 +110,16 @@ init
         "Dirty:\t" type dirty c@ . cr
 ;
 
+10 1 cell array items
+0 value item-index
+0 value jacuzzi
+
+
+: init
+    here /mqtt allot to jacuzzi
+;
+
+init
 "/home/Jacuzzi/LWT" jacuzzi set-topic
 \ "Offline" jacuzzi set-msg
 \ char B  jacuzzi set-type
@@ -122,4 +132,17 @@ init
 char B  jacuzzi set-type
 
 jacuzzi display
+
+jacuzzi item-index items !
+
+: test
+    10 0 do
+        i dup . "\t" type items @ . cr
+
+        i items @ ?dup 0<> if
+           display 
+        then
+    loop
+;
+
 
