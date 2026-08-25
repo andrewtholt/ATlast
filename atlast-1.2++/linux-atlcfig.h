@@ -13,7 +13,7 @@
 // LINUX should apply to any UNIX like system, such as
 // MacOS X, Solaris, QNX, Cygwin ....
 // #define LINUX
-#define INDIVIDUALLY
+// #define INDIVIDUALLY
 
 #define ARRAY                 /* Array subscripting words */
 #define BREAK                 /* Asynchronous break facility */

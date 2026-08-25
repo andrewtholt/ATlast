@@ -35,7 +35,7 @@
 //#define DOUBLE                  /* Double word primitives (2DUP) */
 //#define EVALUATE                /* The EVALUATE primitive */
 //#define FILEIO                  /* File I/O primitives */
-//#define MATH                    /* Math functions */
+#define MATH                    /* Math functions */
 //#define MEMMESSAGE              /* Print message for stack/heap errors */
 //#define PROLOGUE                /* Prologue processing and auto-init */
 //#define REAL                    /* Floating point numbers */

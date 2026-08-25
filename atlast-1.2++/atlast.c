@@ -107,12 +107,21 @@ static int token( char **);
     application.  */
 
 #ifdef CUSTOM
+#pragma message ("Custom defined")
 #include "atlcfig.h"
+#else
+#pragma message ("Custom undefined")
 #endif
 
 /*  Subpackage configuration.  If INDIVIDUALLY is defined, the inclusion
     of subpackages is based on whether their compile-time tags are
     defined.  Otherwise, we automatically enable all the subpackages.  */
+
+#ifdef INDIVIDUALLY
+#pragma message ("INDIVIDUALLY")
+#else
+#pragma message ("NOT INDIVIDUALLY")
+#endif
 
 #ifndef INDIVIDUALLY
 #define ARRAY			      /* Array subscripting words */
@@ -139,9 +148,11 @@ static int token( char **);
 #endif /* !INDIVIDUALLY */
 
 
+#pragma message ("Math undefined")
 #include "atldef.h"
 
 #ifdef MATH
+#pragma message ("Math defined")
 #include <math.h>
 #endif
 
