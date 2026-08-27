@@ -1,0 +1,75 @@
+#include <stdbool.h>
+#ifndef __ATLAST_CFIG
+#define __ATLAST_CFIG
+// TODO Remove all references to EMBEDDED in io words.
+// Output to a buffer is the norm.
+#define EMBEDDED            // Mods for use in an embedded system.
+                            // anything that results in output to stdout, or stderr goes
+                            // to a global buffer.
+                            //
+// Define OS platform here
+// #define FREERTOS
+//
+// LINUX should apply to any UNIX like system, such as
+// MacOS X, Solaris, QNX, Cygwin ....
+// #define LINUX
+// #define INDIVIDUALLY
+
+#define ARRAY                 /* Array subscripting words */
+#define BREAK                 /* Asynchronous break facility */
+#define COMPILERW             /* Compiler-writing words */
+#define CONIO                 /* Interactive console I/O */
+#define DEFFIELDS             /* Definition field access for words */
+#define DOUBLE                /* Double word primitives (2DUP) */
+#define EVALUATE              /* The EVALUATE primitive */
+// #define FILEIO                /* File I/O primitives */
+// #define MATH                  /* Math functions */
+#define MEMMESSAGE            /* Print message for stack/heap errors */
+#define MEMSTAT
+#define PROLOGUE              /* Prologue processing and auto-init */
+// TODO Not defining real breaks build
+// #define REAL                  /* Floating point numbers */
+#define SHORTCUTA             /* Shortcut integer arithmetic words */
+#define SHORTCUTC             /* Shortcut integer comparison */
+#define STRING                /* String functions */
+// #define SYSTEM                /* System command function */
+#define TRACE                 /* Execution tracing */
+#define WALKBACK              /* Walkback trace */
+#define WORDSUSED             /* Logging of words used and unused */
+#define BANNER
+// #define ATH
+#define ANSI                /* Enable ANSI compatability words */
+// #define LIBSER
+#define NVRAMRC
+// #define EXTRAS
+// #define PUBSUB              // Use the Small pub/sub system
+// #define PTHREAD             // Pthreaded pubsub
+// 
+// #define Keyhit
+// 
+// Stuff added by me
+//
+// #define ATH
+// 
+// #define SOCKET
+
+// char outBuffer[255];
+
+#ifdef PUBSUB
+#ifdef PTHREAD
+#include <pthread.h>
+extern pthread_mutex_t lock;
+
+/*
+struct cmdMessage {
+    char sender[32];    // name of senders message Q
+    uint8_t count;
+    char cmd[8];        // Command
+    char key[16];       // Key to search on.
+    char defn[32];      // Value.
+};
+*/
+#endif
+#endif
+
+#endif

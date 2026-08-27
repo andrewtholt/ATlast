@@ -1,0 +1,131 @@
+( )
+( Forth data structures from Forth Dimension UK )
+( )
+
+: dofield
+does> ( c d )
+ dup @  ( c d o )
+ swap   ( c o d )
+ cell+ @      ( c o s )
+ -rot   ( s c o )
+ + swap 
+ drop ( don't often need length )
+;
+
+: field   ( offset size )
+  create 
+    2dup  
+    swap 
+    ,    
+    ,   
+    +  
+  dofield
+;
+
+0 constant struct
+
+: endstruct
+  create
+    ,
+  does>
+    @
+;
+
+\ Example
+
+\ struct
+\ 10 chars field first-name
+\ 20 chars field  surname
+\ endstruct name
+\ 
+\ name allocate abort" Allocation Failed" value name-buffer
+\
+\ name-buffer name erase
+\ 
+\ name-buffer surname
+\
+\ The above returns the address and the size of the surname field: e.g:
+\
+\ 1234 20
+
+3 constant tst_rx
+
+: qid@
+drop 0xff
+;
+
+: message!
+;
+
+0 memsafe
+
+1 constant TST_HARNESS
+
+TST_HARNESS constant iam
+
+struct
+    cell field sender
+    1 chars field fields
+    8 chars field cmd
+    16 chars field key
+    32 chars field value
+endstruct /msg
+
+variable init_run
+variable out
+
+
+: init
+	init_run @ 0= if
+        here /msg allot out !
+        out @ /msg erase
+
+        -1 init_run !
+	then
+;
+
+
+: mkmsg
+    init_run if
+        iam qid@ out @ sender !
+        3 out @ fields !
+        "SET"  out @ cmd strcpy
+        "RUN"  out @ key strcpy
+        "TRUE" out @ value strcpy
+    then
+;
+
+: mkmsg-sub
+    init_run if
+        iam qid@ out @ sender !
+        2 out @ fields !
+        "SUB"  out @ cmd strcpy
+        "COUNTER"  out @ key strcpy
+    then
+;
+
+
+: send
+    init_run if
+        out @  tst_rx qid@ message!
+    then
+;
+
+
+: disp
+    init_run if
+        out @ /msg dump
+    then
+;
+
+mkdb constant db
+
+: eval-msg \ addr
+    >r
+    db
+    r@ key  
+    r> value 
+
+    add-record
+;
+

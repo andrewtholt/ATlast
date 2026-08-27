@@ -1,0 +1,9 @@
+
+mk-string fred
+
+32 string  out
+
+"Hello" fred s!
+
+
+

@@ -1,0 +1,11 @@
+
+20 1 4 array my-list
+
+\ store 255 at array[1]
+\ 
+255 1 my-list !
+\ 
+\ restrieve value from array[1]
+\
+1 my-list @
+

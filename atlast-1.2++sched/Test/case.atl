@@ -1,0 +1,18 @@
+
+: test-switch
+case
+    10 of 1000 endof
+    20 of 2000 endof
+    30 of 3000 endof
+endcase
+;
+
+: print-digit
+case 
+    1 of "One\n" type endof
+    2 of "Two\n" type endof
+    3 of "Three"  type endof
+    "Unknown digit\n" type dup .
+endcase
+;
+

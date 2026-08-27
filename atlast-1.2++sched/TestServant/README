@@ -1,0 +1,29 @@
+
+To test servant
+
+run atlast
+
+forth -v -I init.atl
+
+Then load the test
+
+include tstServant.atl
+
+map map-dump 
+
+displays the results
+
+To test tst1.sh
+
+run atlast
+
+forth -v -I init.atl
+
+Then load the test
+
+include tstServant1.atl
+
+fred . cr
+
+displays the results
+

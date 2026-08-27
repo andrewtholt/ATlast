@@ -1,0 +1,35 @@
+--- /home/claude/atlast_orig/atlast-1.2++/Makefile	2026-08-06 09:05:06.000000000 +0000
++++ /home/claude/atlast_delivery/Makefile	2026-08-27 11:55:10.461438527 +0000
+@@ -9,7 +9,7 @@
+ # LIBRARIES += -lrt -lpthread
+ # LIBRARIES = -L/usr/local/lib -lsmall -lstdc++ -lrt -lpthread
+ # LIBRARIES = -L/usr/local/lib -lser
+-LIBRARIES += -lhiredis -lrt
++LIBRARIES += -lrt
+ # ATLCONFIG += -DFILEIO -DATH -DCUSTOM -DALIGNMENT -DEXPORT -DREADONLYSTRINGS # -DSOCKET
+ ATLCONFIG += -DALIGNMENT -DEXPORT -DREADONLYSTRINGS # -DSOCKET
+ LDFLAGS +=-Wl,--no-as-needed
+@@ -17,7 +17,12 @@
+ # CFLAGS += $(ATLCONFIG) -Wfatal-errors -g -fPIC  -DLINUX -w -fpermissive # -Wwrite-strings
+ CFLAGS += $(ATLCONFIG) -Wl,--no-as-needed -Wfatal-errors -g -fPIC  -DLINUX -w -fpermissive # -Wwrite-strings
+ 
+-ATLOBJ += atlast.o atlmain.o extraFunc.o
++# extraFunc.o (and the -lhiredis it needs) are only pulled in by
++# profiles that actually set -DCPP_EXTRAS (extras.mk, mqtt.mk) --
++# see their own ATLOBJ/LIBRARIES lines. Every other profile
++# (basic/linux/small/uclinux/sched/...) no longer needs hiredis
++# installed just to build.
++ATLOBJ += atlast.o atlmain.o
+ 
+ APPS = atlast atlsmall # primdeftest
+ 
+@@ -35,6 +40,9 @@
+ mqtt.o:	mqtt.cpp ringBuffer.o
+ 	$(CC) $(CFLAGS) -c mqtt.cpp -o mqtt.o 
+ 
++sched.o:	sched.cpp sched.h
++	$(CC) $(CFLAGS) -c sched.cpp -o sched.o
++
+ atlast: $(ATLOBJ) # mqtt.o
+ 	$(CC) $(CFLAGS) $(INCLUDE) -Wl,--no-as-needed $(ATLOBJ) -o atlast $(LIBRARIES)
+ 

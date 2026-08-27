@@ -1,0 +1,15 @@
+
+To test
+
+run:
+
+forth -v
+
+Then:
+
+include mqtt1.atl
+
+then:
+
+test
+

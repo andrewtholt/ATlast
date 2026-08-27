@@ -1,0 +1,11 @@
+
+100 string pattern
+
+"this;is;a;test" pattern strcpy
+
+pattern ";" strtok \ -- ptr len First token
+
+0 ";" strtok    \ -- ptr len Next token
+
+
+

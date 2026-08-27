@@ -1,0 +1,15 @@
+\ make sure stack is clear
+
+clear
+
+1024 string buffer
+
+"./tst.sh" buffer 1024 servant
+
+cr
+buffer 100 dump
+
+.s cr
+buffer evaluate
+.s cr
+

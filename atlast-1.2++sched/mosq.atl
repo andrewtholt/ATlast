@@ -1,0 +1,11 @@
+
+255 string buffer
+
+mk-string-list constant topic-list 
+
+"/home/house/ChristmasTree/cmnd/power" buffer strcpy
+
+buffer topic-list split-topic
+
+topic-list string-list-dump
+

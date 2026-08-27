@@ -1,0 +1,19 @@
+
+To generate a test:
+
+Enter the following:
+    ./toAtlast.py environ dest.atl
+
+then:
+    atlast -v -I dest.atl
+
+then try the following:
+    environ map-dump
+
+You will see the keys, and values
+
+then try:
+    environ map-count 
+
+The number of keys is now on the TOS.
+

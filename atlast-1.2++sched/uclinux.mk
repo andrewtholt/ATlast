@@ -1,0 +1,7 @@
+CC=arm-uclinuxeabi-gcc
+
+BASIC=""
+ATLCONFIG=-DLINUX -DUCLINUX
+ATLOBJ=linux.o
+# ATLCONFIG=-DMQTT
+

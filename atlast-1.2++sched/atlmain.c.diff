@@ -1,0 +1,14 @@
+--- /home/claude/atlast_orig/atlast-1.2++/atlmain.c	2026-08-18 12:25:16.000000000 +0000
++++ /home/claude/atlast_delivery/atlmain.c	2026-08-27 11:52:37.506122936 +0000
+@@ -285,6 +285,11 @@
+     extern void mqttLoad();
+     mqttLoad();
+ #endif
++
++#ifdef SCHED
++    extern void schedLoad();
++    schedLoad();
++#endif
+     int8_t len=0;
+     uint8_t lineBuffer[MAX_LINE];
+     char t[132];

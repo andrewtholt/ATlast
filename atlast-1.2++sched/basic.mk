@@ -1,0 +1,4 @@
+CC=gcc
+BASIC=""
+ATLCONFIG=-DLINUX
+

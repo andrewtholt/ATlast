@@ -1,0 +1,99 @@
+\ Test/vocabularies.atl
+\ Test suite for Vocabularies and Search Order in ATLAST
+
+"--- Testing Vocabularies and Search Order ---" type CR
+
+\ 1. Initial State
+"Initial search order and vocabs:" type CR
+ORDER
+VOCS
+
+\ 2. Create Vocabulary EDITOR
+VOCABULARY EDITOR
+"After VOCABULARY EDITOR:" type CR
+VOCS
+
+\ 3. Define words in EDITOR
+ALSO EDITOR DEFINITIONS
+"Search order while defining in EDITOR:" type CR
+ORDER
+
+: HELLO-ED "Hello from EDITOR vocabulary!" type CR ;
+: CMD1 100 . CR ;
+: SHARED-FN 111 . CR ;
+
+"Words defined in EDITOR:" type CR
+WORDS
+
+\ 4. Return to FORTH
+ONLY FORTH DEFINITIONS
+"Search order after ONLY FORTH DEFINITIONS:" type CR
+ORDER
+
+: HELLO-FORTH "Hello from FORTH vocabulary!" type CR ;
+: CMD2 200 . CR ;
+: SHARED-FN 222 . CR ;
+
+"Testing FORTH definitions:" type CR
+HELLO-FORTH
+CMD2
+SHARED-FN
+
+\ 5. Verify Isolation: ED words not visible in FORTH
+"Testing isolation (EDITOR words should not shadow unless in search order):" type CR
+SHARED-FN \ should print 222
+
+\ 6. Add EDITOR to search order
+ALSO EDITOR
+"Search order with ALSO EDITOR:" type CR
+ORDER
+
+"Testing EDITOR precedence over FORTH:" type CR
+SHARED-FN \ should print 111
+CMD1      \ should print 100
+CMD2      \ should print 200 from FORTH
+
+\ 7. Drop EDITOR with PREVIOUS
+PREVIOUS
+"Search order after PREVIOUS:" type CR
+ORDER
+SHARED-FN \ should print 222
+
+\ 8. Test CONTEXT and CURRENT variables
+"Testing CONTEXT and CURRENT variables:" type CR
+ALSO EDITOR
+: TEST-VARS-1
+    CONTEXT @ CURRENT @ <> IF "PASS: CONTEXT != CURRENT" type CR THEN
+;
+TEST-VARS-1
+DEFINITIONS
+: TEST-VARS-2
+    CONTEXT @ CURRENT @ = IF "PASS: DEFINITIONS set CURRENT = CONTEXT" type CR THEN
+;
+TEST-VARS-2
+
+\ 9. Test ANSI Search Order words
+ONLY FORTH DEFINITIONS
+VOCABULARY GRAPHICS
+ALSO GRAPHICS
+GET-ORDER
+"GET-ORDER returned count: " type . CR
+CLEAR
+
+-1 SET-ORDER
+"After -1 SET-ORDER (default reset):" type CR
+ORDER
+
+\ 10. Test FORGET with vocabularies
+"Testing FORGET on vocabulary:" type CR
+VOCABULARY TEMP-VOC
+ALSO TEMP-VOC DEFINITIONS
+: TEMP-W 999 . CR ;
+VOCS
+ONLY FORTH DEFINITIONS
+FORGET TEMP-VOC
+"After FORGET TEMP-VOC:" type CR
+VOCS
+ORDER
+
+"--- All vocabulary tests completed successfully ---" type CR

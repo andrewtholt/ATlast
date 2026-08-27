@@ -1,0 +1,125 @@
+
+include "struct.atl"
+
+struct
+      1 chars field msg-flag
+    64 chars field topic
+    1024 chars field payload
+endstruct /msg
+
+here /msg allot constant msg
+here /msg allot constant safe
+
+here 64 allot constant value 
+
+msg /msg erase
+safe /msg erase
+
+variable init-run
+variable client
+
+0 init-run !
+
+: init
+    init-run @ 0= if
+        mqtt-init if
+            "mqtt-init failed" type cr
+            abort
+        then
+        "TEST" msg mqtt-new 0= if
+            client !
+\            client @ "192.168.0.65" 1883 mqtt-client
+            client @ "192.168.10.124" 1883 mqtt-client
+
+            0= if
+                "Init success"
+            else
+                "Init failed"
+            then
+            type cr
+        else
+            "mqtt-new failed" type cr
+            abort
+        then
+        -1 init-run !
+    then
+;
+
+: stuff
+    clear client @ -1 mqtt-loop 
+;
+
+: run
+    begin
+        stuff if 
+            "Error " type . cr
+        else
+            .s
+        then
+        200 ms
+    again
+;
+
+: test
+    init
+
+    client @ "/home/house/DRRight/STATE" mqtt-sub if
+        "mqtt-sub failed" type cr
+        abort
+    then
+
+    client @ "/home/environment/TIME" mqtt-sub if
+        "mqtt-sub failed" type cr
+        abort
+    then
+
+
+    "Start loop" type cr
+
+    client @ mqtt-loop-start if
+        "mqtt-loop failed" type cr
+        abort
+    then
+;
+
+: publish
+    init
+    client @ "/home/office/proliant/testing" "ATLAST" mqtt-pub .s
+
+;
+
+mk-string t
+mk-string p
+mk-string dest
+100 string buffer
+
+: mqtt-dump
+    mqtt-q-empty if
+        "Nothing to say" type .s cr
+    else
+        t p mqtt-q-get 
+        "Topic :" type t cout cr
+        "Msg   :" type p cout cr
+        "Depth :" type mqtt-q-size . cr
+
+        t s@ here nip "/home/environment/TIME" compare .s cr
+        0 = if 
+            p s@ here nip buffer strcpy 
+            buffer type cr
+        else
+            p "Time" dest json-search
+            dest s@ here nip buffer strcpy
+            buffer 20 dump
+
+        then
+    then
+;
+
+: runner
+    begin
+        mqtt-dump
+        1000 10 * ms
+    again
+;
+
+

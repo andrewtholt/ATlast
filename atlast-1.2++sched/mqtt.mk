@@ -1,0 +1,6 @@
+# CC=gcc
+MQTT=""
+ATLCONFIG=-DFILEIO -DSOCKET -DMQTT -DLINUX -DATH -DCPP_EXTRAS -DEXTRAS
+ATLOBJ=mqtt.o linux.o ringBuffer.o extraFunc.o
+LIBRARIES=-L/usr/lib/x86_64-linux-gnu -lmosquitto -lhiredis
+

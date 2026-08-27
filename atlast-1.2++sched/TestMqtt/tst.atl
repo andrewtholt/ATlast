@@ -1,0 +1,148 @@
+include struct.atl
+
+
+struct
+    64 chars field topic
+    32 chars field msg
+     1 chars field msg-type
+     1 chars field dirty
+     8 chars field truth
+endstruct /mqtt
+
+\ 0 value jacuzzi
+\ 
+\ : init
+\     here /mqtt allot to jacuzzi
+\ ;
+\ 
+\ init
+
+\ "Topic" jacuzzi topic strcpy
+\ "Msg"   jacuzzi msg strcpy
+
+: set-dirty \ flag struct-ptr --
+    dirty c!
+;
+
+: set-topic   \ "topic" *struct -- 
+    topic strcpy
+;
+
+: get-topic \ field-addr -- PAD: content
+    topic pad strcpy
+;
+            
+: set-msg  \ "string" struct-ptr ---
+    dup >r
+    msg strcpy
+    -1 r> set-dirty
+
+;
+
+: set-type \ "B|S|N" --
+    msg-type c!
+;
+
+: set-truth \ "string" --
+    truth strcpy
+;
+   
+: get-dirty \ struct-ptr -- f
+    dirty c@
+;
+
+
+: get-type \ struct-addr --- "B|S|N"
+    msg-type c@
+;
+
+: msg->flag \ "On"|"Online" -- TRUE
+            \ "Off"|"Offline" -- FALSE
+            dup "On" strcmp swap
+            "Online" strcmp and 0=
+;
+
+: get-truth 
+    truth pad strcpy
+;
+
+: is-msg-true \ struct-addr -- f
+    dup msg 
+    swap
+    truth strcasecmp 0=
+;
+
+: get-msg \ struct-addr --
+    dup get-type
+    case
+        66 of \ B
+            "Boolean\n" type
+            msg pad strcpy
+            pad msg->flag
+        endof 
+        83 of \ S
+            "String\n" type 
+            msg pad strcpy
+        endof
+        78 of \ N
+            "Number\n" type 
+            msg pad strcpy
+            pad strint nip
+        endof
+    endcase
+
+;
+
+: test-switch ( n -- )
+    case
+        66 of 1000 endof
+        83 of 2000 endof
+        78 of 3000 endof
+    endcase
+;
+
+
+: display \ *struct --
+    dup "Topic:\t" type topic type cr
+    dup "Msg  :\t" type msg type cr
+    dup "Type :\t" type msg-type c@ emit cr
+    dup "Truth:\t" type truth type cr
+        "Dirty:\t" type dirty c@ . cr
+;
+
+10 1 cell array items
+0 value item-index
+0 value jacuzzi
+
+
+: init
+    here /mqtt allot to jacuzzi
+;
+
+init
+"/home/Jacuzzi/LWT" jacuzzi set-topic
+\ "Offline" jacuzzi set-msg
+\ char B  jacuzzi set-type
+
+\ "54321" jacuzzi set-msg
+\ char N  jacuzzi set-type
+
+"Offline" jacuzzi set-msg
+"Online" jacuzzi set-truth
+char B  jacuzzi set-type
+
+jacuzzi display
+
+jacuzzi item-index items !
+
+: test
+    10 0 do
+        i dup . "\t" type items @ . cr
+
+        i items @ ?dup 0<> if
+           display 
+        then
+    loop
+;
+
+

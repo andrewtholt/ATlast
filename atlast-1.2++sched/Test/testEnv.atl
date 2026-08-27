@@ -1,0 +1,178 @@
+
+\ Run atlast fom fish like this:
+\   FRED="test" atlast -v
+\
+\ Then when atlast is running
+
+16 string ip
+0 value port
+0 value redis-context
+
+: read-env
+	"REDIS_PORT" getenv
+	0= if
+		pad strint nip to port
+        verbose @ 0<> if
+            port . cr
+        then
+	else 
+		"ip getenv failed\n" type
+	then
+
+	"REDIS_IP" getenv
+	0= if
+        pad ip strcpy
+        verbose @ 0<> if
+    		pad type cr
+        then
+	else
+		"getenv failed\n" type
+	then
+
+;
+
+: redis-test
+    pad 20 erase
+    redis-context "GET test" redis-cmd
+    0= if
+        verbose @ 0<> if 
+            "Query success.\n" type
+        then
+    else
+        "Query FAIL.\n" type
+        abort
+    then
+
+    pad 10 dump
+    "Key    :" type
+    pad type cr
+    pad strlen "Key len: " type . " bytes\n" type
+;
+
+: redis-init
+    ip port redis-connect ?dup 0= if
+        "Failed to connect to Redis.\n" type
+        abort
+    else
+        to redis-context
+    then
+
+    redis-context redis-ping 0= if
+        verbose @ 0<> if
+            "Redis connect and query sucess.\n" type
+        then
+    else
+        "Redis init failed.\n" type
+        abort
+    then
+
+;
+
+: redis-get-time
+    redis-context "hget ENVIRONMENT:1001 TIME" redis-cmd
+    0= if
+        verbose @ 0<> if
+            "TIME " type
+            pad type cr
+        then
+    else
+        "Read time failed\n" type
+    then
+;
+
+: redis-get-sunrise
+    redis-context "hget ENVIRONMENT:1001 SUNRISE" redis-cmd
+    0= if
+        verbose @ 0<> if
+            "SUNRISE " type
+            pad type cr
+        then
+    else
+        "Read time failed\n" type
+    then
+;
+
+: redis-get-sunset
+    redis-context "hget ENVIRONMENT:1001 SUNSET" redis-cmd
+    0= if
+        verbose @ 0<> if
+            "SUNSET  " type
+            pad type cr
+        then
+    else
+        "Read time failed\n" type
+    then
+;
+
+: hhmmss-secs
+    pad ":" strtok drop pad strint nip 60 *
+    0 ":" strtok drop pad strint nip +
+
+;
+
+ 0 value time-secs
+ 0 value sunrise-secs
+ 0 value sunset-secs
+1800 constant sun-offset \ 30 Minutes
+360 constant morning-on  \ 06:00
+570 constant morning-off \ 09:30
+990 constant night-on \ 16:30
+1380 constant night-off \ 23:00
+
+: ?daylight
+    sunrise-secs sun-offset - sunset-secs sun-offset + time-secs between
+
+\    time-secs sunrise-secs sun-offset - >=
+\    time-secs sunset-secs sun-offset + <
+\    and
+;
+
+: ?night
+    ?daylight not 
+;
+
+\ If true then switch lights on
+\ otherwise off
+\ 
+: ?lights
+    morning-on morning-off time-secs between
+    night-on night-off time-secs between
+    or
+    ?night and
+;
+
+: test
+    read-env
+    redis-init
+\    redis-test
+
+    redis-get-time
+    hhmmss-secs to time-secs
+
+    redis-get-sunrise
+    hhmmss-secs to sunrise-secs
+
+    redis-get-sunset
+    hhmmss-secs to sunset-secs
+
+    ?lights 
+\    "Lights \n" type
+    0= if 
+        "OFF" type
+    else
+        "ON" type
+    then
+
+    verbose @ 0<> if
+        ?daylight 0<> if
+            "Daylight\n" type
+        else
+            "Night\n" type
+     then
+    then
+;
+
+test
+bye
+
+

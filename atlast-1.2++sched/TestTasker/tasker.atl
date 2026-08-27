@@ -1,0 +1,161 @@
+\ =====================================================================
+\ tasker.atl - Advanced Deadlock-Free Multitasker for ATLAST
+\ =====================================================================
+
+\ ---------------------------------------------------------------------
+\ 1. Constants & Task Control Block (TCB) Definition
+\ ---------------------------------------------------------------------
+\ Task Status Codes
+0 CONSTANT STATE-READY
+1 CONSTANT STATE-SLEEPING
+
+\ Structure of our traditional TCB:
+\ Cell 0: Link Pointer (Points to the next task in the circular chain)
+\ Cell 1: Task Execution State (READY or SLEEPING)
+\ Cell 2: Delay Wake Counter (Number of scheduler ticks to sleep)
+\ Cell 3: Saved Stack Value (Preserves exactly 1 parameter across YIELD)
+CREATE TCB-MAIN   0 , 0 , 0 , 0 ,
+CREATE TCB-A      0 , 0 , 0 , 0 ,
+CREATE TCB-B      0 , 0 , 0 , 0 ,
+
+VARIABLE CHASER-TASK     \ Tracks the currently executing task node
+
+\ Inter-Task Communication (Mailbox Queue)
+VARIABLE MAILBOX-DATA    \ Holds the message payload integer
+VARIABLE MAILBOX-FULL?   \ Flag (0 = empty, -1 = contains message)
+
+\ ---------------------------------------------------------------------
+\ 2. The Traditional YIELD Keyword & Core Extensions
+\ ---------------------------------------------------------------------
+: YIELD ( -- )
+    \ Step A: Preserve the active task's data parameter if present
+    DEPTH 0> IF
+        CHASER-TASK @ 3 CELLS + !   \ Store top of stack into Cell 3
+    THEN
+
+    \ Step B: Circularly advance to the next task node in the chain
+    BEGIN
+        CHASER-TASK @ @ CHASER-TASK !
+        
+        \ Housekeeping: Handle sleeping time delays
+        CHASER-TASK @ 1 CELLS + @ STATE-SLEEPING = IF
+            -1 CHASER-TASK @ 2 CELLS + +! \ Decrement sleep counter
+            
+            \ Safe ATLAST check: Evaluates if counter is less than or equal to 0
+            CHASER-TASK @ 2 CELLS + @ DUP 0< SWAP 0= OR IF
+                STATE-READY CHASER-TASK @ 1 CELLS + ! \ Wake up!
+            THEN
+        THEN
+        
+        \ Keep cycling until we find a READY task
+        CHASER-TASK @ 1 CELLS + @ STATE-READY =
+    UNTIL 
+
+    \ Step C: Restore the next task's parameter context to the stack
+    CHASER-TASK @ 3 CELLS + @ ?DUP IF
+        0 CHASER-TASK @ 3 CELLS + ! \ Clear cell to prevent duplication
+    THEN ;
+
+\ Task Lifecycle Primitives
+: MS-DELAY ( ticks -- )
+    CHASER-TASK @ 2 CELLS + !             \ Set sleep counter duration
+    STATE-SLEEPING CHASER-TASK @ 1 CELLS + ! \ Set state to sleeping
+    YIELD ;
+
+\ Deadlock-Free Mailbox Primitives (Non-Blocking IPC)
+: TRY-POST-MAIL ( msg -- success? )
+    MAILBOX-FULL? @ IF 
+        DROP 0                      \ Mailbox full: return false
+    ELSE
+        MAILBOX-DATA !
+        -1 MAILBOX-FULL? !
+        -1                          \ Return true
+    THEN ;
+
+: TRY-FETCH-MAIL ( -- msg success? | 0 )
+    MAILBOX-FULL? @ 0= IF
+        0                           \ Mailbox empty: return false
+    ELSE
+        MAILBOX-DATA @
+        0 MAILBOX-FULL? !
+        -1                          \ Return data and true flag
+    THEN ;
+
+\ ---------------------------------------------------------------------
+\ 3. Definition of Cooperative Task Workers
+\ ---------------------------------------------------------------------
+VARIABLE COUNTER-A
+VARIABLE COUNTER-B
+
+: RUN-TASK-A ( -- )
+    1 COUNTER-A +!
+    " [Task A] Attempting to send counter: " TYPE COUNTER-A @ . " \n" TYPE
+    
+    \ Attempt a non-blocking mail post
+    COUNTER-A @ TRY-POST-MAIL IF
+        " [Task A] Mail delivered! Sleeping for 4 ticks...\n" TYPE
+        4 MS-DELAY 
+    ELSE
+        " [Task A] Mailbox busy. Yielding to try again later.\n" TYPE
+    THEN 
+    YIELD ;
+
+: RUN-TASK-B ( -- )
+    " [Task B] Checking Mailbox...\n" TYPE
+    TRY-FETCH-MAIL IF
+        \ If true flag is returned, the integer payload is on the stack
+        " [Task B] Received payload value: " TYPE . " \n" TYPE
+        
+        1 COUNTER-B +!
+        COUNTER-B @ 3 MOD 0= IF
+            " [Task B] Heartbeat milestone completed.\n" TYPE
+        THEN
+    ELSE
+        " [Task B] No mail found. Yielding.\n" TYPE
+    THEN
+    YIELD ;
+
+\ ---------------------------------------------------------------------
+\ 4. Initialization and Scheduler Linkage
+\ ---------------------------------------------------------------------
+: INIT-MULTITASKER ( -- )
+    \ Link nodes into a traditional circular round-robin chain
+    TCB-A    TCB-MAIN !
+    TCB-B    TCB-A !
+    TCB-MAIN TCB-B !
+    
+    \ All tasks start ready, zero delays
+    STATE-READY TCB-A 1 CELLS + !
+    STATE-READY TCB-B 1 CELLS + !
+    0 TCB-A 2 CELLS + !
+    0 TCB-B 2 CELLS + !
+    
+    \ Reset Shared Mailbox
+    0 MAILBOX-DATA !
+    0 MAILBOX-FULL? !
+
+    \ Anchor switcher to start with the Main Task node
+    TCB-MAIN CHASER-TASK ! ;
+
+\ ---------------------------------------------------------------------
+\ 5. Flat Engine Driving Supervisor
+\ ---------------------------------------------------------------------
+: START ( -- )
+    INIT-MULTITASKER
+    0 COUNTER-A !
+    0 COUNTER-B !
+    
+    " =================================================\n" TYPE
+    " Initialised Advanced ATLAST Traditional Tasker.\n" TYPE
+    " =================================================\n" TYPE
+    
+    BEGIN
+        \ Run task loops sequentially by forcing a manual context shift.
+        \ Bypassing loops inside workers preserves the C return-stack.
+        TCB-A 1 CELLS + @ STATE-READY = IF RUN-TASK-A THEN
+        TCB-B 1 CELLS + @ STATE-READY = IF RUN-TASK-B THEN
+        YIELD
+    AGAIN ;
+
+\ Start the application
+START

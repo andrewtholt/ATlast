@@ -1,0 +1,52 @@
+include ./test.atl
+
+0 value redis-context
+
+: init-redis
+    "Initialising redis connection.\n" type
+
+    redis "PORT" map-get 
+    0<> if
+        pad strint nip
+    else
+        "...Get PORT Failed.\n" type
+        abort 
+    then
+
+    redis "IP" map-get
+    0= if
+        "...Get IP Failed.\n" type
+        abort 
+    then
+
+    pad swap redis-connect \ redis-context !
+;
+
+: init-redis-check
+    redis-context redis-ping
+    0= if
+        "Redis ping success.\n" type
+    else
+        "Redis ping FAIL.\n" type
+        abort
+    then
+;
+
+: redis-test
+    redis-context "GET test" redis-cmd
+    0= if
+        "Query Success.\n" type
+    else
+        "Query FAIL" type
+        abort
+    then
+
+    pad 10 dump
+    pad strlen "Key is " type . " bytes\n" type
+;
+
+init-redis to redis-context
+
+init-redis-check
+redis-test
+

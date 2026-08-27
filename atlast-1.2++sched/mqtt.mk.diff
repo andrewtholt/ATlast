@@ -1,0 +1,11 @@
+--- /home/claude/atlast_orig/atlast-1.2++/mqtt.mk	2026-01-28 11:46:59.000000000 +0000
++++ /home/claude/atlast_delivery/mqtt.mk	2026-08-27 11:55:23.126688506 +0000
+@@ -1,6 +1,6 @@
+ # CC=gcc
+ MQTT=""
+ ATLCONFIG=-DFILEIO -DSOCKET -DMQTT -DLINUX -DATH -DCPP_EXTRAS -DEXTRAS
+-ATLOBJ=mqtt.o linux.o ringBuffer.o
+-LIBRARIES=-L/usr/lib/x86_64-linux-gnu -lmosquitto
++ATLOBJ=mqtt.o linux.o ringBuffer.o extraFunc.o
++LIBRARIES=-L/usr/lib/x86_64-linux-gnu -lmosquitto -lhiredis
+ 

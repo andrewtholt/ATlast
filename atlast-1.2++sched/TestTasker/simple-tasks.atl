@@ -1,0 +1,49 @@
+\ =====================================================================
+\ simple_demo.atl - Bare Minimum Two-Task Cooperative Model
+\ =====================================================================
+
+\ 1. Define 3 task nodes for our circular ring
+CREATE TCB-MAIN 0 ,
+CREATE TCB-A    0 ,
+CREATE TCB-B    0 ,
+
+VARIABLE CHASER-TASK
+
+\ The Core Switcher Word
+: YIELD ( -- )
+    CHASER-TASK @ @ CHASER-TASK ! ;
+
+\ ---------------------------------------------------------------------
+\ 2. The Simple Worker Tasks (Flat, No Internal Infinite Loops)
+\ ---------------------------------------------------------------------
+: RUN-TASK-A ( -- )
+    " [Task A] Hello World!\n" TYPE
+    500 ms
+    YIELD ;
+
+: RUN-TASK-B ( -- )
+    " [Task B] Running second action...\n" TYPE
+    500 ms
+    YIELD ;
+
+\ ---------------------------------------------------------------------
+\ 3. Setup and Runtime Execution
+\ ---------------------------------------------------------------------
+: START ( -- )
+    \ Link the tasks into an infinite circle: MAIN -> A -> B -> MAIN
+    TCB-A    TCB-MAIN !
+    TCB-B    TCB-A !
+    TCB-MAIN TCB-B !
+    
+    TCB-MAIN CHASER-TASK ! \ Set starting point
+
+    " Multitasker started. Press Ctrl+C to stop.\n" TYPE
+    
+    \ The master loop lives here on a flat plane to keep memory safe
+    BEGIN
+        RUN-TASK-A
+        RUN-TASK-B
+        YIELD
+    AGAIN ;
+
+START

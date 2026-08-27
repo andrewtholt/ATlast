@@ -1,0 +1,31 @@
+
+10 string buffer
+
+file clock
+
+: to-minutes ( "hh:mm:ss" -- minutes )
+    buffer ":" strtok
+    drop pad strint nip 60 *
+    0 ":" strtok drop pad strint nip +
+;
+
+: test
+    "/dev/shm/clock.txt" 1 clock fopen
+    if
+        "File open success.\n" type 
+    else
+        "FAILED to open file.\n" type
+        abort
+    then
+
+    buffer 10 clock fread
+
+    buffer swap dump
+
+    clock fclose
+    "File closed.\n" type
+;
+
+test to-minutes
+
+

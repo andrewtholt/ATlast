@@ -1,0 +1,113 @@
+
+255 constant /buflen
+/buflen string reply
+
+/buflen string scratch
+
+-1 constant TRUE
+0 constant FALSE
+
+16 string ip
+0 value port
+0 value sock
+0 value connected-flag
+
+0 value /home/Jacuzzi/POWER 
+0 value /home/Jacuzzi/LWT 
+
+: connected
+    true to connected-flag
+;
+
+: ok
+;
+
+: qsize
+;
+
+: online -1 ;
+
+: offline 0 ;
+
+
+: mqtt-setup
+    "MQTT_PORT" getenv
+    0= if
+        pad strint nip to port
+    else
+        "getenv failed\n" type
+    then
+
+    "MQTT_IP" getenv 0= if
+        pad ip strcpy
+    then
+
+    ip port socket-connect 0= if
+        to sock
+        reply /buflen sock socket-recv  \ reply_len
+        drop
+    else 
+        "Failed to connect.\n" type
+        abort
+    then
+;
+
+: ?qsize
+    "QSIZE\n" dup strlen sock socket-send 0<> if
+        "Send Failed.\n" type
+        abort
+    else
+        drop
+        reply /buflen sock socket-recv  \ reply_len
+        drop reply evaluate drop
+    then
+;
+
+: fread1
+    "FREAD1\n" dup strlen sock socket-send 0<> if
+        "Send Failed.\n" type
+        abort
+    else
+        drop
+        reply /buflen sock socket-recv  \ reply_len
+        reply swap dump
+        reply " " strtok
+        drop
+        reply evaluate 0= if
+             evaluate 0= if
+                pad #pad erase
+                0 " " strtok 
+                drop
+                "to " scratch strcpy
+                pad scratch strcat
+                scratch evaluate drop
+            then
+        then
+    then
+;
+
+: subscribe
+    "Subscribe.\n" type
+    "SUB " pad strcpy  
+    pad strcat
+    "\n" pad strcat
+
+    pad  dup strlen sock socket-send 0<> if
+
+\    "SUB /home/Jacuzzi/POWER\n" dup strlen sock socket-send 0<> if
+        "Send Failed.\n" type
+        abort
+    else
+        drop
+        reply /buflen sock socket-recv  \ reply_len
+        "Result\n" type
+        reply swap dump
+    then
+;
+
+
+mqtt-setup
+"/home/Jacuzzi/POWER" subscribe
+"/home/Jacuzzi/LWT" subscribe
+
+

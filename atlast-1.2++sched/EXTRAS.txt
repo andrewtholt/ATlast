@@ -1,0 +1,49 @@
+
+
+To add new features, in the least invasive way possible, do the following:
+
+Create a 'profile' e.g. extras.mk:
+
+CC=gcc
+EXTRAS=""
+ATLCONFIG=-DEXTRAS
+
+In atlmain you will find:
+
+#ifdef EXTRAS
+    extern void extrasLoad();
+
+    extrasLoad();
+#endif
+
+and in extras.c:
+
+atest() {
+    printf("Hello\n");
+}
+
+
+static struct primfcn extras[] = {
+    {"0TESTING", atest},
+    {NULL, (codeptr) 0}
+};
+
+void extrasLoad() {
+    atl_primdef( extras );
+}
+
+And in the Makefile
+
+ifdef EXTRAS
+
+extras.o:   extras.c
+    $(CC) $(CFLAGS) -c extras.c -o extras.o
+
+atlast: $(ATLOBJ) extras.o
+    $(CC) $(CFLAGS) -Wl,--no-as-needed extras.o $(ATLOBJ) -o atlast $(LIBRARIES)
+else
+atlast: $(ATLOBJ)
+    $(CC) $(CFLAGS) -Wl,--no-as-needed $(ATLOBJ) -o atlast $(LIBRARIES)
+endif
+
+

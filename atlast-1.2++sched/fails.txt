@@ -1,0 +1,12 @@
+
+List of Profiles
+
+basic       Builds
+darwin
+extras      Fails
+linux       Builds
+mqtt        Builds
+pubsub      Fails
+small       Builds
+uclinux     Builds
+

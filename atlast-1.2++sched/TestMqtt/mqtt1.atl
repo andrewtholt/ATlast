@@ -1,0 +1,122 @@
+
+include "struct.atl"
+
+struct
+      1 chars field msg-flag
+     64 chars field topic
+    1024 chars field payload
+endstruct /msg
+
+here /msg allot constant msg
+here /msg allot constant safe
+
+msg /msg erase
+safe /msg erase
+
+0 value init-run
+0 value client
+
+0 to init-run 
+
+: init
+    init-run 0= if
+        mqtt-init if
+            "mqtt-init failed" type cr
+            abort
+        then
+        "TEST" msg mqtt-new 0= if
+            to client
+            client "192.168.10.124" 1883 mqtt-client
+\            client "192.168.0.50" 1883 mqtt-client
+
+            0= if
+                "Init success"
+            else
+                "Init failed"
+            then
+            type cr
+        else
+            "mqtt-new failed" type cr
+            abort
+        then
+        -1 to init-run 
+    then
+;
+
+: stuff
+    clear client -1 mqtt-loop 
+;
+
+mk-string t
+mk-string p
+
+: mqtt-dump
+    "around .." type cr
+    mqtt-q-empty if
+        "Nothing to say" type cr
+    else
+        depth . cr
+        t p mqtt-q-get 
+        "Topic :" type t cout cr
+        "Msg   :" type p cout cr
+        "Depth :" type mqtt-q-size . cr
+    then
+;
+:  fred
+    mqtt-q-empty 0= if
+        t p mqtt-q-get 
+        "Topic :" type t cout cr
+        "Msg   :" type p cout cr
+        "Depth :" type mqtt-q-size . cr
+    then
+; 
+
+: run
+    begin
+        stuff if 
+            "Error " type . cr
+        else
+            .s
+        then
+        mqtt-dump
+        1000 ms
+    again
+;
+
+: test
+    init
+
+\    client  "/home/environment/#" mqtt-sub if
+    client  "/home/house/DRRight/#" mqtt-sub if
+        "mqtt-sub failed" type cr
+        abort
+    then
+
+    client "/home/house/DRLeft/#" mqtt-sub if
+        "mqtt-sub failed" type cr
+        abort
+    then
+
+    client "/home/environment/TIME" mqtt-sub if
+        "mqtt-sub failed" type cr
+        abort
+    then
+
+    client "/home/office/WEMOS/#" mqtt-sub if
+        "mqtt-sub failed" type cr
+        abort
+    then
+
+\    client -1 mqtt-loop if
+    client mqtt-loop-start if
+        "mqtt-loop failed" type cr
+        abort
+    then
+;
+
+: publish
+    init
+    client "/home/office/proliant/testing" "ATLAST" mqtt-pub .s
+
+;
+
