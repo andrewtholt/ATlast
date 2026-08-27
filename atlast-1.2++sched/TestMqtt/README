@@ -13,3 +13,14 @@ then:
 
 test
 
+27 Aug 20026
+
+to test run
+
+./envTest.sh
+
+But first make sure that mqttDaemon.py is running in another terminal.
+
+It can be found at Source/Tools/Python/mqttAgent
+
+
