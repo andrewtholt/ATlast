@@ -6338,6 +6338,25 @@ prim P_fwdresolve()		      /* Emit forward jump offset */
 }
 
 #endif /* COMPILERW */
+/* Implements: alias <new-name> <old-name> */
+/* Implements: alias <new-name> <old-name> */
+prim P_alias() {
+    char new_name[64];
+    char old_name[64];
+    char eval_str[256];
+
+    /* Fetch the new name token from the input stream */
+    if (token(&instream) != TokWord) return;
+    strcpy(new_name, tokbuf);
+
+    /* Fetch the target (old) name token from the input stream */
+    if (token(&instream) != TokWord) return;
+    strcpy(old_name, tokbuf);
+
+    /* Construct the colon definition on the fly and evaluate it */
+    sprintf(eval_str, ": %s %s ;", new_name, old_name);
+    atl_eval(eval_str);
+}
 /*  Table of primitive words  */
 
 static struct primfcn primt[] = {
@@ -6635,6 +6654,7 @@ static struct primfcn primt[] = {
     {"0HOSTNAME",ATH_hostname},
     {"0.UNAME",ATH_dotuname},
 #endif
+    { "0ALIAS", P_alias },
 
 #ifdef LIBSER
     {"0OPEN-SERIAL-PORT", ATH_openSerialPort},
