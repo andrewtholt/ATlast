@@ -35,6 +35,8 @@
 
 #if defined(LINUX)
 #include <mqueue.h>
+#include <sys/mman.h>
+#include <sys/utsname.h>
 #endif
 #if defined(LINUX) || defined(DARWIN)
 #include <unistd.h>
@@ -634,6 +636,151 @@ void ATH_expect() {
     
     // Return the actual number of characters stored
     Push= idx;
+}
+
+
+// <ptr> name -- ptr
+prim ATH_getenv() {
+    Sl(1); // On entry will use this many.
+    So(1); // on exit will leave this many.
+
+    char *name=(char *)S0;
+    char *tmp;
+
+//    Pop2;
+
+    char *ptr;
+
+    ptr = (char *) atl_body(pad);
+    tmp = getenv(name);
+    if(!tmp) {
+        S0=-1;
+    } else {
+        strcpy(ptr, tmp);
+        S0=0;
+    }
+}
+
+prim ATH_putenv() {
+    char *env_string;
+    char *env;
+    char *val;
+
+    Sl(2);
+    So(1);
+
+    env=(char *)S1;
+    val=(char *)S0;
+    Pop;
+
+    if(asprintf(&env_string,"%s=%s",env,val) == -1) {
+        S0 =-1;
+    } else {
+        if( putenv(env_string) !=0) {
+            free(env_string);
+            S0=0;
+        } else {
+            S0=-1;
+        }
+    }
+}
+
+
+// msg --
+prim ATH_perror() {
+
+//    Sl(1);
+    So(0);
+
+//    perror((char *)S0);
+    perror((char *)NULL);
+    errno=0;
+//    Pop;
+}
+
+// fd size -- ptr
+
+prim ATH_mmap() {
+    void *ptr;
+    Sl(2);
+    So(1);
+
+
+    ptr = mmap(0,S0, PROT_READ | PROT_WRITE, MAP_SHARED, S1, 0);
+    Pop;
+    S0=(stackitem)ptr;
+}
+
+
+struct utsname unameInfo;
+#define OS_UNKNOWN 0
+#define OS_LINUX 1
+
+#define CPU_UNKNOWN 0
+#define CPU_X86_64 4
+#define CPU_AARCH64 7
+
+prim ATH_uname() {
+    int rc = uname(&unameInfo);
+}
+
+prim ATH_os() {
+    Sl(0);
+    So(1);
+
+    int os = OS_UNKNOWN;
+
+    int ret = strcmp(unameInfo.sysname,"Linux");
+
+    if( ret == 0) {
+        os = OS_LINUX;
+    } else {
+        os = OS_UNKNOWN;
+    }
+    Push=os ;
+}
+
+
+prim ATH_cpu() {
+    Sl(0);
+    So(1);
+
+    int cpu = CPU_UNKNOWN;
+
+    int ret = strcmp(unameInfo.machine,"x86_64");
+
+    if (ret == 0) {
+        cpu = CPU_X86_64;
+    }
+
+    ret = strcmp(unameInfo.machine,"aarch64");
+
+    if(ret == 0) {
+        cpu = CPU_AARCH64;
+    }
+
+    Push=cpu;
+}
+
+prim ATH_hostname() {
+    Sl(0);
+    So(0);
+
+    char *ptr;
+
+    ptr=(char *)atl_body(pad);
+
+    char  *ret=strcpy(ptr,unameInfo.nodename);
+
+}
+
+prim ATH_dotuname() {
+    int rc = uname(&unameInfo);
+
+    printf("\n");
+    printf("OS:\t\t%s\n",unameInfo.sysname);
+    printf("CPU:\t\t%s\n",unameInfo.machine);
+    printf("Hostname:\t%s\n",unameInfo.nodename);
 }
 
 #endif
@@ -4123,6 +4270,20 @@ prim P_strcmp() 		      /* Compare top two strings on stack */
     Pop;
 }
 
+prim P_strcasecmp()               /* Compare top two strings on stack */
+{
+    int i;
+
+    Sl(2);
+    if( ath_safe_memory == Truth) {
+        Hpc(S0);
+        Hpc(S1);
+    }
+    i = strcasecmp((char *) S1, (char *) S0);
+    S1 = (i == 0) ? 0L : ((i > 0) ? 1L : -1L);
+    Pop;
+}
+
 prim P_strchar()		      /* Find character in string */
 {
     Sl(2);
@@ -6280,6 +6441,7 @@ static struct primfcn primt[] = {
     {"0S+", P_strcat},
     {"0STRLEN", P_strlen},
     {"0STRCMP", P_strcmp},
+    {"0STRCASECMP", P_strcasecmp},
     {"0STRCHAR", P_strchar},
     {"0SUBSTR", P_substr},
     {"0COMPARE", P_strcmp},
@@ -6463,6 +6625,15 @@ static struct primfcn primt[] = {
     {"0KEY",ATH_key},
     {"0?KEY",ATH_qkey},
     {"0EXPECT", ATH_expect},
+    {"0GETENV", ATH_getenv},
+    {"0PUTENV", ATH_putenv},
+    {"0PERROR", ATH_perror},
+    {"0MMAP", ATH_mmap},
+    {"0UNAME",ATH_uname},
+    {"0OS",ATH_os},
+    {"0CPU",ATH_cpu},
+    {"0HOSTNAME",ATH_hostname},
+    {"0.UNAME",ATH_dotuname},
 #endif
 
 #ifdef LIBSER
