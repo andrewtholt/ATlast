@@ -1,4 +1,15 @@
 
+Updated 27 Aug 2026
+
+To Build
+
+cd ./atlast-1.2++sched 
+
+./build.sh -l
+
+./build.sh -p sched
+
+===========================================================
 
 To Build
 
