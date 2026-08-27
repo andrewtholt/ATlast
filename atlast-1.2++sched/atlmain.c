@@ -242,7 +242,7 @@ int main(int argc, char *argv[]) {
     }
 #ifdef BANNER
     if(verbose ) {
-        PR("ATLAST 1.2++ (2007-10-07) This program is in the public domain.\n");
+        PR("ATLAST 1.2++ Scheduler (2026-27-08) This program is in the public domain.\n");
         printf("Compiled: %s %s\n",__DATE__,__TIME__);
     }
 #endif
