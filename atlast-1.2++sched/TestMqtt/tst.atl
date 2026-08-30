@@ -1,7 +1,15 @@
 include struct.atl
 
+-1 constant TRUE
+0 constant FALSE
+
+255 constant /buflen
+/buflen string reply
+
+/buflen string scratch
 
 struct
+    64 chars field cmnd-topic
     64 chars field topic
     32 chars field msg
      1 chars field msg-type
@@ -9,16 +17,6 @@ struct
      8 chars field truth
 endstruct /mqtt
 
-\ 0 value jacuzzi
-\ 
-\ : init
-\     here /mqtt allot to jacuzzi
-\ ;
-\ 
-\ init
-
-\ "Topic" jacuzzi topic strcpy
-\ "Msg"   jacuzzi msg strcpy
 
 : set-dirty \ flag struct-ptr --
     dirty c!
@@ -26,6 +24,10 @@ endstruct /mqtt
 
 : set-topic   \ "topic" *struct -- 
     topic strcpy
+;
+
+: set-cmnd-topic   \ "topic" *struct -- 
+    cmnd-topic strcpy
 ;
 
 : get-topic \ field-addr -- PAD: content
@@ -103,24 +105,114 @@ endstruct /mqtt
 
 
 : display \ *struct --
-    dup "Topic:\t" type topic type cr
-    dup "Msg  :\t" type msg type cr
-    dup "Type :\t" type msg-type c@ emit cr
-    dup "Truth:\t" type truth type cr
-        "Dirty:\t" type dirty c@ . cr
+    dup "Cmnd Topic:\t" type cmnd-topic type cr
+    dup "Topic     :\t" type topic type cr
+    dup "Msg       :\t" type msg type cr
+    dup "Type      :\t" type msg-type c@ emit cr
+    dup "Truth     :\t" type truth type cr
+        "Dirty     :\t" type dirty c@ . cr
+
+    "----\n" type
 ;
 
 10 1 cell array items
 0 value item-index
 0 value jacuzzi
 
+16 string ip
+0 value port
+0 value sock
+0 value connected-flag
+
+: connected
+    true to connected-flag
+;
+
+: ok ;
+
+: qsize ;
+
+: online -1 ;
+
+: offline 0 ;
+
+: mqtt-setup
+    "MQTT_PORT" getenv
+    0= if
+        pad strint nip to port
+    else
+        "getenv failed\n" type
+    then
+
+    "MQTT_IP" getenv 0= if
+        pad ip strcpy
+    then
+
+    ip port socket-connect 0= if
+        to sock
+        reply /buflen sock socket-recv  \ reply_len
+        drop
+    else
+        "Failed to connect.\n" type
+        abort
+    then
+;
 
 : init
     here /mqtt allot to jacuzzi
+    mqtt-setup
+    
 ;
 
+0 value  /home/Jacuzzi/POWER 
+
+: ?qsize
+    "QSIZE\n" dup strlen sock socket-send 0<> if
+        "Send Failed.\n" type
+        abort
+    else
+        drop
+        reply /buflen sock socket-recv  \ reply_len
+        drop reply evaluate drop
+    then
+;
+
+: fread1
+    "FREAD1\n" dup strlen sock socket-send 0<> if
+        "Send Failed.\n" type
+        abort
+    else
+        drop
+        reply /buflen sock socket-recv  \ reply_len
+        reply evaluate
+        0= if
+            drop
+        then
+    then
+;
+
+: subscribe \ "topic" --
+    "Subscribe.\n" type
+    "SUB " pad strcpy
+    pad strcat
+    "\n" pad strcat
+
+    pad  dup strlen sock socket-send 0<> if
+
+\    "SUB /home/Jacuzzi/POWER\n" dup strlen sock socket-send 0<> if
+        "Send Failed.\n" type
+        abort
+    else
+        drop
+        reply /buflen sock socket-recv  \ reply_len
+        "Result\n" type
+        reply swap dump
+    then
+;
 init
-"/home/Jacuzzi/LWT" jacuzzi set-topic
+"/home/Jacuzzi/POWER" jacuzzi set-topic
+\ "/home/Jacuzzi/LWT" jacuzzi set-topic
+"/home/Jacuzzi/cmnd/POWER" jacuzzi set-cmnd-topic
 \ "Offline" jacuzzi set-msg
 \ char B  jacuzzi set-type
 
@@ -137,7 +229,7 @@ jacuzzi item-index items !
 
 : test
     10 0 do
-        i dup . "\t" type items @ . cr
+\        i dup . "\t" type items @ . cr
 
         i items @ ?dup 0<> if
            display 
@@ -145,4 +237,17 @@ jacuzzi item-index items !
     loop
 ;
 
+: init-sub
+    10 0 do
+
+        i items @ ?dup 0<> if
+            i . cr
+           get-topic pad scratch strcpy
+           scratch 20 dump
+           scratch subscribe
+        then
+    loop
+;
+
+init-sub
 
