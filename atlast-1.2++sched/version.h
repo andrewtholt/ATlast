@@ -1,0 +1,2 @@
+#define BUILD_NUMBER 1000
+#define GIT_COMMIT_HASH "bec9f09"
