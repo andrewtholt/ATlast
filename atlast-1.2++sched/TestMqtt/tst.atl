@@ -10,9 +10,9 @@ include struct.atl
 
 struct
     64 chars field cmnd-topic
-    64 chars field topic
+    64 chars field topic    \ <- Indes.
     32 chars field msg
-     1 chars field msg-type
+     1 chars field msg-type \ Boole|String|Time
      1 chars field dirty
      8 chars field truth
 endstruct /mqtt
