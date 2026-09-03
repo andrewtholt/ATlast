@@ -1,0 +1,32 @@
+
+
+1 constant READ
+2 constant WRITE
+4 constant BIN-FILE
+8 constant CREAT
+
+0 value kv
+16 string env
+
+".env.txt" env s!
+
+: init
+    
+    env 0 access 0= if
+        "Env file exists ...\n" type
+    else
+        "No Env file.\n" type
+        abort
+    then
+
+    kv-init to kv
+
+    kv ".env.txt" kv-load 0= if
+        "File opened\n" type
+    then
+
+;
+
+init
+
+kv kv-display
