@@ -5003,7 +5003,6 @@ prim P_rmdir() {
 #endif
 }
 
-
 prim P_fopen()			      /* Open file: fname fmodes fd -- flag */
 {
     stackitem stat;
@@ -5196,6 +5195,18 @@ prim P_access() {
 	S1 =  yaffs_access((char *)S1, (int) S0);
 
 	Pop;
+#endif
+
+#ifdef LINUX
+    int mode = S0;
+    char *filename = S1;
+    Pop;
+    if (access(filename, mode) == 0) {
+        S0 = 0;
+    } else {
+        S0= -1;
+    }
+
 #endif
 
 }
