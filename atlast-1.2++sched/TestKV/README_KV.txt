@@ -1,4 +1,8 @@
 
+This feature requires "VerySmallDatabase" to be built and installed and findable via LD_LIBRARY_PATH
+
+
+
 Words to access key value database
 
 Name:   kv-init
