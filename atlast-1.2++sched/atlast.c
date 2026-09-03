@@ -932,6 +932,12 @@ void ATH_Features() {
 #else
     printf("NOT MQTT\r\n");
 #endif
+
+#ifdef KV
+    printf("    Key/Value db\r\n");
+#else
+    printf("NOT Key/Value db\r\n");
+#endif
 //
 // ------------------
 
@@ -1268,6 +1274,104 @@ prim ATH_on() {
 prim ATH_off() {
     Push=0;
 }
+#ifdef KV
+#pragma message ( "KV included" )
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include <kv.h>
+#ifdef __cplusplus
+}
+#endif
+prim kv_init() {
+    Sl(0);
+    So(1);
+
+    StringStore *db = create_store();
+
+    Push=(void *) db;
+}
+
+// Stack: *db "key" "value"
+//
+prim DB_set() {
+    Sl(3);
+    So(0);
+
+    char *v = S0;
+    char *k = S1;
+    StringStore *db = (StringStore *) S2;
+    Pop2;
+    Pop;
+
+    kv_set(db,k,v);
+}
+
+prim DB_get() {
+    Sl(2);
+    So(1);
+
+    char *buffer;
+    StringStore *db = (StringStore *) S1;
+    char *k = S0;
+    Pop;
+    char *v = kv_get(db,k);
+
+    if ( v == NULL) {
+        S0=0;
+    } else {
+//    printf("Val=%s\n",v);
+        buffer=(char *)atl_body(pad);
+        strcpy(buffer,v);
+        S0=-1;
+    }
+}
+
+prim DB_display() {
+
+    StringStore *db = (StringStore *) S0;
+    Pop;
+    kv_display(db);
+}
+
+prim DB_dump() {
+    Sl(2);
+
+    char *name = S0;;
+    StringStore *db = (StringStore *) S1;
+
+    int rc = kv_dump(db,name);
+
+    Pop;
+    S0 = rc;    // 0 on success
+}
+
+prim DB_load() {
+    Sl(2);
+    So(1);
+
+    char *name = S0;;
+    Pop;
+    StringStore *db = (StringStore *) S0;
+
+    int rc = kv_load(db,name);
+
+    S0=rc;
+
+}
+
+prim DB_close() {
+
+    Sl(1);
+    So(0);
+
+    StringStore *db = (StringStore *) S0;
+    Pop;
+}
+
+
+
+#endif
 
 #ifdef SOCKET
 #pragma message ( "SOCKET included" )
@@ -6691,6 +6795,12 @@ static struct primfcn primt[] = {
 #endif /* EVALUATE */
 
 #ifdef ATH
+    {"0KV-INIT", kv_init},
+    {"0KV-SET", DB_set},
+    {"0KV-GET", DB_get},
+    {"0KV-DISPLAY", DB_display},
+    {"0KV-DUMP", DB_dump},
+    {"0KV-LOAD", DB_load},
 #ifdef SOCKET
 	{(char *)"0SOCKET-CONNECT", athConnect},
 	{(char *)"0SOCKET-CLOSE",athClose},
