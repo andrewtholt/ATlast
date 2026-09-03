@@ -28,6 +28,12 @@ APPS = atlast atlsmall # primdeftest
 
 all:	$(APPS)
 
+version.h:	build_number.txt
+	@echo "Generating version.h..."
+	@echo "#define BUILD_NUMBER $$(cat build_number.txt)" > version.h
+	@echo "#define GIT_COMMIT_HASH \"$$(git rev-parse --short HEAD)\"" >> version.h
+
+
 linux.o:	linux.c
 	$(CC) $(CFLAGS) -c linux.c -o linux.o $(INCLUDE)
 
@@ -78,6 +84,7 @@ clean:
 	rm -f *.bak *.o *.dvi *.aux *.log
 	rm -f core core.* cscope.out *.tar.gz
 	rm -rf dist
+	rm -f version.h
 #	( cd tex ; make clean )
 	
 dist:
