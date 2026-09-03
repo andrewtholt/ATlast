@@ -19,7 +19,7 @@
 #include "atldef.h"
 #include "atlcfig.h"
 #include <inttypes.h>
-
+#include "version.h"
 #ifdef NVRAMRC
 // #warning "nvramrc"
 #include "nvramrc.h"
@@ -244,6 +244,7 @@ int main(int argc, char *argv[]) {
     if(verbose ) {
         PR("ATLAST 1.2++ Scheduler (2026-27-08) This program is in the public domain.\n");
         printf("Compiled: %s %s\n",__DATE__,__TIME__);
+        printf("Program Version: Build #%d (Commit: %s)\n", BUILD_NUMBER, GIT_COMMIT_HASH);
     }
 #endif
     // OK, so init the system
