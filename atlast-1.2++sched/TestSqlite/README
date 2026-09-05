@@ -1,0 +1,17 @@
+
+Tests for sqlite3 intergration
+
+1. Load the test database.
+
+sqlite3 test.db < test.sql
+
+2. Run the test
+
+atlast -v -I sql-test.atl
+
+3. Save the databse, if modded
+
+sqlite3 test.db > test.sql
+
+
+

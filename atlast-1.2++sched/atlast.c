@@ -1383,8 +1383,8 @@ prim DB_close() {
 
 /* Keep track of a prepared statement alongside the database */
 // static sqlite3 *db_handle = NULL;
-static sqlite3 *db_handle = NULL;
-static sqlite3_stmt *stmt_handle = NULL;
+// static sqlite3 *db_handle = NULL;
+// static sqlite3_stmt *stmt_handle = NULL;
 /* SQL-OPEN 
    Opens an SQLite3 database file
 Stack: "name" -- handle|0
@@ -1417,6 +1417,8 @@ Stack: handle "sql statement" -- statement-handle
    */
 void P_sqlprepare(void) {
     sqlite3 *db_handle = NULL;
+    sqlite3_stmt *stmt_handle = NULL;
+
     So(2);
 
 //    char query[256];
@@ -1453,6 +1455,7 @@ void P_sqlprepare(void) {
    Steps the prepared statement. Pushes 1 (TRUE) if a row is available,
    or 0 (FALSE) if the query execution is complete. */
 void P_sqlstep(void) {
+    sqlite3_stmt *stmt_handle = NULL;
     
     stmt_handle = S0;
     Pop;
@@ -1484,6 +1487,8 @@ void P_sqlstep(void) {
 Stack: stmt_handle <col-index> -- "column"
 */
 void P_sqlcol(void) {
+    sqlite3_stmt *stmt_handle = NULL;
+
     So(2);
     Sl(1);
 
@@ -1524,22 +1529,27 @@ void P_sqlcol(void) {
     Push = (stackitem)bytes;
 }
 
-/* 0SQL-CLOSE
+/* SQL-CLOSE
    Finalizes any active statement and closes the active database connection 
 Stack: db-handle stmt-handle --
    */
 void P_sqlclose(void) {
+    sqlite3_stmt *stmt_handle = NULL;
+    sqlite3 *db_handle = NULL;
+
     So(2);
 
-//    stmt_handle=S0;
-//    db_handle=S1;
-//    Pop2;
+    stmt_handle=(sqlite3_stmt *)S0;
+    db_handle=S1;
+    Pop2;
 
     /* Clean up any leftover prepared statement */
+    /*
     if (stmt_handle) {
         sqlite3_finalize(stmt_handle);
         stmt_handle = NULL;
     }
+    */
 
     /* Close the database handle */
     if (db_handle) {
@@ -4088,7 +4098,8 @@ prim P_value()			      /* Declare value */
     Sl(1);
     P_create(); 		      /* Create dictionary item */
     createword->wcode = P_con;	      /* Set code to value push (same as constant) */
-    Ho(1);
+//    Ho(1);
+    Ho(sizeof(stackitem));
     Hstore = S0;		      /* Store initial value in body */
     Pop;
 }
