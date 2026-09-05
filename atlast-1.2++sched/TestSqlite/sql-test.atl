@@ -2,8 +2,6 @@
 0 value db-handle
 0 value stmt-handle
 
-variable fred
-
 : init
     "test.db" SQL-OPEN ?dup if
         to db-handle
@@ -28,7 +26,6 @@ db-handle "SELECT id, name,age FROM users;" SQL-PREPARE to stmt-handle
     REPEAT
 ;
 
-stmt-handle fred !
 : finish
     db-handle stmt-handle SQL-CLOSE
 ;
