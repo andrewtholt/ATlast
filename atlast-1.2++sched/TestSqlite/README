@@ -13,5 +13,3 @@ atlast -v -I sql-test.atl
 
 sqlite3 test.db > test.sql
 
-
-
