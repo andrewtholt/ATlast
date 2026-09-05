@@ -1373,6 +1373,186 @@ prim DB_close() {
 
 #endif
 
+#ifdef SQLITE3
+#pragma message ( "SQLITE included" )
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sqlite3.h>
+#include "atlast.h"
+
+/* Keep track of a prepared statement alongside the database */
+// static sqlite3 *db_handle = NULL;
+static sqlite3 *db_handle = NULL;
+static sqlite3_stmt *stmt_handle = NULL;
+/* SQL-OPEN 
+   Opens an SQLite3 database file
+Stack: "name" -- handle|0
+   */
+void P_sqlopen(void) {
+    sqlite3 *db_handle = NULL;
+    So(1);
+    Sl(1);
+//    char filename[128];
+    char *filename;
+   
+    filename = S0;   
+    /* Parse the next token as the filename string */
+//    if (token(&instream) != TokWord) return;
+//    strcpy(filename, tokbuf);
+
+    if (sqlite3_open(filename, &db_handle)) {
+        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db_handle));
+        sqlite3_close(db_handle);
+        db_handle = NULL;
+        S0=0;
+    } else {
+//        printf("Opened database successfully\n");
+        S0 = (stackitem)db_handle;
+    }
+}
+/* SQL-PREPARE <sql-query>
+   Prepares an SQL statement for stepping
+Stack: handle "sql statement" -- statement-handle
+   */
+void P_sqlprepare(void) {
+    sqlite3 *db_handle = NULL;
+    So(2);
+
+//    char query[256];
+    char *query;
+
+    query = S0;
+    db_handle = S1;
+    Pop2;
+    
+    if (!db_handle) {
+        printf("Error: No database open.\n");
+        return;
+    }
+
+//    if (token(&instream) != TokWord) return;
+//    strcpy(query, tokbuf);
+
+    /* Finalize any lingering statement */
+    if (stmt_handle) {
+        sqlite3_finalize(stmt_handle);
+        stmt_handle = NULL;
+    }
+
+    if (sqlite3_prepare_v2(db_handle, query, -1, &stmt_handle, 0) != SQLITE_OK) {
+        fprintf(stderr, "SQL Prepare error: %s\n", sqlite3_errmsg(db_handle));
+        stmt_handle = NULL;
+        Push=0;
+    } else {
+        Push=(stackitem)stmt_handle;
+    }
+}
+
+/* SQL-STEP ( -- flag )
+   Steps the prepared statement. Pushes 1 (TRUE) if a row is available,
+   or 0 (FALSE) if the query execution is complete. */
+void P_sqlstep(void) {
+    
+    stmt_handle = S0;
+    Pop;
+    if (!stmt_handle) {
+//        atl_sstore(0);
+        Push=(stackitem)0;
+        return;
+    }
+
+    int rc = sqlite3_step(stmt_handle);
+    if (rc == SQLITE_ROW) {
+//        atl_sstore(1); /* Row available */
+        Push=(stackitem)0;
+    } else {
+        if (rc != SQLITE_DONE) {
+            fprintf(stderr, "SQL Step error\n");
+        }
+        sqlite3_finalize(stmt_handle);
+        stmt_handle = NULL;
+//        atl_sstore(0); /* Complete or error */
+
+        Push=(stackitem)-1;
+    }
+}
+
+/* SQL-COL <col-index> ( -- addr len )
+   Pushes the text string of the specified column index for the current row onto the stack. 
+
+Stack: stmt_handle <col-index> -- "column"
+*/
+void P_sqlcol(void) {
+    So(2);
+    Sl(1);
+
+    /* Pop column index from Atlast stack */
+//    int col = atl_sload();
+    int col = S0;
+    stmt_handle = S1;
+    Pop2;
+
+    if (!stmt_handle) {
+//        atl_sstore(0);
+//        atl_sstore((atl_int)"");
+
+        Push=(stackitem)(atl_int)"";
+        Push=(stackitem)0;
+
+        return;
+    }
+
+    const unsigned char *text = sqlite3_column_text(stmt_handle, col);
+    int bytes = sqlite3_column_bytes(stmt_handle, col);
+
+    if (!text) {
+//        atl_sstore(0);
+//        atl_sstore((atl_int)"");
+
+        Push=(stackitem)(atl_int)"";
+        Push=(stackitem)0;
+        return;
+    }
+
+    /* Push string address and length back to Atlast */
+//    atl_sstore(bytes);
+//    atl_sstore((atl_int)text);
+//    Push = (stackitem)text;
+    char *buffer=(char *)atl_body(pad);
+    strcpy((char *)buffer,text);
+    Push = (stackitem)bytes;
+}
+
+/* 0SQL-CLOSE
+   Finalizes any active statement and closes the active database connection 
+Stack: db-handle stmt-handle --
+   */
+void P_sqlclose(void) {
+    So(2);
+
+//    stmt_handle=S0;
+//    db_handle=S1;
+//    Pop2;
+
+    /* Clean up any leftover prepared statement */
+    if (stmt_handle) {
+        sqlite3_finalize(stmt_handle);
+        stmt_handle = NULL;
+    }
+
+    /* Close the database handle */
+    if (db_handle) {
+        sqlite3_close(db_handle);
+        db_handle = NULL;
+        printf("Database closed successfully\n");
+    } else {
+        printf("No active database to close.\n");
+    }
+}
+
+#endif
+
 #ifdef SOCKET
 #pragma message ( "SOCKET included" )
 prim athConnect() {
@@ -6768,6 +6948,14 @@ static struct primfcn primt[] = {
     {"0CPU",ATH_cpu},
     {"0HOSTNAME",ATH_hostname},
     {"0.UNAME",ATH_dotuname},
+#ifdef SQLITE3
+    { "0SQL-OPEN", P_sqlopen },
+    { "0SQL-PREPARE", P_sqlprepare },
+    { "0SQL-STEP",    P_sqlstep },
+    { "0SQL-COL",     P_sqlcol },
+    { "0SQL-CLOSE", P_sqlclose },
+#endif
+
 #endif
     { "0ALIAS", P_alias },
 

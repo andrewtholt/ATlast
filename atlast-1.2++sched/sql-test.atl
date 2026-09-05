@@ -1,0 +1,29 @@
+\ Open database
+0 value db-handle
+0 value stmt-handle
+
+: init
+    "test.db" SQL-OPEN ?dup if
+        to db-handle
+    then
+
+;
+
+init
+\ Prepare statement
+db-handle "SELECT id, name,age FROM users;" SQL-PREPARE to stmt-handle
+
+
+: test
+
+\ Define a word to loop through and display results row-by-row
+     BEGIN
+        stmt-handle sql-step 0=
+     WHILE                 
+        stmt-handle 0 SQL-COL drop pad TYPE 58 emit  \ Fetch column 0 (id)
+        stmt-handle 1 SQL-COL drop pad TYPE 58 emit \ Fetch column 0 (id)
+        stmt-handle 2 SQL-COL drop pad TYPE CR \ Fetch column 0 (id)
+    REPEAT
+;
+
+SQL-CLOSE
