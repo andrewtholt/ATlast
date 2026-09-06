@@ -938,6 +938,12 @@ void ATH_Features() {
 #else
     printf("NOT Key/Value db\r\n");
 #endif
+
+#ifdef SQLITE3
+    printf("    SQL\r\n");
+#else
+    printf("NOT SQL\r\n");
+#endif
 //
 // ------------------
 
