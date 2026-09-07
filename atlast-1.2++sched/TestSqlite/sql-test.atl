@@ -5,13 +5,15 @@
 : init
     "test.db" SQL-OPEN ?dup if
         to db-handle
+\        0 to stmt-handle
+        db-handle "SELECT id, name,age FROM users;" SQL-PREPARE to stmt-handle
     then
 
 ;
 
 init
 \ Prepare statement
-db-handle "SELECT id, name,age FROM users;" SQL-PREPARE to stmt-handle
+\ db-handle "SELECT id, name,age FROM users;" SQL-PREPARE to stmt-handle
 
 
 : test
@@ -24,9 +26,13 @@ db-handle "SELECT id, name,age FROM users;" SQL-PREPARE to stmt-handle
         stmt-handle 1 SQL-COL drop pad TYPE 58 emit \ Fetch column 0 (id)
         stmt-handle 2 SQL-COL drop pad TYPE CR \ Fetch column 0 (id)
     REPEAT
+\    stmt-handle sql-finalize to stmt-handle
 ;
 
 : finish
     db-handle stmt-handle SQL-CLOSE
+    0 to db-handle
+    0 to stmt-handle
+
 ;
 

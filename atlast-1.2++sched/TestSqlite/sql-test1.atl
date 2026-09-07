@@ -1,0 +1,52 @@
+\ ------------------------------------------------------------------------
+\ SQLite Database Test Script for Atlast
+\ ------------------------------------------------------------------------
+0 value stmt
+\ 1. Open the database (pushes database handle onto the stack)
+"test.db" SQL-OPEN
+constant db
+
+\ 2. Setup tables and insert sample rows using SQL-EXEC
+\ db "CREATE TABLE IF NOT EXISTS users (id INT, name TEXT, age INT);" SQL-EXEC
+\ db "DELETE FROM users;" SQL-EXEC
+\ db "INSERT INTO users VALUES(1, 'Alice', 30);" SQL-EXEC
+\ db "INSERT INTO users VALUES(2, 'Bob', 25);" SQL-EXEC
+\ db "INSERT INTO users VALUES(3, 'Charlie', 35);" SQL-EXEC
+
+\ 3. Run an update statement
+\ db "UPDATE users SET age = 44 WHERE id = 3;" SQL-EXEC
+
+\ 4. Define a reusable query word
+: query-users
+    \ Prepare statement: consumes db handle and sql string, leaves stmt handle
+    db "SELECT id, name, age FROM users;" SQL-PREPARE to stmt
+    
+    BEGIN
+        \ Step statement: returns ( stmt-handle flag )
+        stmt SQL-STEP
+    WHILE
+        \ Process columns using the statement handle currently on stack
+        dup 0 SQL-COL drop pad  TYPE "|" type
+        dup 1 SQL-COL drop pad TYPE "|" type
+        2 SQL-COL drop pad TYPE CR
+    REPEAT
+    
+    \ Explicitly clean up the prepared statement handle once loop exits
+    stmt SQL-FINALIZE
+;
+
+\ 5. Execute the query twice to confirm no double-free / segment faults occur
+"\n=== First Query Run ===\n" type
+query-users
+
+"\n=== Second Query Run ===\n" type
+query-users
+
+"\n=== Third Query Run ===\n" type
+query-users
+\ 6. Close the database connection cleanly
+\ db SQL-CLOSE
+
+"\nTest completed successfully.\n" type
+
+

@@ -1417,6 +1417,45 @@ void P_sqlopen(void) {
         S0 = (stackitem)db_handle;
     }
 }
+
+/* 0SQL-FINALIZE: stmt_handle -- */
+prim P_sqlfinalize(void) {
+    sqlite3_stmt *stmt;
+    Sl(1);
+    stmt = (sqlite3_stmt *)(uintptr_t)S0;
+    Pop;
+    if (stmt != NULL) {
+        sqlite3_finalize(stmt);
+    }
+}
+
+/* SQL-EXEC: db_handle "sql-statement" -- */
+prim P_sqlexec(void) {
+    const char *query;
+    sqlite3 *db;
+    char *err_msg = NULL;
+
+    /* Ensure there are at least 2 items on the stack */
+    Sl(2);
+    query = (const char *)S0;
+    db = (sqlite3 *)(uintptr_t)S1;
+
+    if (!db || !query) {
+        Pop2;
+        return;
+    }
+
+    int rc = sqlite3_exec(db, query, NULL, 0, &err_msg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL exec error: %s\n", err_msg);
+        sqlite3_free(err_msg);
+    }
+    
+    /* Clean up both arguments from the stack */
+    Pop2;
+}
+
+
 /* SQL-PREPARE <sql-query>
    Prepares an SQL statement for stepping
 Stack: handle "sql statement" -- statement-handle
@@ -1466,24 +1505,22 @@ void P_sqlstep(void) {
     stmt_handle = S0;
     Pop;
     if (!stmt_handle) {
-//        atl_sstore(0);
         Push=(stackitem)0;
         return;
     }
 
     int rc = sqlite3_step(stmt_handle);
     if (rc == SQLITE_ROW) {
-//        atl_sstore(1); /* Row available */
-        Push=(stackitem)0;
+        Push = (stackitem) stmt_handle;
+        Push=(stackitem)1;
     } else {
         if (rc != SQLITE_DONE) {
             fprintf(stderr, "SQL Step error\n");
         }
-        sqlite3_finalize(stmt_handle);
+//        sqlite3_finalize(stmt_handle);
         stmt_handle = NULL;
-//        atl_sstore(0); /* Complete or error */
 
-        Push=(stackitem)-1;
+        Push=(stackitem)0;
     }
 }
 
@@ -6967,9 +7004,11 @@ static struct primfcn primt[] = {
     {"0.UNAME",ATH_dotuname},
 #ifdef SQLITE3
     { "0SQL-OPEN", P_sqlopen },
+    { "0SQL-EXEC", P_sqlexec },
     { "0SQL-PREPARE", P_sqlprepare },
     { "0SQL-STEP",    P_sqlstep },
     { "0SQL-COL",     P_sqlcol },
+    { "0SQL-FINALIZE", P_sqlfinalize },
     { "0SQL-CLOSE", P_sqlclose },
 #endif
 
