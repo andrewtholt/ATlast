@@ -23,3 +23,9 @@ CREATE INDEX idx_mqtt_topic_pub ON mqtt_devices(topic_pub);
 INSERT INTO mqtt_devices (name, topic_pub, topic_sub, msg, msg_type, dirty, truth) 
 VALUES ('Jacuzzi',  '/home/Jacuzzi/cmnd/POWER', '/home/Jacuzzi/Power', 'Off', 'B', 0, 'On');
 
+INSERT INTO mqtt_devices (name, topic_pub, topic_sub, msg, msg_type, dirty, truth)
+VALUES ('PorchLight',  '/home/PorchLight_1/cmnd/POWER', '/home/PorchLight_1/Power', 'Off', 'B', 0, 'On');
+
+INSERT INTO mqtt_devices (name, topic_pub, topic_sub, msg, msg_type, dirty, truth)
+VALUES ('BackFloodlight',  '/home/BackFloodlight/cmnd/POWER', '/home/BackFloodlight/Power', 'Off', 'B', 0, 'On');
+
