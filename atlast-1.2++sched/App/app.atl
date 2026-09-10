@@ -1,0 +1,78 @@
+
+0 value db
+0 value stmt
+0 value init-run
+132 string query
+
+
+\       0  1    2         3         4   5        6     7    
+"select id,name,topic_pub,topic_sub,msg,msg_type,dirty,truth from mqtt_devices ;" query s!
+0 constant #id
+1 constant #name
+2 constant #topic_pub
+3 constant #topic_sub
+4 constant #msg
+5 constant #msg_type
+6 constant #dirty
+7 constant #truth
+
+
+struct
+    2 chars field  id           \ INTEGER PRIMARY KEY AUTOINCREMENT
+    32 chars field name         \ TEXT(32) UNIQUE (+1 for null terminator)
+    64 chars field topic_pub    \ TEXT(64) (+1 for null terminator)
+    64 chars field topic_sub     \ TEXT(64) UNIQUE (+1 for null terminator)
+    32 chars field msg           \ TEXT(32) (+1 for null terminator)
+    2 chars field msg_type      \ TEXT(1) - e.g., 'B' or 'T'
+    2 chars field dirty        \ INTEGER
+    8 chars field truth         \ TEXT(8) (+1 for null terminator)
+endstruct /record
+
+\ Create a structure per database record
+\
+here /record allot constant jacuzzi
+
+: init
+    init-run 0= if
+        "devices.atl" sql-open to db
+        -1 to init-run
+    else
+        "Already Run.\n" type
+    then
+
+;
+
+: query-jacuzzi
+    "devices.db" sql-open to db
+
+    db query sql-prepare to stmt
+
+    begin
+        stmt sql-step
+    while
+        dup #id        sql-col drop pad jacuzzi id  s!
+        dup #name      sql-col drop pad jacuzzi name s!
+        dup #topic_pub sql-col drop pad jacuzzi topic_pub s!
+        dup #topic_sub sql-col drop pad jacuzzi topic_sub s!
+        dup #msg       sql-col drop pad jacuzzi msg s!
+        dup #msg_type  sql-col drop pad jacuzzi msg_type s!
+        dup #dirty     sql-col drop pad jacuzzi dirty s!
+            #truth     sql-col drop pad jacuzzi truth s!
+    repeat
+
+    stmt sql-finalize
+
+;
+
+
+: query-devices
+    query-jacuzzi
+;
+
+: app
+    init
+
+    query-devices
+    jacuzzi /record dump
+;
+

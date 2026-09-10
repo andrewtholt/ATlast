@@ -44,8 +44,9 @@ query-users
 
 "\n=== Third Query Run ===\n" type
 query-users
-\ 6. Close the database connection cleanly
-\ db SQL-CLOSE
+
+"6. Close the database connection cleanly\n" type
+db SQL-CLOSE
 
 "\nTest completed successfully.\n" type
 

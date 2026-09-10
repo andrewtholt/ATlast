@@ -1577,27 +1577,18 @@ void P_sqlcol(void) {
 Stack: db-handle stmt-handle --
    */
 void P_sqlclose(void) {
-    sqlite3_stmt *stmt_handle = NULL;
-    sqlite3 *db_handle = NULL;
+    sqlite3 *db = NULL;
 
-    So(2);
+    So(1);
 
-    stmt_handle=(sqlite3_stmt *)S0;
-    db_handle=S1;
-    Pop2;
+    db=(sqlite3 *)(uintptr_t)S0;
+    Pop;
 
-    /* Clean up any leftover prepared statement */
-    /*
-    if (stmt_handle) {
-        sqlite3_finalize(stmt_handle);
-        stmt_handle = NULL;
-    }
-    */
 
     /* Close the database handle */
-    if (db_handle) {
-        sqlite3_close(db_handle);
-        db_handle = NULL;
+    if (db) {
+        sqlite3_close(db);
+        db = NULL;
         printf("Database closed successfully\n");
     } else {
         printf("No active database to close.\n");
