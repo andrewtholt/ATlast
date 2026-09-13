@@ -5497,12 +5497,21 @@ prim P_fload()			      /* Load source file:  fd -- evalstat */
 
 prim P_dInclude() {
     int estat;
+    extern char *atlPath;
     Sl(1);
+
 #if defined(LINUX) || defined(DARWIN)
     FILE *fd;
 
-    char *fname ;
-    fname = S0;
+    char *buffer;
+    char fname[132] ;
+    buffer = S0;
+
+    if(access(buffer,R_OK) == 0) {
+        V strcpy(fname, buffer);
+     } else {
+         sprintf(fname,"%s/%s",atlPath,buffer);
+     }
 
     fd = fopen((char *)fname, "r") ;
 #endif

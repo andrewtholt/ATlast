@@ -147,8 +147,7 @@ void *doSmall(void *arg) {
 char outBuffer[OUTBUFFER];
 char *user_args[10];
 int user_argn=0;
-
-
+char *atlPath = NULL;
 
 int main(int argc, char *argv[]) {
     int i;
@@ -331,7 +330,7 @@ FILE *fp;
 
 #ifdef LINUX
     char startFile[255];
-    char *atlPath = NULL;
+//    char *atlPath = NULL;
 
     atlPath = getenv("ATL_PATH");
 
@@ -364,11 +363,12 @@ FILE *fp;
     for (i = 0; i < in; i++) {
         char fn[132];
 
-//        V strcpy(fn, include[i]);
 
         if(access(include[i], R_OK) != 0) {
             printf("No file\n");
             sprintf(fn,"%s/%s",atlPath,include[i]);
+        } else {
+            V strcpy(fn, include[i]);
         }
 
         if (strchr(fn, '.') == NULL) {

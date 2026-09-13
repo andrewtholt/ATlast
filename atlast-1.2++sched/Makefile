@@ -24,7 +24,7 @@ CFLAGS += $(ATLCONFIG) -Wl,--no-as-needed -Wfatal-errors -g -fPIC  -DLINUX -w -f
 # installed just to build.
 ATLOBJ += atlast.o atlmain.o
 
-APPS = atlast atlsmall # primdeftest
+APPS = atlast # atlsmall # primdeftest
 
 all:	$(APPS)
 
