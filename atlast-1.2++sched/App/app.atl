@@ -1,3 +1,4 @@
+include safe-evaluate.atl
 
 0 value db
 0 value stmt
@@ -6,7 +7,9 @@
 
 
 \       0  1    2         3         4   5        6     7    
+\ "select id,name,topic_pub,topic_sub,msg,msg_type,dirty,truth from mqtt_devices where name='Jacuzzi';" query s!
 "select id,name,topic_pub,topic_sub,msg,msg_type,dirty,truth from mqtt_devices ;" query s!
+
 0 constant #id
 1 constant #name
 2 constant #topic_pub
@@ -31,16 +34,21 @@ endstruct /record
 \ Create a structure per database record
 \
 here /record allot constant jacuzzi
+here /record allot constant PorchLight
+here /record allot constant BackFloodlight
 
 : init
     init-run 0= if
-        "devices.atl" sql-open to db
+        "devices.db" sql-open to db
         -1 to init-run
     else
         "Already Run.\n" type
     then
 
 ;
+
+32 string scratch-name
+0 value scratch-struct
 
 : query-jacuzzi
     "devices.db" sql-open to db
@@ -50,14 +58,20 @@ here /record allot constant jacuzzi
     begin
         stmt sql-step
     while
-        dup #id        sql-col drop pad jacuzzi id  s!
-        dup #name      sql-col drop pad jacuzzi name s!
-        dup #topic_pub sql-col drop pad jacuzzi topic_pub s!
-        dup #topic_sub sql-col drop pad jacuzzi topic_sub s!
-        dup #msg       sql-col drop pad jacuzzi msg s!
-        dup #msg_type  sql-col drop pad jacuzzi msg_type s!
-        dup #dirty     sql-col drop pad jacuzzi dirty s!
-            #truth     sql-col drop pad jacuzzi truth s!
+        dup #name      sql-col drop pad type cr
+        pad scratch-name s!
+        pad safe-evaluate  to scratch-struct
+        scratch-name type cr
+
+         dup #id        sql-col drop pad scratch-struct id  s!
+         dup #name      sql-col drop pad scratch-struct name s!
+         dup #topic_pub sql-col drop pad scratch-struct topic_pub s!
+         dup #topic_sub sql-col drop pad scratch-struct topic_sub s!
+         dup #msg       sql-col drop pad scratch-struct msg s!
+         dup #msg_type  sql-col drop pad scratch-struct msg_type s!
+         dup #dirty     sql-col drop pad scratch-struct dirty s!
+             #truth     sql-col drop pad scratch-struct truth s!
+\            drop
     repeat
 
     stmt sql-finalize
