@@ -1,2 +1,2 @@
-#define BUILD_NUMBER 1003
+#define BUILD_NUMBER 1004
 #define GIT_COMMIT_HASH "bec9f09"
