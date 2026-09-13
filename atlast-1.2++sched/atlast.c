@@ -4056,11 +4056,10 @@ prim P_ccomma() 		      /* Store one byte on heap */
     void *tmp;
 
     Sl(1);
-    tmp = (void *)S0;
+    tmp = (void *)hptr;
 
     if ( ath_safe_memory == Truth ) {
         Hpc(tmp);
-//        Hpc(S0);
     }
     chp = ((unsigned char *) hptr);
     *chp++ = S0;

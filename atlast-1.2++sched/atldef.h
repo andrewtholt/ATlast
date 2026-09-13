@@ -303,6 +303,13 @@ extern char *atl_fgetsp();
 #define Realpop  stk -= Realsize      /* Pop real from stack */
 #define Realpop2 stk -= (2 * Realsize) /* Pop two reals from stack */
 
+#if defined(__x86_64__) || defined(__aarch64__) || defined(__LP64__)
+#define REAL0 *((atl_real *) &S0)
+#define REAL1 *((atl_real *) &S1)
+#define REAL2 *((atl_real *) &S2)
+#define SREAL0(x) *((atl_real *) &S0) = (x)
+#define SREAL1(x) *((atl_real *) &S1) = (x)
+#else
 #ifdef ALIGNMENT
 #define REAL0 *((atl_real *) memcpy((char *) &rbuf0, (char *) &S1, sizeof(atl_real)))
 #define REAL1 *((atl_real *) memcpy((char *) &rbuf1, (char *) &S3, sizeof(atl_real)))
@@ -315,6 +322,7 @@ extern char *atl_fgetsp();
 #define REAL2	*((atl_real *) &S5)   /* Third real on stack */
 #define SREAL0(x) *((atl_real *) &S1) = (x)
 #define SREAL1(x) *((atl_real *) &S3) = (x)
+#endif
 #endif
 
 /*  File I/O definitions (used only if FILEIO is configured).  */

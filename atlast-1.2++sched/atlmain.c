@@ -364,7 +364,13 @@ FILE *fp;
     for (i = 0; i < in; i++) {
         char fn[132];
 
-        V strcpy(fn, include[i]);
+//        V strcpy(fn, include[i]);
+
+        if(access(include[i], R_OK) != 0) {
+            printf("No file\n");
+            sprintf(fn,"%s/%s",atlPath,include[i]);
+        }
+
         if (strchr(fn, '.') == NULL) {
             V strcat(fn, ".atl");
         }
