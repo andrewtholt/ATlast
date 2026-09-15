@@ -4714,6 +4714,7 @@ prim P_fstrform()		      /* Format real using sprintf() */
 }
 #endif /* REAL */
 
+
 prim P_strint() 		      /* String to integer */
 {				      /* str -- endptr value */
     stackitem is;

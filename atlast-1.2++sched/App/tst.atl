@@ -1,0 +1,38 @@
+
+0 value db
+0 value stmt
+132 string query
+0 value init-run
+
+"select max(id) from mqtt_devices ;" query s!
+
+: init
+    init-run 0= if
+        "devices.db" sql-open to db
+        -1 to init-run
+    else
+        "Already Run.\n" type
+    then
+
+;
+
+: get-max-id
+    db query sql-prepare to stmt
+
+    begin
+        stmt sql-step
+    while
+        0 sql-col drop pad strint nip
+    repeat
+    stmt sql-finalize
+    0 to stmt
+;
+
+init
+
+get-max-id
+
+
+1 cell array fred
+2 fred @ . cr
+
