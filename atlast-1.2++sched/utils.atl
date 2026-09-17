@@ -3,7 +3,7 @@
 \    token $sift
 \ ;
 
-: [char] char ; immediate
+\ : [char] char ; immediate
 
 
 255 constant /dirbuf
@@ -13,5 +13,10 @@
     dirbuf dup /dirbuf (pwd) 0= if
         type cr
     then
+;
+
+( x1 x2 -- x2 x1 x2 ) 
+: tuck 
+    swap over
 ;
 

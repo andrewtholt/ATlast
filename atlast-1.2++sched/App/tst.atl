@@ -2,10 +2,13 @@
 0 value db
 0 value stmt
 132 string query
+132 string row-count
+
 0 value init-run
 
 "select max(id) from mqtt_devices ;" query s!
 
+"select count() from mqtt_devices;" row-count s!
 : init
     init-run 0= if
         "devices.db" sql-open to db
@@ -16,23 +19,30 @@
 
 ;
 
-: get-max-id
-    db query sql-prepare to stmt
+: do-prep  \ "sql_query" 
+    db swap sql-prepare to stmt
+    stmt sql-step drop
+    0 sql-col drop pad strint nip
 
-    begin
-        stmt sql-step
-    while
-        0 sql-col drop pad strint nip
-    repeat
     stmt sql-finalize
-    0 to stmt
+    0 to stmt \ clear debris
+;
+
+
+: get-row-count
+    db query sql-prepare to stmt
+    stmt sql-step drop
+    0 sql-col drop pad strint nip
+
+    stmt sql-finalize
+    0 to stmt \ clear debris
 ;
 
 init
 
-get-max-id
+\ get-max-id
+\ get-row-count 1 cell array fred
+query do-prep 1 cell array fred
 
-
-1 cell array fred
 2 fred @ . cr
 
