@@ -27,6 +27,24 @@
 
 ;
 
+: tst
+    kv "IP" kv-exist 0<> if
+        "IP: Exists\n" type
+    else
+        "IP: DOES NOT Exist.\n" type
+    then
+
+    kv "CRAP" kv-exist 0<> if
+        "CRAP: Exists\n" type
+    else
+        "CRAP: DOES NOT Exist.\n" type
+    then
+    cr
+;
+
+
 init
+
+tst
 
 kv kv-display
