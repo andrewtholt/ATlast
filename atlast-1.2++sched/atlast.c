@@ -1333,6 +1333,22 @@ prim DB_get() {
     }
 }
 
+prim DB_exist() {
+    Sl(2);
+    So(1);
+
+    bool exists = false;
+
+    char *key = S0;
+    StringStore *db = S1;
+    Pop;
+
+    exists = kv_exist(db,key);
+
+    S0 = exists;
+
+}
+
 prim DB_display() {
 
     StringStore *db = (StringStore *) S0;
@@ -7053,6 +7069,7 @@ static struct primfcn primt[] = {
     {"0KV-INIT", kv_init},
     {"0KV-SET", DB_set},
     {"0KV-GET", DB_get},
+    {"0KV-EXIST", DB_exist},
     {"0KV-DISPLAY", DB_display},
     {"0KV-DUMP", DB_dump},
     {"0KV-LOAD", DB_load},
