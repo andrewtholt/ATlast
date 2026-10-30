@@ -1788,7 +1788,8 @@ prim athPoll() {
         fdset[i].revents = 0;
     }
 
-    int ret = poll(fdset, nfds, 5000);
+    // Wait for 0.5s (5000 ms) 
+    int ret = poll(fdset, nfds, 1000);
 
     int evCount = 0;
     if( ret > 0 ) {

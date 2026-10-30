@@ -1,0 +1,79 @@
+-1 constant true
+0 constant false
+
+32 string name
+
+0 value ?server-ok
+
+256 constant /buflen
+/buflen string cmd
+/buflen string reply
+
+9090 constant port
+0 value sock
+
+0 value ?init-run
+
+: init
+    ?init-run 0= if
+        "localhost" name strcpy
+        true to ?init-run 
+    then
+;
+
+
+: CONNECTED 
+    true  to ?server-ok
+    "Connected\n" type
+;
+
+: send \ cmd --
+    dup strlen sock socket-send 0<> if
+        "Send failed\n" type
+        abort
+    then
+;
+
+: ?recv \ -- true|false
+    sock 1 socket-poll
+;
+
+: recv \ -- len 
+    pad #pad sock socket-recv
+    pad type cr
+;
+
+: ping
+    "^get CONNECTED\n" dup strlen sock socket-send 0<> if
+        "Send failed\n" type
+        abort
+    then
+    reply /buflen sock socket-recv 
+    reply swap dump
+ 
+    reply evaluate drop 
+;
+
+: main
+    init
+
+    name port socket-connect 0= if
+        to sock
+    else
+        "Failed to connect" type cr
+        abort
+    then
+
+    pad #pad sock socket-recv drop
+    pad evaluate drop
+\     ping
+\ 
+\     ?server-ok false = if 
+\         "Ping failed.\n" type
+\         abort
+\     else 
+\         "Server OK.\n" type
+\     then
+;
+
+
