@@ -17,6 +17,7 @@
 : init
     ?init-run 0= if
         "localhost" name strcpy
+\        "192.168.10.124" name strcpy
         true to ?init-run 
     then
 ;
@@ -48,7 +49,7 @@
         "Send failed\n" type
         abort
     then
-    reply /buflen sock socket-recv 
+    reply swap sock socket-recv 
     reply swap dump
  
     reply evaluate drop 
