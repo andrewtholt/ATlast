@@ -7070,7 +7070,7 @@ static struct primfcn primt[] = {
     {"0KV-INIT", kv_init},
     {"0KV-SET", DB_set},
     {"0KV-GET", DB_get},
-    {"0KV-EXIST", DB_exist},
+    {"0?KV-EXIST", DB_exist},
     {"0KV-DISPLAY", DB_display},
     {"0KV-DUMP", DB_dump},
     {"0KV-LOAD", DB_load},
