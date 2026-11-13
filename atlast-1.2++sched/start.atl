@@ -38,6 +38,9 @@ does> ( c d )
     @
 ;
 
+: tuck ( a b -- b a b )
+    dup -rot
+;
 
 clear
 
