@@ -940,9 +940,9 @@ void ATH_Features() {
 #endif
 
 #ifdef SQLITE3
-    printf("    SQL\r\n");
+    printf("    SQLITE3\r\n");
 #else
-    printf("NOT SQL\r\n");
+    printf("NOT SQLIGHT3\r\n");
 #endif
 //
 // ------------------
