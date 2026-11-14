@@ -1776,14 +1776,29 @@ prim athCmdSet() {
 }
 // 
 // Stack: fd0 .... fdn n -- 
+
 prim athPoll() {
+    Sl(1);
     int nfds = (int) S0;
     Pop;
 
-    struct pollfd fdset[nfds];
+    if(nfds <=0 || nfds > 1024) {
+        So(1);
+        Push = 0;
+        return;
+    }
+
+    Sl(nfds);
+
+//    struct pollfd fdset[nfds];
+    struct pollfd *fdset = malloc(nfds * sizeof(struct pollfd));
+    if(fdset == NULL) {
+        So(1);
+        Push = 0;
+        return;
+    }
 
     for(int i=0;i<nfds;i++) {
-        printf("i=%d:%d\n", i,S0);
         fdset[i].fd = (int)S0;
         Pop;
 
@@ -1796,6 +1811,7 @@ prim athPoll() {
 
     int evCount = 0;
     if( ret > 0 ) {
+        So(evCount + 1);
         for(int i=0;i<nfds;i++) {
             if ( fdset[i].revents != 0) {
                 Push=fdset[i].fd ;
@@ -1804,9 +1820,11 @@ prim athPoll() {
         }
         Push=evCount ;
     } else {
-        printf("Timedout\n");
+        So(1);
         Push=0 ;
     } 
+
+    free(fdset);
 }
 
 #endif
