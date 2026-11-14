@@ -803,7 +803,7 @@ void ATH_Features() {
 #ifdef BREAK
     printf("    BREAK\r\n");
 #else
-    printf"NOT BREAK\r\n");
+    printf("NOT BREAK\r\n");
 #endif
 //
 #ifdef COMPILERW
@@ -1541,9 +1541,9 @@ void P_sqlstep(void) {
 }
 
 /* SQL-COL <col-index> ( -- addr len )
-   Pushes the text string of the specified column index for the current row onto the stack. 
+   Copies the text string of the specified column index for the current row into pad.
 
-Stack: stmt_handle <col-index> -- "column"
+Stack: stmt_handle <col-index> -- pad:"column"
 */
 void P_sqlcol(void) {
     sqlite3_stmt *stmt_handle = NULL;
@@ -1657,9 +1657,12 @@ prim athConnect() {
             }
         }
     }
+    /*
     if (exitStatus == 0) {
         Push=sock1;
     }
+    */
+    Push=sock1;
     Push=exitStatus;
 }
 
@@ -4669,8 +4672,10 @@ prim P_strform()		      /* Format integer using sprintf() */
         Hpc(S0);
         Hpc(S1);
     }
-    
+
+//    char *eval_str = (char *) S0;
     V sprintf((char *) S0, (char *) S1, S2);  // NOT EMBEDDED
+//    V snprintf(eval_str, sizeof(eval_str), ": %s %s ;", new_name, old_name);                                              
     
     Npop(3);
 }
