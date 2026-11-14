@@ -115,13 +115,18 @@ void *doSmall(void *arg) {
     attr.mq_msgsize = sizeof(struct cmdMessage);
     attr.mq_curmsgs = 0;
 
-    mq = mq_open(queueName, O_CREAT | O_RDONLY, 0644, &attr);
-    if( (mqd_t)-1 == mq) {
-        perror("mq_open");
-        if(errno == ENOSYS) {
-            fprintf(stderr,"Fatal ERROR\n");
-            exit(1);
+    if (queueName != NULL ) {
+        mq = mq_open(queueName, O_CREAT | O_RDONLY, 0644, &attr);
+        if( (mqd_t)-1 == mq) {
+            perror("mq_open");
+            if(errno == ENOSYS) {
+                fprintf(stderr,"Fatal ERROR\n");
+                exit(1);
+            }
         }
+    } else {
+        perror("mq_open");
+        exit(1);
     }
 
     mq_setattr(mq, &attr,NULL);
